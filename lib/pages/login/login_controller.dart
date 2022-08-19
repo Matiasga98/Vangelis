@@ -38,7 +38,7 @@ class LoginController extends GetxController {
   }
 
   Future<bool> logIn() async {
-    User? result;
+    /*User? result;
     if (isOktaLogin.value) {
       result = await authService.logInOkta();
     } else {
@@ -62,7 +62,8 @@ class LoginController extends GetxController {
         message: errorCredentials,
       );
       return false;
-    }
+    }*/
+    return true;
   }
 
   bool validate() {

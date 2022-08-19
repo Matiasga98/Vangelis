@@ -24,9 +24,9 @@ const menuItemFeedback = "menuItemFeedback";
 const menuItemLanguage = "menuItemLanguage";
 const menuItemLogOut = "menuItemLogOut";
 const searchPlaceholder = "searchPlaceholder";
-const bottomNavBarHome = "bottomNavBarHome";
-const bottomNavBarAccount = "bottomNavBarAccount";
-const bottomNavBarDownload = "bottomNavBarDownload";
+const bottomNavBarSearch = "bottomNavBarSearch";
+const bottomNavBarProfile = "bottomNavBarProfile";
+const bottomNavBarCollab = "bottomNavBarCollab";
 const warningNoAvailablePersonalStudyPlan =
     "warningNoAvailablePersonalStudyPlan";
 const errorLoadingRegistrations = "errorLoadingRegistrations";
