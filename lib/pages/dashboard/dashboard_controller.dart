@@ -22,7 +22,7 @@ class DashboardController extends GetxController with GetSingleTickerProviderSta
   RxBool recommendationExist = false.obs;
   final ReceivePort _port = ReceivePort();
   final Rx<int> currentButtonIndex = 0.obs;
-  RxList<StatelessWidget> bodies = <StatelessWidget>[].obs;
+  RxList<Widget> bodies = <Widget>[].obs;
 
 
   ConnectivityService connectivityService = Get.find();

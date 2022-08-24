@@ -33,7 +33,7 @@ class DashboardPage extends StatelessWidget {
 
   Widget _buildNavigationBar() {
     return Column(
-      mainAxisSize: MainAxisSize.min,
+      mainAxisSize: MainAxisSize.min ,
       children: [
         BottomNavigationBar(
           items: <BottomNavigationBarItem>[
