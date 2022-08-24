@@ -226,10 +226,12 @@ class _ProfilePageState extends State<ProfilePage>
                 width: 5000.w,
                 height: 500.h,
                 child: TabBarView(
+                  physics: NeverScrollableScrollPhysics(),
                   controller: tabController,
                   children: [
                     GridView.builder(
-                      physics: NeverScrollableScrollPhysics(),
+                      scrollDirection: Axis.vertical,
+
                       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                           mainAxisExtent: 250.0, crossAxisCount: 3),
                       itemBuilder: (context, index) {
