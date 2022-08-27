@@ -38,16 +38,16 @@ class DashboardPage extends StatelessWidget {
         BottomNavigationBar(
           items: <BottomNavigationBarItem>[
             BottomNavigationBarItem(
-              icon: const Icon(Icons.home_rounded),
-              label: bottomNavBarHome.tr,
+              icon: const Icon(Icons.search_rounded),
+              label: bottomNavBarSearch.tr,
             ),
             BottomNavigationBarItem(
-              icon: const Icon(Icons.file_download_outlined),
-              label: bottomNavBarDownload.tr,
+              icon: const Icon(Icons.people_rounded),
+              label: bottomNavBarCollab.tr,
             ),
             BottomNavigationBarItem(
               icon: const Icon(Icons.account_box),
-              label: bottomNavBarAccount.tr,
+              label: bottomNavBarProfile.tr,
             ),
           ],
           selectedLabelStyle: const TextStyle(fontFamily: regularFont),

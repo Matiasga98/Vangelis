@@ -4,6 +4,8 @@ import 'dart:ui';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:vangelis/pages/dashboard/profile/profile_page.dart';
+import 'package:vangelis/pages/dashboard/search/search_page.dart';
 
 
 import '../../entity/user.dart';
@@ -13,6 +15,7 @@ import '../../services/auth_service.dart';
 import '../../services/connectivity_service.dart';
 import '../../services/theme_service.dart';
 import '../../util/constants.dart';
+import 'collab/profile_page.dart';
 
 class DashboardController extends GetxController with GetSingleTickerProviderStateMixin {
   RxBool isSearched = false.obs;
@@ -101,7 +104,7 @@ class DashboardController extends GetxController with GetSingleTickerProviderSta
   }
 
   Future<void> _internalLoad() async {
-    final hasLoaded = await loadStudyPlan();
+    final hasLoaded = await load();
     if (!hasLoaded) {
       final AuthService authService = Get.find();
       await authService.logOut();
@@ -213,8 +216,9 @@ class DashboardController extends GetxController with GetSingleTickerProviderSta
     send!.send([id, status, progress]);
   }*/
 
-  Future<bool> loadStudyPlan({bool forceApi = false}) async {
+  Future<bool> load({bool forceApi = false}) async {
     AbnormalOperationNotification? loadingError;
+    addBodies();
     /*try {
       if (User().defaultPspVariation.target != null) {
         defPsp.value = User().defaultPspVariation.target!;
@@ -449,10 +453,10 @@ class DashboardController extends GetxController with GetSingleTickerProviderSta
   }*/
 
     Future<void> addBodies() async {
-      //todo: cambiar por las paginas que queremos
-      //bodies.add(const HomePage());
-      //bodies.add(const DownloadPage());
-      //bodies.add(AccountPage());
+
+      bodies.add(SearchPage());
+      bodies.add(CollabPage());
+      bodies.add(ProfilePage());
     }
 
     /*void _setSubjectAndLayoutFilters(List<LearningActivity> activities) {
