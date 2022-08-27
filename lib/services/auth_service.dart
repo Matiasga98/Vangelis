@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:io';
 
 //import 'package:flutter_appauth/flutter_appauth.dart';
 import 'package:get/get.dart';
@@ -11,7 +10,6 @@ import '../config/config.dart';
 import '../entity/jwt.dart';
 import '../entity/user.dart';
 import '../model/refresh_token_data.dart';
-import '../model/user_credentials.dart';
 import '../repository/storage/db_connection.dart';
 import '../repository/storage/user_storage.dart';
 import 'base_api_service.dart';
@@ -22,9 +20,6 @@ class AuthService extends GetxService
   final UserStorage _userStorage = Get.find();
   final Configuration _configuration = Get.find();
   //final FlutterAppAuth _appAuth = const FlutterAppAuth();
-
-  static const _callbackUrl = 'com.barbri.studyplan:/callback';
-  static const _logoutUrl = 'com.barbri.studyplan:/';
 
   static const _scopes = [
     'openid',
@@ -39,6 +34,7 @@ class AuthService extends GetxService
   AuthService();
 
   final _logInUrl = 'authenticate';
+  final _registerUrl = 'register';
 
   Future<bool> isLogged() async
   {
@@ -83,6 +79,30 @@ class AuthService extends GetxService
         tokenResponse.tokenType != null;*/
     return true;
   }
+
+  Future<bool> register(String username, String password, String email) async{
+    try {
+      var data = {
+        'username': username,
+        'password': password,
+        'email': email,
+        'bio': ""
+      };
+      var response = await http.post(Uri.parse(_configuration.getApiUrl() + _registerUrl),
+          headers: {"Content-Type": "application/json"},
+          body: json.encode(data));
+      if (BaseApiService.isSuccessful(response)) {
+        return true;
+      }
+      else{
+        return false;
+      }
+      //return true;
+    } catch (ex) {
+      return false;
+    }
+  }
+
 
   Future<User?> logIn(String username, String password) async
   {
