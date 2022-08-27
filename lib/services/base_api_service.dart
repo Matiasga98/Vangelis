@@ -27,11 +27,14 @@ abstract class BaseApiService extends GetxService {
   }
 
   @protected
-  Future<http.Response> get(String url) async {
+  Future<http.Response> get(String url) async
+  {
     await _refreshTokenIfNeeded();
+    var user = User();
+    Map<String, String> finalHeaders = <String, String>{};
+    finalHeaders['Authorization'] = '${user.token.target!.tokenType} ${User().token.target!.token}';
     return http
-        .get(_getParsedUri(url), headers: getCompleteHeaders())
-        .timeout(Duration(seconds: _configuration.getRequestTimeout()))
+        .get(_getParsedUri(url), headers: finalHeaders)
         .onError((error, stackTrace) => Future.value(http.Response("Error", 500)));
   }
 
@@ -279,15 +282,16 @@ abstract class BaseApiService extends GetxService {
     var user = User();
     if (!finalHeaders.containsKey('Authorization') && user.token.target != null) {
       finalHeaders['Authorization'] =
-          '${user.token.target!.tokenType} ${User().token.target!.accessToken}';
+          '${user.token.target!.tokenType} ${User().token.target!.token}';
     }
     return finalHeaders;
   }
 
   Future<void> _refreshTokenIfNeeded() async {
     final user = User();
-    if (user.token.target != null &&
-        user.token.target!.expireDate.isBefore(DateTime.now())) {
+    if (user.token.target != null
+        //&& user.token.target!.expireDate.isBefore(DateTime.now())
+    ) {
       final AuthService authService = Get.find();
       await authService.refreshToken();
     }

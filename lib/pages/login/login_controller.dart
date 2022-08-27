@@ -37,24 +37,21 @@ class LoginController extends GetxController {
     }
   }
 
-  Future<bool> logIn() async {
+  Future<bool> logIn() async
+  {
     User? result;
-    if (isOktaLogin.value) {
-      result = await authService.logInOkta();
+    if (validate()) {
+      //progress.showProgress();
+      result = await authService.logIn(
+        usernameController.text.toString(),
+        passwordController.text.toString(),
+      );
+      //progress.dismissProgress();
     } else {
-      if (validate()) {
-        progress.showProgress();
-        result = await authService.logIn(
-          usernameController.text.toString(),
-          passwordController.text.toString(),
-        );
-        progress.dismissProgress();
-      } else {
-        return false;
-      }
+      return false;
     }
-    if (result != null) {
-
+    if (result != null)
+    {
       return true;
     } else {
       showMsg(

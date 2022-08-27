@@ -16,7 +16,8 @@ import '../repository/storage/db_connection.dart';
 import '../repository/storage/user_storage.dart';
 import 'base_api_service.dart';
 
-class AuthService extends GetxService {
+class AuthService extends GetxService
+{
   final UserService _userService = Get.find();
   final UserStorage _userStorage = Get.find();
   final Configuration _configuration = Get.find();
@@ -24,6 +25,7 @@ class AuthService extends GetxService {
 
   static const _callbackUrl = 'com.barbri.studyplan:/callback';
   static const _logoutUrl = 'com.barbri.studyplan:/';
+
   static const _scopes = [
     'openid',
     'profile',
@@ -36,14 +38,16 @@ class AuthService extends GetxService {
 
   AuthService();
 
-  final _logInUrl = 'security/oauth/token/internal';
+  final _logInUrl = 'authenticate';
 
-  Future<bool> isLogged() async {
+  Future<bool> isLogged() async
+  {
     final user = await _userStorage.getCurrentUser();
     return user != null && user.userName.isNotEmpty;
   }
 
-  Future<User?> logInOkta() async {
+  Future<User?> logInOkta() async
+  {
     /*try {
       final AuthorizationTokenResponse? result = await _appAuth.authorizeAndExchangeCode(
         AuthorizationTokenRequest(_configuration.getOktaClientId(), _callbackUrl,
@@ -80,22 +84,30 @@ class AuthService extends GetxService {
     return true;
   }
 
-  Future<User?> logIn(String username, String password) async {
+  Future<User?> logIn(String username, String password) async
+  {
     try {
-      Map<String, String> headers = <String, String>{};
-      headers['Authorization'] = 'Basic ${_configuration.getApiSecret()}';
+      //Map<String, String> headers = <String, String>{};
+      //headers['Authorization'] = 'Basic ${_configuration.getApiSecret()}';
+      var data = {
+        'username': username,
+        'password': password
+      };
       var response = await http.post(Uri.parse(_configuration.getApiUrl() + _logInUrl),
-          headers: headers,
-          body: UserCredentials(username: username, password: password).toMap());
+          headers: {"Content-Type": "application/json"},
+          body: json.encode(data));
+
       if (BaseApiService.isSuccessful(response)) {
         final parsed = Jwt.fromJson(json.decode(response.body));
         final user = await _userService.getUser(username, parsed);
-        if (user != null && user.userName.isNotEmpty) {
+        /*if (user != null && user.userName.isNotEmpty) {
           await _userStorage.saveUser(user);
         }
         return user;
       } else {
         return null;
+      }*/
+        return user;
       }
     } catch (ex) {
       DbConnection.deleteDataFiles();
@@ -103,7 +115,8 @@ class AuthService extends GetxService {
     }
   }
 
-  Future<Jwt?> refreshToken() async {
+  Future<Jwt?> refreshToken() async
+  {
     if (_configuration.getUseOkta()) {
       return await _refreshTokenOkta();
     } else {
@@ -140,14 +153,15 @@ class AuthService extends GetxService {
     return token;
   }
 
-  Future<Jwt?> _refreshTokenSecurityService() async {
+  Future<Jwt?> _refreshTokenSecurityService() async
+  {
     Map<String, String> headers = <String, String>{};
     headers['Content-Type'] = 'application/x-www-form-urlencoded';
     headers['Authorization'] = 'Basic ${_configuration.getApiSecret()}';
     final user = User();
     var response = await http.post(Uri.parse(_configuration.getApiUrl() + _logInUrl),
         headers: headers,
-        body: RefreshTokenData(refreshToken: user.token.target!.refreshToken).toMap());
+        body: RefreshTokenData(refreshToken: user.token.target!.token).toMap());
     if (BaseApiService.isSuccessful(response)) {
       final parsed = Jwt.fromJson(json.decode(response.body));
       return await _updateToken(parsed);
@@ -156,7 +170,8 @@ class AuthService extends GetxService {
     }
   }
 
-  Future<bool> logOut() async {
+  Future<bool> logOut() async
+  {
     try {
       User().clearUserData();
       await DbConnection.deleteDataFiles();

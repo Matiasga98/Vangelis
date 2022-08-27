@@ -4,7 +4,8 @@ import 'package:get/get.dart';
 import '../entity/user.dart';
 
 
-class Configuration extends GetxService {
+class Configuration extends GetxService
+{
   static const environments = {
     'RED3': 'Red 3',
     'RED2': 'Red 2',
@@ -24,17 +25,19 @@ class Configuration extends GetxService {
     loadFile();
   }
 
-  String _fromSources(String key, String fallback) {
+  String _fromSources(String key, String fallback)
+  {
     /*String? value;
     if (_envMap != null) {
       value = _envMap?[key] ?? fallback;
     } else {
       value = dotenv.get(key, fallback: fallback);
     }*/
-    return "fran";
+    return "http://10.0.2.2:8080/";
   }
 
-  String getApiUrl() {
+  String getApiUrl()
+  {
     final key = '${User().environment}.API_URL';
     var url = _fromSources(key, '');
     return url.endsWith('/') ? url : '$url/';
@@ -56,7 +59,8 @@ class Configuration extends GetxService {
   }
 
   int getMaxUpdateTime() {
-    return  User().updateTime > 0 ? User().updateTime : int.parse(_fromSources('MAX_UPDATE_TIME', '30'));
+    //return  User().updateTime > 0 ? User().updateTime : int.parse(_fromSources('MAX_UPDATE_TIME', '30'));
+    return int.parse(_fromSources('MAX_UPDATE_TIME', '30'));
   }
 
   bool getDebugMode() {

@@ -27,8 +27,7 @@ const searchPlaceholder = "searchPlaceholder";
 const bottomNavBarHome = "bottomNavBarHome";
 const bottomNavBarAccount = "bottomNavBarAccount";
 const bottomNavBarDownload = "bottomNavBarDownload";
-const warningNoAvailablePersonalStudyPlan =
-    "warningNoAvailablePersonalStudyPlan";
+const warningNoAvailablePersonalStudyPlan = "warningNoAvailablePersonalStudyPlan";
 const errorLoadingRegistrations = "errorLoadingRegistrations";
 const errorLoadingLearningPlan = "errorLoadingLearningPlan";
 const errorChangingStudyPlanPlan = "errorChangingStudyPlanPlan";

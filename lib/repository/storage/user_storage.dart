@@ -23,7 +23,7 @@ class UserStorage extends BaseStorage {
 
   Future<User?> _getFromDatabase() async {
     final box = await getBox<User>();
-    final query = box.query(User_.firstName.notEquals('')).build();
+    final query = box.query(User_.userName.notEquals('')).build();
     List<User>? user = query.find();
     query.close();
     return user.isNotEmpty ? user.first : null;
