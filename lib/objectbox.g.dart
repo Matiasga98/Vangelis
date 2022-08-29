@@ -22,7 +22,7 @@ final _entities = <ModelEntity>[
   ModelEntity(
       id: const IdUid(1, 7343022369758524994),
       name: 'Jwt',
-      lastPropertyId: const IdUid(11, 7748449109121943328),
+      lastPropertyId: const IdUid(13, 4101795790848201024),
       flags: 0,
       properties: <ModelProperty>[
         ModelProperty(
@@ -31,53 +31,18 @@ final _entities = <ModelEntity>[
             type: 6,
             flags: 1),
         ModelProperty(
-            id: const IdUid(2, 463684839024402313),
-            name: 'userPartyId',
-            type: 6,
-            flags: 0),
-        ModelProperty(
             id: const IdUid(3, 700699502899145371),
             name: 'lastUpdatedAt',
             type: 10,
             flags: 0),
         ModelProperty(
-            id: const IdUid(4, 2891864814578009964),
-            name: 'idToken',
+            id: const IdUid(12, 2067673302026979064),
+            name: 'token',
             type: 9,
             flags: 0),
         ModelProperty(
-            id: const IdUid(5, 5017529633868221986),
-            name: 'accessToken',
-            type: 9,
-            flags: 0),
-        ModelProperty(
-            id: const IdUid(6, 4319967632291168320),
+            id: const IdUid(13, 4101795790848201024),
             name: 'tokenType',
-            type: 9,
-            flags: 0),
-        ModelProperty(
-            id: const IdUid(7, 7557825774822024276),
-            name: 'refreshToken',
-            type: 9,
-            flags: 0),
-        ModelProperty(
-            id: const IdUid(8, 2747992633915691583),
-            name: 'expiresIn',
-            type: 6,
-            flags: 0),
-        ModelProperty(
-            id: const IdUid(9, 3469727455246878399),
-            name: 'expireDate',
-            type: 10,
-            flags: 0),
-        ModelProperty(
-            id: const IdUid(10, 2936600721406616600),
-            name: 'scope',
-            type: 9,
-            flags: 0),
-        ModelProperty(
-            id: const IdUid(11, 7748449109121943328),
-            name: 'jti',
             type: 9,
             flags: 0)
       ],
@@ -86,7 +51,7 @@ final _entities = <ModelEntity>[
   ModelEntity(
       id: const IdUid(2, 863897412781948733),
       name: 'User',
-      lastPropertyId: const IdUid(12, 3423741387045359741),
+      lastPropertyId: const IdUid(13, 698533130156835837),
       flags: 0,
       properties: <ModelProperty>[
         ModelProperty(
@@ -94,22 +59,6 @@ final _entities = <ModelEntity>[
             name: 'objectBoxId',
             type: 6,
             flags: 1),
-        ModelProperty(
-            id: const IdUid(2, 5777761957073788737),
-            name: 'firstName',
-            type: 9,
-            flags: 0),
-        ModelProperty(
-            id: const IdUid(3, 6308805970911218673),
-            name: 'lastName',
-            type: 9,
-            flags: 0),
-        ModelProperty(
-            id: const IdUid(4, 4119063846641623970),
-            name: 'partyId',
-            type: 6,
-            flags: 32808,
-            indexId: const IdUid(1, 2957674131869971758)),
         ModelProperty(
             id: const IdUid(5, 49551375918934146),
             name: 'userName',
@@ -128,11 +77,6 @@ final _entities = <ModelEntity>[
             indexId: const IdUid(2, 1587160166785019890),
             relationTarget: 'Jwt'),
         ModelProperty(
-            id: const IdUid(8, 7921785593112178603),
-            name: 'defaultLocale',
-            type: 9,
-            flags: 0),
-        ModelProperty(
             id: const IdUid(9, 2229594509470191251),
             name: 'lastUpdatedAt',
             type: 10,
@@ -143,14 +87,14 @@ final _entities = <ModelEntity>[
             type: 9,
             flags: 0),
         ModelProperty(
-            id: const IdUid(11, 5037747737811843491),
-            name: 'updateTime',
-            type: 6,
-            flags: 0),
-        ModelProperty(
             id: const IdUid(12, 3423741387045359741),
             name: 'isDark',
             type: 1,
+            flags: 0),
+        ModelProperty(
+            id: const IdUid(13, 698533130156835837),
+            name: 'defaultLocale',
+            type: 9,
             flags: 0)
       ],
       relations: <ModelRelation>[],
@@ -182,8 +126,23 @@ ModelDefinition getObjectBoxModel() {
       lastRelationId: const IdUid(0, 0),
       lastSequenceId: const IdUid(0, 0),
       retiredEntityUids: const [],
-      retiredIndexUids: const [],
-      retiredPropertyUids: const [],
+      retiredIndexUids: const [2957674131869971758],
+      retiredPropertyUids: const [
+        463684839024402313,
+        2891864814578009964,
+        5017529633868221986,
+        4319967632291168320,
+        7557825774822024276,
+        2747992633915691583,
+        3469727455246878399,
+        2936600721406616600,
+        7748449109121943328,
+        5777761957073788737,
+        6308805970911218673,
+        4119063846641623970,
+        7921785593112178603,
+        5037747737811843491
+      ],
       retiredRelationUids: const [],
       modelVersion: 5,
       modelVersionParserMinimum: 5,
@@ -199,24 +158,13 @@ ModelDefinition getObjectBoxModel() {
           object.objectBoxId = id;
         },
         objectToFB: (Jwt object, fb.Builder fbb) {
-          final idTokenOffset = fbb.writeString(object.idToken);
-          final accessTokenOffset = fbb.writeString(object.accessToken);
+          final tokenOffset = fbb.writeString(object.token);
           final tokenTypeOffset = fbb.writeString(object.tokenType);
-          final refreshTokenOffset = fbb.writeString(object.refreshToken);
-          final scopeOffset = fbb.writeString(object.scope);
-          final jtiOffset = fbb.writeString(object.jti);
-          fbb.startTable(12);
+          fbb.startTable(14);
           fbb.addInt64(0, object.objectBoxId);
-          fbb.addInt64(1, object.userPartyId);
           fbb.addInt64(2, object.lastUpdatedAt.millisecondsSinceEpoch);
-          fbb.addOffset(3, idTokenOffset);
-          fbb.addOffset(4, accessTokenOffset);
-          fbb.addOffset(5, tokenTypeOffset);
-          fbb.addOffset(6, refreshTokenOffset);
-          fbb.addInt64(7, object.expiresIn);
-          fbb.addInt64(8, object.expireDate.millisecondsSinceEpoch);
-          fbb.addOffset(9, scopeOffset);
-          fbb.addOffset(10, jtiOffset);
+          fbb.addOffset(11, tokenOffset);
+          fbb.addOffset(12, tokenTypeOffset);
           fbb.finish(fbb.endTable());
           return object.objectBoxId;
         },
@@ -227,26 +175,12 @@ ModelDefinition getObjectBoxModel() {
           final object = Jwt()
             ..objectBoxId =
                 const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0)
-            ..userPartyId =
-                const fb.Int64Reader().vTableGet(buffer, rootOffset, 6, 0)
             ..lastUpdatedAt = DateTime.fromMillisecondsSinceEpoch(
                 const fb.Int64Reader().vTableGet(buffer, rootOffset, 8, 0))
-            ..idToken = const fb.StringReader(asciiOptimization: true)
-                .vTableGet(buffer, rootOffset, 10, '')
-            ..accessToken = const fb.StringReader(asciiOptimization: true)
-                .vTableGet(buffer, rootOffset, 12, '')
+            ..token = const fb.StringReader(asciiOptimization: true)
+                .vTableGet(buffer, rootOffset, 26, '')
             ..tokenType = const fb.StringReader(asciiOptimization: true)
-                .vTableGet(buffer, rootOffset, 14, '')
-            ..refreshToken = const fb.StringReader(asciiOptimization: true)
-                .vTableGet(buffer, rootOffset, 16, '')
-            ..expiresIn =
-                const fb.Int64Reader().vTableGet(buffer, rootOffset, 18, 0)
-            ..expireDate = DateTime.fromMillisecondsSinceEpoch(
-                const fb.Int64Reader().vTableGet(buffer, rootOffset, 20, 0))
-            ..scope = const fb.StringReader(asciiOptimization: true)
-                .vTableGet(buffer, rootOffset, 22, '')
-            ..jti = const fb.StringReader(asciiOptimization: true)
-                .vTableGet(buffer, rootOffset, 24, '');
+                .vTableGet(buffer, rootOffset, 28, '');
 
           return object;
         }),
@@ -259,25 +193,19 @@ ModelDefinition getObjectBoxModel() {
           object.objectBoxId = id;
         },
         objectToFB: (User object, fb.Builder fbb) {
-          final firstNameOffset = fbb.writeString(object.firstName);
-          final lastNameOffset = fbb.writeString(object.lastName);
           final userNameOffset = fbb.writeString(object.userName);
           final emailOffset = fbb.writeString(object.email);
-          final defaultLocaleOffset = fbb.writeString(object.defaultLocale);
           final environmentOffset = fbb.writeString(object.environment);
-          fbb.startTable(13);
+          final defaultLocaleOffset = fbb.writeString(object.defaultLocale);
+          fbb.startTable(14);
           fbb.addInt64(0, object.objectBoxId);
-          fbb.addOffset(1, firstNameOffset);
-          fbb.addOffset(2, lastNameOffset);
-          fbb.addInt64(3, object.partyId);
           fbb.addOffset(4, userNameOffset);
           fbb.addOffset(5, emailOffset);
           fbb.addInt64(6, object.token.targetId);
-          fbb.addOffset(7, defaultLocaleOffset);
           fbb.addInt64(8, object.lastUpdatedAt.millisecondsSinceEpoch);
           fbb.addOffset(9, environmentOffset);
-          fbb.addInt64(10, object.updateTime);
           fbb.addBool(11, object.isDark);
+          fbb.addOffset(12, defaultLocaleOffset);
           fbb.finish(fbb.endTable());
           return object.objectBoxId;
         },
@@ -288,26 +216,18 @@ ModelDefinition getObjectBoxModel() {
           final object = User()
             ..objectBoxId =
                 const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0)
-            ..firstName = const fb.StringReader(asciiOptimization: true)
-                .vTableGet(buffer, rootOffset, 6, '')
-            ..lastName = const fb.StringReader(asciiOptimization: true)
-                .vTableGet(buffer, rootOffset, 8, '')
-            ..partyId =
-                const fb.Int64Reader().vTableGet(buffer, rootOffset, 10, 0)
             ..userName = const fb.StringReader(asciiOptimization: true)
                 .vTableGet(buffer, rootOffset, 12, '')
             ..email = const fb.StringReader(asciiOptimization: true)
                 .vTableGet(buffer, rootOffset, 14, '')
-            ..defaultLocale = const fb.StringReader(asciiOptimization: true)
-                .vTableGet(buffer, rootOffset, 18, '')
             ..lastUpdatedAt = DateTime.fromMillisecondsSinceEpoch(
                 const fb.Int64Reader().vTableGet(buffer, rootOffset, 20, 0))
             ..environment = const fb.StringReader(asciiOptimization: true)
                 .vTableGet(buffer, rootOffset, 22, '')
-            ..updateTime =
-                const fb.Int64Reader().vTableGet(buffer, rootOffset, 24, 0)
             ..isDark =
-                const fb.BoolReader().vTableGet(buffer, rootOffset, 26, false);
+                const fb.BoolReader().vTableGet(buffer, rootOffset, 26, false)
+            ..defaultLocale = const fb.StringReader(asciiOptimization: true)
+                .vTableGet(buffer, rootOffset, 28, '');
           object.token.targetId =
               const fb.Int64Reader().vTableGet(buffer, rootOffset, 16, 0);
           object.token.attach(store);
@@ -324,41 +244,15 @@ class Jwt_ {
   static final objectBoxId =
       QueryIntegerProperty<Jwt>(_entities[0].properties[0]);
 
-  /// see [Jwt.userPartyId]
-  static final userPartyId =
-      QueryIntegerProperty<Jwt>(_entities[0].properties[1]);
-
   /// see [Jwt.lastUpdatedAt]
   static final lastUpdatedAt =
-      QueryIntegerProperty<Jwt>(_entities[0].properties[2]);
+      QueryIntegerProperty<Jwt>(_entities[0].properties[1]);
 
-  /// see [Jwt.idToken]
-  static final idToken = QueryStringProperty<Jwt>(_entities[0].properties[3]);
-
-  /// see [Jwt.accessToken]
-  static final accessToken =
-      QueryStringProperty<Jwt>(_entities[0].properties[4]);
+  /// see [Jwt.token]
+  static final token = QueryStringProperty<Jwt>(_entities[0].properties[2]);
 
   /// see [Jwt.tokenType]
-  static final tokenType = QueryStringProperty<Jwt>(_entities[0].properties[5]);
-
-  /// see [Jwt.refreshToken]
-  static final refreshToken =
-      QueryStringProperty<Jwt>(_entities[0].properties[6]);
-
-  /// see [Jwt.expiresIn]
-  static final expiresIn =
-      QueryIntegerProperty<Jwt>(_entities[0].properties[7]);
-
-  /// see [Jwt.expireDate]
-  static final expireDate =
-      QueryIntegerProperty<Jwt>(_entities[0].properties[8]);
-
-  /// see [Jwt.scope]
-  static final scope = QueryStringProperty<Jwt>(_entities[0].properties[9]);
-
-  /// see [Jwt.jti]
-  static final jti = QueryStringProperty<Jwt>(_entities[0].properties[10]);
+  static final tokenType = QueryStringProperty<Jwt>(_entities[0].properties[3]);
 }
 
 /// [User] entity fields to define ObjectBox queries.
@@ -367,42 +261,28 @@ class User_ {
   static final objectBoxId =
       QueryIntegerProperty<User>(_entities[1].properties[0]);
 
-  /// see [User.firstName]
-  static final firstName =
-      QueryStringProperty<User>(_entities[1].properties[1]);
-
-  /// see [User.lastName]
-  static final lastName = QueryStringProperty<User>(_entities[1].properties[2]);
-
-  /// see [User.partyId]
-  static final partyId = QueryIntegerProperty<User>(_entities[1].properties[3]);
-
   /// see [User.userName]
-  static final userName = QueryStringProperty<User>(_entities[1].properties[4]);
+  static final userName = QueryStringProperty<User>(_entities[1].properties[1]);
 
   /// see [User.email]
-  static final email = QueryStringProperty<User>(_entities[1].properties[5]);
+  static final email = QueryStringProperty<User>(_entities[1].properties[2]);
 
   /// see [User.token]
   static final token =
-      QueryRelationToOne<User, Jwt>(_entities[1].properties[6]);
+      QueryRelationToOne<User, Jwt>(_entities[1].properties[3]);
+
+  /// see [User.lastUpdatedAt]
+  static final lastUpdatedAt =
+      QueryIntegerProperty<User>(_entities[1].properties[4]);
+
+  /// see [User.environment]
+  static final environment =
+      QueryStringProperty<User>(_entities[1].properties[5]);
+
+  /// see [User.isDark]
+  static final isDark = QueryBooleanProperty<User>(_entities[1].properties[6]);
 
   /// see [User.defaultLocale]
   static final defaultLocale =
       QueryStringProperty<User>(_entities[1].properties[7]);
-
-  /// see [User.lastUpdatedAt]
-  static final lastUpdatedAt =
-      QueryIntegerProperty<User>(_entities[1].properties[8]);
-
-  /// see [User.environment]
-  static final environment =
-      QueryStringProperty<User>(_entities[1].properties[9]);
-
-  /// see [User.updateTime]
-  static final updateTime =
-      QueryIntegerProperty<User>(_entities[1].properties[10]);
-
-  /// see [User.isDark]
-  static final isDark = QueryBooleanProperty<User>(_entities[1].properties[11]);
 }

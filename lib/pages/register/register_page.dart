@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:vangelis/pages/login/login_controller.dart';
+import 'package:vangelis/pages/login/login_page.dart';
+import 'package:vangelis/util/enums.dart';
 
 
 import '../../config/config.dart';
@@ -11,12 +14,12 @@ import '../../services/theme_service.dart';
 import '../../util/constants.dart';
 import '../dashboard/dashboard_controller.dart';
 import '../dashboard/dashboard_page.dart';
-import 'login_controller.dart';
+import 'register_controller.dart';
 
-class LoginPage extends StatelessWidget {
-  LoginPage({Key? key}) : super(key: key);
+class RegisterPage extends StatelessWidget {
+  RegisterPage({Key? key}) : super(key: key);
 
-  final _ctrl = Get.put(LoginController());
+  final _ctrl = Get.put(RegisterController());
 
   @override
   Widget build(BuildContext context) {
@@ -112,32 +115,38 @@ class LoginPage extends StatelessWidget {
           action: TextInputAction.done,
         ),
         SizedBox(height: 30.h),
-        Padding(
-          padding: const EdgeInsets.symmetric(vertical: 8),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              _register(),
-            ],
-          ),
+        CustomTextField(
+          fontSize: 26.h,
+          keyValue: "email",
+          hint: emailHint,
+          label: emailLabel,
+          textEditingController: _ctrl.emailController,
+          action: TextInputAction.done,
+        ),
+        SizedBox(height: 30.h),
+        const Padding(
+          padding: EdgeInsets.symmetric(vertical: 8),
         ),
         SizedBox(height: 30.h),
       ]);
     }
     fields.addAll([
       CustomButton(
-        keyValue: "loginButton",
-        label: buttonLogin,
+        keyValue: "registerButton",
+        label: buttonRegister,
         fontSize: 20,
         onTap: () async {
-          var res = await _ctrl.logIn();
+          var res = await _ctrl.register();
           if (res) {
-            Get.put(DashboardController(), permanent: true);
+            Get.put(LoginController(), permanent: true);
             Get.off(
-              () => DashboardPage(),
+              () => LoginPage(),
               transition: Transition.fadeIn,
               duration: const Duration(milliseconds: 1500),
             );
+          }
+          else{
+            showMsg(message: "error while registering", type: MessageType.error);
           }
         },
       ),
@@ -146,19 +155,7 @@ class LoginPage extends StatelessWidget {
     return fields;
   }
 
-  Widget _register() {
-    return GestureDetector(
-      key : const Key(forgotPasswordGestureDetector),
-      onTap: () {
-        Get.toNamed(RouterName.registerPageTag);
-      },
-      child: CustomText(
-        register,
-        fontSize: 22.h,
-        textColor: themeConfig!.blueColor,
-      ),
-    );
-  }
+
 
   void _changeEnvironment() async {
     if (_ctrl.isDebugMode()) {

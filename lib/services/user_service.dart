@@ -5,14 +5,15 @@ import '../entity/user.dart';
 import 'base_api_service.dart';
 
 class UserService extends BaseApiService {
-  final _getUserUrl = 'student/';
+  final _getUserUrl = 'users/me';
 
   @override
-  Future<User?> getUser(String username, [Jwt? token]) async {
+  Future<User?> getUser(String username, [Jwt? token]) async
+  {
     var user = User();
     user.token = ToOne<Jwt>(target: token!);
-    final params = <String, String>{'username': username};
-    var response = await get(getUrlEncodedParams(_getUserUrl, params));
+    //final params = <String, String>{'username': username};
+    var response = await get(_getUserUrl);
     if (BaseApiService.isSuccessful(response)) {
       var decoded = json.decode(response.body);
       return User(json: decoded, token: token);
