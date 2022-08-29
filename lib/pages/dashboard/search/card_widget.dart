@@ -10,13 +10,18 @@ class MusicianCard extends StatelessWidget {
     required this.finalImage,
     required this.name,
     required this.description,
-    required this.address
+    required this.address,
+    required this.instruments,
+    required this.genres
   }) : super(key: key);
 
   final String finalImage;
   final String name;
   final String description;
   final String address;
+  final List<String> instruments;
+  final List<String> genres;
+
 
   @override
   Widget build(BuildContext context) {

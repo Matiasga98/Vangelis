@@ -11,12 +11,6 @@ import '../../../config/colors_.dart';
 import 'card_widget.dart';
 import '../../../services/theme_service.dart';
 
-List<MusicianCard> musicians = [
-  MusicianCard(finalImage: "images/Hernan.png", name: "Hernan Ezequiel Rodriguez Cary", description: "Bandoneonista", address: "Munro"),
-  MusicianCard(finalImage: "images/Indio Diego.png", name: "Diego Daniel Gagliardi", description: "Baterista", address: "Ituzaingo"),
-  MusicianCard(finalImage: "images/Mantecolati.png", name: "Matias Gamal Laye Berardi", description: "Pianista", address: "Villa del Parque")
-];
-
 class SearchScreen extends StatefulWidget {
   const SearchScreen({Key? key}) : super(key: key);
 
@@ -27,135 +21,85 @@ class SearchScreen extends StatefulWidget {
 class _SearchScreenState extends State<SearchScreen> {
   final _ctrl = Get.put(SearchController());
   Faker faker = Faker();
-  double _distance = 5;
-  List<String> maximumDistance = [
-    "1km-",
-    "5km-",
-    "10km-",
-    "15km-",
-    "20km-",
-    "20km+"
-  ];
-  int selectedDistance = 1;
 
-  double _age = 15;
-  List<String> ageRange = [
-    "15+",
-    "18+",
-    "20+",
-    "25+",
-    "30+",
-    "35+",
-    "40+",
-    "45+",
-    "50+",
-    "60+",
-    "65+"
-  ];
-  int selectedAge = 0;
-  String selectedGender = "Masculino";
-  List<String> instruments = [
-    "Bajo",
-    "Saxo",
-    "Clarinete",
-    "Guitarra",
-    "Bateria",
-    "Bandoneon",
-    "Vocalista",
-    "Teremin",
-    "Flauta de Embolo",
-    "Acordeon",
-  ];
-  List<String> musicalGenres = [
-    "Rock",
-    "Jazz",
-    "Metal",
-    "Cumbia",
-    "Reggae",
-    "Blues",
-    "Tango",
-    "Trap",
-    "Pop",
-    "Folclore",
-    "Chamame",
-    "Cuarteto",
-    "Rap",
-    "Hip Hop",
-  ];
-  List<String> selectedInstruments = [];
-  List<String> selectedGenres = [];
   @override
   Widget build(BuildContext context) {
+    ThemeService().init(context);
     Size size = MediaQuery.of(context).size;
 
-    return SingleChildScrollView(
-      padding: EdgeInsets.symmetric(vertical: 20),
-      child: Column(
-        children: [
-          Center(
-            child: SizedBox(
-              width: size.width * 0.9,
-              child: TextFormField(
-                controller: _ctrl.textFilterController,
-                cursorColor: greenMed,
-                enableSuggestions: true,
-                textAlign: TextAlign.start,
-                decoration: InputDecoration(
-                    hintText: "Buscar por Nombre",
-                    filled: true,
-                    alignLabelWithHint: true,
-                    fillColor: const Color(0xffDCEBEA),
-                    hintStyle: TextStyle(fontSize: 15, color: greenDark),
-                    prefixIcon: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
-                      child: SvgPicture.asset(
-                        "images/search.svg",
-                        color: greenDark,
-                      ),
-                    ),
-                    suffixIcon: SizedBox(
-                        width: 165.w,
-                        child: Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          IconButton(
-                              onPressed: () {
-                                _ctrl.closeContext();
-                              },
-                              icon: const Icon(Icons.clear)),
-                          GestureDetector(
-                            onTap: () {
-                              showModalBottomSheet(
-                                  context: context,
-                                  backgroundColor: Colors.white,
-                                  enableDrag: true,
-                                  isScrollControlled: true,
-                                  shape: const RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.only(
-                                          topLeft: Radius.circular(15),
-                                          topRight: Radius.circular(15))),
-                                  builder: (_) => StatefulBuilder(
-                                        builder: (context, setState) =>
-                                            SingleChildScrollView(
-                                          padding: const EdgeInsets.all(12),
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              Center(
-                                                child: Text(
-                                                  "Filtros",
-                                                  style: TextStyle(
-                                                      fontSize: 17,
-                                                      color: greenDark,
-                                                      fontWeight:
-                                                          FontWeight.bold),
-                                                ),
-                                              ),
-                                              const SizedBox(
-                                                height: 20,
-                                              ),
-                                              /*Row(
+    return Scaffold(
+        backgroundColor: themeConfig!.whiteBlackColor,
+        body: SingleChildScrollView(
+          padding: EdgeInsets.symmetric(vertical: 20),
+          child: Column(
+            children: [
+              Center(
+                child: SizedBox(
+                  width: size.width * 0.9,
+                  child: TextFormField(
+                    controller: _ctrl.textFilterController,
+                    cursorColor: greenMed,
+                    enableSuggestions: true,
+                    textAlign: TextAlign.start,
+                    decoration: InputDecoration(
+                        hintText: "Buscar por Nombre",
+                        filled: true,
+                        alignLabelWithHint: true,
+                        fillColor: const Color(0xffDCEBEA),
+                        hintStyle: TextStyle(fontSize: 15, color: greenDark),
+                        prefixIcon: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 16),
+                          child: SvgPicture.asset(
+                            "images/search.svg",
+                            color: greenDark,
+                          ),
+                        ),
+                        suffixIcon: SizedBox(
+                          width: 165.w,
+                          child: Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                IconButton(
+                                    onPressed: () {
+                                      _ctrl.closeContext();
+                                      setState(() {});
+                                    },
+                                    icon: const Icon(Icons.clear)),
+                                GestureDetector(
+                                  onTap: () {
+                                    showModalBottomSheet(
+                                        context: context,
+                                        backgroundColor: Colors.white,
+                                        enableDrag: true,
+                                        isScrollControlled: true,
+                                        shape: const RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.only(
+                                                topLeft: Radius.circular(15),
+                                                topRight: Radius.circular(15))),
+                                        builder: (_) => StatefulBuilder(
+                                              builder: (context, setState) =>
+                                                  SingleChildScrollView(
+                                                padding:
+                                                    const EdgeInsets.all(12),
+                                                child: Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    Center(
+                                                      child: Text(
+                                                        "Filtros",
+                                                        style: TextStyle(
+                                                            fontSize: 17,
+                                                            color: greenDark,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .bold),
+                                                      ),
+                                                    ),
+                                                    const SizedBox(
+                                                      height: 20,
+                                                    ),
+                                                    /*Row(
                                             children: [
                                               Text(
                                                 "Distancia Maxima",
@@ -315,150 +259,225 @@ class _SearchScreenState extends State<SearchScreen> {
                                                   )),
                                             ),
                                           ),*/
-                                              const Padding(
-                                                padding:
-                                                    EdgeInsets.only(bottom: 15),
-                                                child: Divider(
-                                                  color: Color(0xffE1E7E7),
-                                                  indent: 10,
-                                                  endIndent: 10,
-                                                  height: 1,
-                                                ),
-                                              ),
-                                              Row(
-                                                children: [
-                                                  Text(
-                                                    "Edad",
-                                                    style: TextStyle(
-                                                        fontSize: 16,
-                                                        color: greenDark,
-                                                        fontWeight:
-                                                            FontWeight.w500),
-                                                  ),
-                                                  const SizedBox(
-                                                    width: 50,
-                                                  ),
-                                                  Container(
-                                                    width: size.width / 2,
-                                                    height: 30,
-                                                    decoration: BoxDecoration(
-                                                        color: greenTint1,
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(5),
-                                                        border: Border.all(
-                                                            color: const Color(
-                                                                0xffABC7C7))),
-                                                    child: Row(
+                                                    const Padding(
+                                                      padding: EdgeInsets.only(
+                                                          bottom: 15),
+                                                      child: Divider(
+                                                        color:
+                                                            Color(0xffE1E7E7),
+                                                        indent: 10,
+                                                        endIndent: 10,
+                                                        height: 1,
+                                                      ),
+                                                    ),
+                                                    Row(
                                                       children: [
-                                                        Material(
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(5),
-                                                          color: Colors
-                                                              .transparent,
-                                                          child: InkWell(
-                                                            onTap: () {
-                                                              setState(() {
-                                                                _age--;
-                                                              });
-                                                            },
-                                                            splashColor:
-                                                                greenTint2,
-                                                            child: Ink(
-                                                              width: 30,
-                                                              height: 30,
-                                                              decoration: BoxDecoration(
-                                                                  color: Colors
-                                                                      .white,
-                                                                  borderRadius:
-                                                                      BorderRadius
-                                                                          .circular(
-                                                                              5),
-                                                                  border: Border.all(
-                                                                      color: const Color(
-                                                                          0xffABC7C7))),
-                                                              child: const Icon(
-                                                                Icons.remove,
-                                                                color: Color(
-                                                                    0xff6B9696),
-                                                                size: 10,
-                                                              ),
-                                                            ),
-                                                          ),
+                                                        Text(
+                                                          "Edad",
+                                                          style: TextStyle(
+                                                              fontSize: 16,
+                                                              color: greenDark,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w500),
                                                         ),
-                                                        Expanded(
-                                                            child: Align(
-                                                                child:
-                                                                    FittedBox(
-                                                          fit: BoxFit.scaleDown,
-                                                          child: Text(
-                                                              "$_age años"),
-                                                        ))),
-                                                        Material(
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(5),
-                                                          color: Colors
-                                                              .transparent,
-                                                          child: InkWell(
-                                                            onTap: () {
-                                                              setState(() {
-                                                                _age++;
-                                                              });
-                                                            },
-                                                            splashColor:
-                                                                greenTint2,
-                                                            child: Ink(
-                                                              width: 30,
-                                                              height: 30,
-                                                              decoration: BoxDecoration(
-                                                                  color: Colors
-                                                                      .white,
-                                                                  borderRadius:
-                                                                      BorderRadius
-                                                                          .circular(
-                                                                              5),
-                                                                  border: Border.all(
-                                                                      color: const Color(
-                                                                          0xffABC7C7))),
-                                                              child: const Icon(
-                                                                Icons.add,
-                                                                color: Color(
-                                                                    0xff6B9696),
-                                                                size: 10,
+                                                        const SizedBox(
+                                                          width: 50,
+                                                        ),
+                                                        Container(
+                                                          width: size.width / 2,
+                                                          height: 30,
+                                                          decoration: BoxDecoration(
+                                                              color: greenTint1,
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          5),
+                                                              border: Border.all(
+                                                                  color: const Color(
+                                                                      0xffABC7C7))),
+                                                          child: Row(
+                                                            children: [
+                                                              Material(
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            5),
+                                                                color: Colors
+                                                                    .transparent,
+                                                                child: InkWell(
+                                                                  onTap: () {
+                                                                    setState(
+                                                                        () {
+                                                                      _ctrl
+                                                                          .age--;
+                                                                    });
+                                                                  },
+                                                                  splashColor:
+                                                                      greenTint2,
+                                                                  child: Ink(
+                                                                    width: 30,
+                                                                    height: 30,
+                                                                    decoration: BoxDecoration(
+                                                                        color: Colors
+                                                                            .white,
+                                                                        borderRadius:
+                                                                            BorderRadius.circular(
+                                                                                5),
+                                                                        border: Border.all(
+                                                                            color:
+                                                                                const Color(0xffABC7C7))),
+                                                                    child:
+                                                                        const Icon(
+                                                                      Icons
+                                                                          .remove,
+                                                                      color: Color(
+                                                                          0xff6B9696),
+                                                                      size: 10,
+                                                                    ),
+                                                                  ),
+                                                                ),
                                                               ),
-                                                            ),
+                                                              Expanded(
+                                                                  child: Align(
+                                                                      child:
+                                                                          FittedBox(
+                                                                fit: BoxFit
+                                                                    .scaleDown,
+                                                                child: Text(
+                                                                    "$_ctrl.age años"),
+                                                              ))),
+                                                              Material(
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            5),
+                                                                color: Colors
+                                                                    .transparent,
+                                                                child: InkWell(
+                                                                  onTap: () {
+                                                                    setState(
+                                                                        () {
+                                                                      _ctrl
+                                                                          .age++;
+                                                                    });
+                                                                  },
+                                                                  splashColor:
+                                                                      greenTint2,
+                                                                  child: Ink(
+                                                                    width: 30,
+                                                                    height: 30,
+                                                                    decoration: BoxDecoration(
+                                                                        color: Colors
+                                                                            .white,
+                                                                        borderRadius:
+                                                                            BorderRadius.circular(
+                                                                                5),
+                                                                        border: Border.all(
+                                                                            color:
+                                                                                const Color(0xffABC7C7))),
+                                                                    child:
+                                                                        const Icon(
+                                                                      Icons.add,
+                                                                      color: Color(
+                                                                          0xff6B9696),
+                                                                      size: 10,
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                              )
+                                                            ],
                                                           ),
                                                         )
                                                       ],
                                                     ),
-                                                  )
-                                                ],
-                                              ),
-                                              Padding(
-                                                padding:
-                                                    const EdgeInsets.symmetric(
-                                                        vertical: 16),
-                                                child: Wrap(
-                                                  spacing: 6,
-                                                  runSpacing: 12,
-                                                  runAlignment:
-                                                      WrapAlignment.start,
-                                                  alignment:
-                                                      WrapAlignment.start,
-                                                  crossAxisAlignment:
-                                                      WrapCrossAlignment.start,
-                                                  children: List.generate(
-                                                      ageRange.length,
-                                                      (index) => IntrinsicWidth(
+                                                    Padding(
+                                                      padding: const EdgeInsets
+                                                              .symmetric(
+                                                          vertical: 16),
+                                                      child: Wrap(
+                                                        spacing: 6,
+                                                        runSpacing: 12,
+                                                        runAlignment:
+                                                            WrapAlignment.start,
+                                                        alignment:
+                                                            WrapAlignment.start,
+                                                        crossAxisAlignment:
+                                                            WrapCrossAlignment
+                                                                .start,
+                                                        children: List.generate(
+                                                            _ctrl.ageRange
+                                                                .length,
+                                                            (index) =>
+                                                                IntrinsicWidth(
+                                                                  child:
+                                                                      GestureDetector(
+                                                                    onTap: () {
+                                                                      setState(
+                                                                        () {
+                                                                          _ctrl.selectedAge =
+                                                                              index;
+                                                                        },
+                                                                      );
+                                                                    },
+                                                                    child: Container(
+                                                                        height: 30,
+                                                                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                                                                        decoration: BoxDecoration(color: index == _ctrl.selectedAge ? greenLight : greenTint1, borderRadius: BorderRadius.circular(15)),
+                                                                        alignment: Alignment.center,
+                                                                        child: Text(
+                                                                          _ctrl.ageRange[
+                                                                              index],
+                                                                          style: TextStyle(
+                                                                              color: index == _ctrl.selectedAge ? Colors.white : Colors.black,
+                                                                              fontWeight: FontWeight.w500),
+                                                                        )),
+                                                                  ),
+                                                                )),
+                                                      ),
+                                                    ),
+                                                    const Padding(
+                                                      padding: EdgeInsets.only(
+                                                          bottom: 15),
+                                                      child: Divider(
+                                                        color:
+                                                            Color(0xffE1E7E7),
+                                                        indent: 10,
+                                                        endIndent: 10,
+                                                        height: 1,
+                                                      ),
+                                                    ),
+                                                    Text(
+                                                      "Sexo",
+                                                      style: TextStyle(
+                                                          fontSize: 16,
+                                                          color: greenDark,
+                                                          fontWeight:
+                                                              FontWeight.w500),
+                                                    ),
+                                                    Padding(
+                                                      padding: const EdgeInsets
+                                                              .symmetric(
+                                                          vertical: 16),
+                                                      child: Wrap(
+                                                        spacing: 6,
+                                                        runSpacing: 12,
+                                                        runAlignment:
+                                                            WrapAlignment.start,
+                                                        alignment:
+                                                            WrapAlignment.start,
+                                                        crossAxisAlignment:
+                                                            WrapCrossAlignment
+                                                                .start,
+                                                        children: [
+                                                          IntrinsicWidth(
                                                             child:
                                                                 GestureDetector(
                                                               onTap: () {
                                                                 setState(
                                                                   () {
-                                                                    selectedAge =
-                                                                        index;
+                                                                    _ctrl.selectedGender =
+                                                                        "Masculino";
                                                                   },
                                                                 );
                                                               },
@@ -467,10 +486,11 @@ class _SearchScreenState extends State<SearchScreen> {
                                                                   padding: const EdgeInsets
                                                                           .symmetric(
                                                                       horizontal:
-                                                                          16),
+                                                                          32),
                                                                   decoration: BoxDecoration(
-                                                                      color: index ==
-                                                                              selectedAge
+                                                                      color: "Masculino" ==
+                                                                              _ctrl
+                                                                                  .selectedGender
                                                                           ? greenLight
                                                                           : greenTint1,
                                                                       borderRadius:
@@ -480,11 +500,9 @@ class _SearchScreenState extends State<SearchScreen> {
                                                                       Alignment
                                                                           .center,
                                                                   child: Text(
-                                                                    ageRange[
-                                                                        index],
+                                                                    "Masculino",
                                                                     style: TextStyle(
-                                                                        color: index ==
-                                                                                selectedAge
+                                                                        color: "Masculino" == _ctrl.selectedGender
                                                                             ? Colors
                                                                                 .white
                                                                             : Colors
@@ -493,413 +511,347 @@ class _SearchScreenState extends State<SearchScreen> {
                                                                             FontWeight.w500),
                                                                   )),
                                                             ),
-                                                          )),
-                                                ),
-                                              ),
-                                              const Padding(
-                                                padding:
-                                                    EdgeInsets.only(bottom: 15),
-                                                child: Divider(
-                                                  color: Color(0xffE1E7E7),
-                                                  indent: 10,
-                                                  endIndent: 10,
-                                                  height: 1,
-                                                ),
-                                              ),
-                                              Text(
-                                                "Sexo",
-                                                style: TextStyle(
-                                                    fontSize: 16,
-                                                    color: greenDark,
-                                                    fontWeight:
-                                                        FontWeight.w500),
-                                              ),
-                                              Padding(
-                                                padding:
-                                                    const EdgeInsets.symmetric(
-                                                        vertical: 16),
-                                                child: Wrap(
-                                                  spacing: 6,
-                                                  runSpacing: 12,
-                                                  runAlignment:
-                                                      WrapAlignment.start,
-                                                  alignment:
-                                                      WrapAlignment.start,
-                                                  crossAxisAlignment:
-                                                      WrapCrossAlignment.start,
-                                                  children: [
-                                                    IntrinsicWidth(
-                                                      child: GestureDetector(
-                                                        onTap: () {
-                                                          setState(
-                                                            () {
-                                                              selectedGender =
-                                                                  "Masculino";
-                                                            },
-                                                          );
-                                                        },
-                                                        child: Container(
-                                                            height: 30,
-                                                            padding:
-                                                                const EdgeInsets
-                                                                        .symmetric(
-                                                                    horizontal:
-                                                                        32),
-                                                            decoration: BoxDecoration(
-                                                                color: "Masculino" ==
-                                                                        selectedGender
-                                                                    ? greenLight
-                                                                    : greenTint1,
-                                                                borderRadius:
-                                                                    BorderRadius
-                                                                        .circular(
-                                                                            15)),
-                                                            alignment: Alignment
-                                                                .center,
-                                                            child: Text(
-                                                              "Masculino",
-                                                              style: TextStyle(
-                                                                  color: "Masculino" ==
-                                                                          selectedGender
-                                                                      ? Colors
-                                                                          .white
-                                                                      : Colors
-                                                                          .black,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .w500),
-                                                            )),
+                                                          ),
+                                                          IntrinsicWidth(
+                                                            child:
+                                                                GestureDetector(
+                                                              onTap: () {
+                                                                setState(
+                                                                  () {
+                                                                    _ctrl.selectedGender =
+                                                                        "Femenino";
+                                                                  },
+                                                                );
+                                                              },
+                                                              child: Container(
+                                                                  height: 30,
+                                                                  padding: const EdgeInsets
+                                                                          .symmetric(
+                                                                      horizontal:
+                                                                          32),
+                                                                  decoration: BoxDecoration(
+                                                                      color: "Femenino" ==
+                                                                              _ctrl
+                                                                                  .selectedGender
+                                                                          ? greenLight
+                                                                          : greenTint1,
+                                                                      borderRadius:
+                                                                          BorderRadius.circular(
+                                                                              15)),
+                                                                  alignment:
+                                                                      Alignment
+                                                                          .center,
+                                                                  child: Text(
+                                                                    "Femenino",
+                                                                    style: TextStyle(
+                                                                        color: "Femenino" == _ctrl.selectedGender
+                                                                            ? Colors
+                                                                                .white
+                                                                            : Colors
+                                                                                .black,
+                                                                        fontWeight:
+                                                                            FontWeight.w500),
+                                                                  )),
+                                                            ),
+                                                          ),
+                                                        ],
                                                       ),
                                                     ),
-                                                    IntrinsicWidth(
-                                                      child: GestureDetector(
-                                                        onTap: () {
-                                                          setState(
-                                                            () {
-                                                              selectedGender =
-                                                                  "Femenino";
-                                                            },
-                                                          );
-                                                        },
-                                                        child: Container(
-                                                            height: 30,
-                                                            padding:
-                                                                const EdgeInsets
-                                                                        .symmetric(
-                                                                    horizontal:
-                                                                        32),
-                                                            decoration: BoxDecoration(
-                                                                color: "Femenino" ==
-                                                                        selectedGender
-                                                                    ? greenLight
-                                                                    : greenTint1,
-                                                                borderRadius:
-                                                                    BorderRadius
-                                                                        .circular(
-                                                                            15)),
-                                                            alignment: Alignment
-                                                                .center,
-                                                            child: Text(
-                                                              "Femenino",
-                                                              style: TextStyle(
-                                                                  color: "Femenino" ==
-                                                                          selectedGender
-                                                                      ? Colors
-                                                                          .white
-                                                                      : Colors
-                                                                          .black,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .w500),
-                                                            )),
+                                                    const SizedBox(
+                                                      height: 16,
+                                                    ),
+                                                    Container(
+                                                      width: double.infinity,
+                                                      height: 50,
+                                                      margin: const EdgeInsets
+                                                              .symmetric(
+                                                          vertical: 7),
+                                                      child: ElevatedButton(
+                                                        onPressed: () {},
+                                                        child: const Text(
+                                                          "Aplicar Filtros",
+                                                          style: TextStyle(
+                                                              color:
+                                                                  Colors.white,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w500,
+                                                              fontSize: 17),
+                                                        ),
+                                                        style: ButtonStyle(
+                                                            backgroundColor:
+                                                                MaterialStateProperty
+                                                                    .all(
+                                                                        greenLight),
+                                                            shape: MaterialStateProperty
+                                                                .all(
+                                                                    RoundedRectangleBorder(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          8.0),
+                                                            ))),
                                                       ),
                                                     ),
+                                                    Container(
+                                                      width: double.infinity,
+                                                      height: 50,
+                                                      margin: const EdgeInsets
+                                                              .symmetric(
+                                                          vertical: 7),
+                                                      child: ElevatedButton(
+                                                        onPressed: () {},
+                                                        child: Text(
+                                                          "Quitar Filtros",
+                                                          style: TextStyle(
+                                                              color: greenLight,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w500,
+                                                              fontSize: 17),
+                                                        ),
+                                                        style: ButtonStyle(
+                                                            backgroundColor:
+                                                                MaterialStateProperty.all(
+                                                                    Colors
+                                                                        .white),
+                                                            overlayColor:
+                                                                MaterialStateProperty.all(
+                                                                    greenLight
+                                                                        .withOpacity(
+                                                                            0.2)),
+                                                            shape: MaterialStateProperty.all(
+                                                                RoundedRectangleBorder(
+                                                                    borderRadius:
+                                                                        BorderRadius.circular(
+                                                                            4.0),
+                                                                    side: BorderSide(
+                                                                        color: greenLight)))),
+                                                      ),
+                                                    )
                                                   ],
                                                 ),
                                               ),
-                                              const SizedBox(
-                                                height: 16,
-                                              ),
-                                              Container(
-                                                width: double.infinity,
-                                                height: 50,
-                                                margin:
-                                                    const EdgeInsets.symmetric(
-                                                        vertical: 7),
-                                                child: ElevatedButton(
-                                                  onPressed: () {},
-                                                  child: const Text(
-                                                    "Aplicar Filtros",
-                                                    style: TextStyle(
-                                                        color: Colors.white,
-                                                        fontWeight:
-                                                            FontWeight.w500,
-                                                        fontSize: 17),
-                                                  ),
-                                                  style: ButtonStyle(
-                                                      backgroundColor:
-                                                          MaterialStateProperty
-                                                              .all(greenLight),
-                                                      shape: MaterialStateProperty
-                                                          .all(
-                                                              RoundedRectangleBorder(
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(8.0),
-                                                      ))),
-                                                ),
-                                              ),
-                                              Container(
-                                                width: double.infinity,
-                                                height: 50,
-                                                margin:
-                                                    const EdgeInsets.symmetric(
-                                                        vertical: 7),
-                                                child: ElevatedButton(
-                                                  onPressed: () {},
-                                                  child: Text(
-                                                    "Quitar Filtros",
-                                                    style: TextStyle(
-                                                        color: greenLight,
-                                                        fontWeight:
-                                                            FontWeight.w500,
-                                                        fontSize: 17),
-                                                  ),
-                                                  style: ButtonStyle(
-                                                      backgroundColor:
-                                                          MaterialStateProperty.all(
-                                                              Colors.white),
-                                                      overlayColor:
-                                                          MaterialStateProperty.all(
-                                                              greenLight
-                                                                  .withOpacity(
-                                                                      0.2)),
-                                                      shape: MaterialStateProperty.all(
-                                                          RoundedRectangleBorder(
-                                                              borderRadius:
-                                                                  BorderRadius.circular(
-                                                                      4.0),
-                                                              side: BorderSide(
-                                                                  color: greenLight)))),
-                                                ),
-                                              )
-                                            ],
-                                          ),
-                                        ),
-                                      ));
-                            },
-                            child: Image.asset(
-                              "images/search.png",
-                            ),
-                          ),
-                        ]),
-                      ),
-                    prefixIconConstraints:
-                        const BoxConstraints(maxHeight: 17, maxWidth: 50),
-                    isDense: true,
-                    contentPadding:
-                        const EdgeInsets.symmetric(vertical: 0, horizontal: 0),
-                    prefixStyle: TextStyle(color: greenDark),
-                    border: const OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(8)),
-                        borderSide: BorderSide.none)),
+                                            ));
+                                  },
+                                  child: Image.asset(
+                                    "images/search.png",
+                                  ),
+                                ),
+                              ]),
+                        ),
+                        prefixIconConstraints:
+                            const BoxConstraints(maxHeight: 17, maxWidth: 50),
+                        isDense: true,
+                        contentPadding: const EdgeInsets.symmetric(
+                            vertical: 0, horizontal: 0),
+                        prefixStyle: TextStyle(color: greenDark),
+                        border: const OutlineInputBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(8)),
+                            borderSide: BorderSide.none)),
+                  ),
+                ),
               ),
-            ),
-          ),
-          _ctrl.searchState.value
-              ? ListView.builder(
-                  shrinkWrap: true,
-                  primary: false,
-                  itemCount: 3,
-                  itemBuilder: (context, index) => musicians[index],
-                )
-              : Column(
-                  children: [
-                    Container(
-                      padding: EdgeInsets.symmetric(
-                          vertical: 16, horizontal: size.width * 0.075),
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        "Instrumentos",
-                        style: TextStyle(
-                            color: greenDark,
-                            fontSize: 16,
-                            fontWeight: FontWeight.w500),
-                      ),
-                    ),
-                    Wrap(
-                      spacing: 6,
-                      runSpacing: 12,
-                      runAlignment: WrapAlignment.start,
-                      alignment: WrapAlignment.start,
-                      crossAxisAlignment: WrapCrossAlignment.start,
-                      children: List.generate(
-                        instruments.length,
-                        (index) => IntrinsicWidth(
-                          child: GestureDetector(
-                            onTap: () {
-                              setState(() {
-                                if (selectedInstruments
-                                    .contains(instruments[index])) {
-                                  selectedInstruments
-                                      .remove(instruments[index]);
-                                } else {
-                                  selectedInstruments.add(instruments[index]);
-                                }
-                              });
-                            },
-                            child: Container(
-                              height: 30,
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 16),
-                              decoration: BoxDecoration(
-                                  color: selectedInstruments
-                                          .contains(instruments[index])
-                                      ? greenLight
-                                      : greenTint1,
-                                  borderRadius: BorderRadius.circular(15)),
-                              alignment: Alignment.center,
-                              child: Text(
-                                instruments[index],
-                                style: TextStyle(
-                                    color: selectedInstruments
-                                            .contains(instruments[index])
-                                        ? Colors.white
-                                        : Colors.black,
-                                    fontWeight: FontWeight.w500),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 16,
-                    ),
-                    Container(
-                      padding: EdgeInsets.symmetric(
-                          vertical: 16, horizontal: size.width * 0.075),
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        "Genero Musical",
-                        style: TextStyle(
-                            color: greenDark,
-                            fontSize: 16,
-                            fontWeight: FontWeight.w500),
-                      ),
-                    ),
-                    Wrap(
-                      spacing: 6,
-                      runSpacing: 12,
-                      runAlignment: WrapAlignment.start,
-                      alignment: WrapAlignment.start,
-                      crossAxisAlignment: WrapCrossAlignment.start,
-                      children: List.generate(
-                        musicalGenres.length,
-                        (index) => IntrinsicWidth(
-                          child: GestureDetector(
-                            onTap: () {
-                              setState(() {
-                                if (selectedGenres
-                                    .contains(musicalGenres[index])) {
-                                  selectedGenres.remove(musicalGenres[index]);
-                                } else {
-                                  selectedGenres.add(musicalGenres[index]);
-                                }
-                              });
-                            },
-                            child: Container(
-                              height: 30,
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 16),
-                              decoration: BoxDecoration(
-                                  color: selectedGenres
-                                          .contains(musicalGenres[index])
-                                      ? greenLight
-                                      : greenTint1,
-                                  borderRadius: BorderRadius.circular(15)),
-                              alignment: Alignment.center,
-                              child: Text(
-                                musicalGenres[index],
-                                style: TextStyle(
-                                    color: selectedGenres
-                                            .contains(musicalGenres[index])
-                                        ? Colors.white
-                                        : Colors.black,
-                                    fontWeight: FontWeight.w500),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 60,
-                    ),
-                    Container(
-                      width: size.width * 0.9,
-                      height: 50,
-                      margin: const EdgeInsets.symmetric(vertical: 7),
-                      child: ElevatedButton(
-                        onPressed: () {
-                          setState(() {
-                            _ctrl.openContext();
-                          });
-                        },
-                        child: const Text(
-                          "Buscar",
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.w500,
-                              fontSize: 17),
-                        ),
-                        style: ButtonStyle(
-                            backgroundColor:
-                                MaterialStateProperty.all(greenLight),
-                            shape: MaterialStateProperty.all(
-                                RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8.0),
-                            ))),
-                      ),
-                    ),
-                    Container(
-                      width: size.width * 0.9,
-                      height: 50,
-                      margin: const EdgeInsets.symmetric(vertical: 7),
-                      child: ElevatedButton(
-                        onPressed: () {
-                          setState(() {
-                            selectedInstruments.clear();
-                            selectedAge = 0;
-                            selectedGender = "Masculino";
-                            selectedDistance = 0;
-                            _age = 0;
-                            _distance = 0;
-                          });
-                        },
-                        child: Text(
-                          "Quitar Filtros",
-                          style: TextStyle(
-                              color: greenLight,
-                              fontWeight: FontWeight.w500,
-                              fontSize: 17),
-                        ),
-                        style: ButtonStyle(
-                            backgroundColor:
-                                MaterialStateProperty.all(Colors.white),
-                            overlayColor: MaterialStateProperty.all(
-                                greenLight.withOpacity(0.2)),
-                            shape: MaterialStateProperty.all(
-                                RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(8.0),
-                                    side: BorderSide(color: greenLight)))),
-                      ),
+              _ctrl.searchState.isTrue
+                  ? ListView.builder(
+                      shrinkWrap: true,
+                      primary: false,
+                      itemCount: _ctrl.filteredMusicians.length,
+                      itemBuilder: (context, index) =>
+                          _ctrl.filteredMusicians[index],
                     )
-                  ],
-                )
-        ],
-      ),
-    );
+                  : Column(
+                      children: [
+                        Container(
+                          padding: EdgeInsets.symmetric(
+                              vertical: 16, horizontal: size.width * 0.075),
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            "Instrumentos",
+                            style: TextStyle(
+                                color: greenDark,
+                                fontSize: 16,
+                                fontWeight: FontWeight.w500),
+                          ),
+                        ),
+                        Wrap(
+                          spacing: 6,
+                          runSpacing: 12,
+                          runAlignment: WrapAlignment.start,
+                          alignment: WrapAlignment.start,
+                          crossAxisAlignment: WrapCrossAlignment.start,
+                          children: List.generate(
+                            _ctrl.instruments.length,
+                            (index) => IntrinsicWidth(
+                              child: GestureDetector(
+                                onTap: () {
+                                  setState(() {
+                                    if (_ctrl.selectedInstruments
+                                        .contains(_ctrl.instruments[index])) {
+                                      _ctrl.selectedInstruments
+                                          .remove(_ctrl.instruments[index]);
+                                    } else {
+                                      _ctrl.selectedInstruments
+                                          .add(_ctrl.instruments[index]);
+                                    }
+                                  });
+                                },
+                                child: Container(
+                                  height: 30,
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 16),
+                                  decoration: BoxDecoration(
+                                      color: _ctrl.selectedInstruments.contains(
+                                              _ctrl.instruments[index])
+                                          ? greenLight
+                                          : greenTint1,
+                                      borderRadius: BorderRadius.circular(15)),
+                                  alignment: Alignment.center,
+                                  child: Text(
+                                    _ctrl.instruments[index],
+                                    style: TextStyle(
+                                        color: _ctrl.selectedInstruments
+                                                .contains(
+                                                    _ctrl.instruments[index])
+                                            ? Colors.white
+                                            : Colors.black,
+                                        fontWeight: FontWeight.w500),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 16,
+                        ),
+                        Container(
+                          padding: EdgeInsets.symmetric(
+                              vertical: 16, horizontal: size.width * 0.075),
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            "Genero Musical",
+                            style: TextStyle(
+                                color: greenDark,
+                                fontSize: 16,
+                                fontWeight: FontWeight.w500),
+                          ),
+                        ),
+                        Wrap(
+                          spacing: 6,
+                          runSpacing: 12,
+                          runAlignment: WrapAlignment.start,
+                          alignment: WrapAlignment.start,
+                          crossAxisAlignment: WrapCrossAlignment.start,
+                          children: List.generate(
+                            _ctrl.musicalGenres.length,
+                            (index) => IntrinsicWidth(
+                              child: GestureDetector(
+                                onTap: () {
+                                  setState(() {
+                                    if (_ctrl.selectedGenres
+                                        .contains(_ctrl.musicalGenres[index])) {
+                                      _ctrl.selectedGenres
+                                          .remove(_ctrl.musicalGenres[index]);
+                                    } else {
+                                      _ctrl.selectedGenres
+                                          .add(_ctrl.musicalGenres[index]);
+                                    }
+                                  });
+                                },
+                                child: Container(
+                                  height: 30,
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 16),
+                                  decoration: BoxDecoration(
+                                      color: _ctrl.selectedGenres.contains(
+                                              _ctrl.musicalGenres[index])
+                                          ? greenLight
+                                          : greenTint1,
+                                      borderRadius: BorderRadius.circular(15)),
+                                  alignment: Alignment.center,
+                                  child: Text(
+                                    _ctrl.musicalGenres[index],
+                                    style: TextStyle(
+                                        color: _ctrl.selectedGenres.contains(
+                                                _ctrl.musicalGenres[index])
+                                            ? Colors.white
+                                            : Colors.black,
+                                        fontWeight: FontWeight.w500),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 60,
+                        ),
+                        Container(
+                          width: size.width * 0.9,
+                          height: 50,
+                          margin: const EdgeInsets.symmetric(vertical: 7),
+                          child: ElevatedButton(
+                            onPressed: () {
+                              setState(() {
+                                _ctrl.openContext();
+                              });
+                            },
+                            child: const Text(
+                              "Buscar",
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 17),
+                            ),
+                            style: ButtonStyle(
+                                backgroundColor:
+                                    MaterialStateProperty.all(greenLight),
+                                shape: MaterialStateProperty.all(
+                                    RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(8.0),
+                                ))),
+                          ),
+                        ),
+                        Container(
+                          width: size.width * 0.9,
+                          height: 50,
+                          margin: const EdgeInsets.symmetric(vertical: 7),
+                          child: ElevatedButton(
+                            onPressed: () {
+                              setState(() {
+                                _ctrl.selectedInstruments.clear();
+                                _ctrl.selectedAge = 0;
+                                _ctrl.selectedGender = "Masculino";
+                                _ctrl.selectedDistance = 0;
+                                _ctrl.age = 0;
+                                _ctrl.distance = 0;
+                              });
+                            },
+                            child: Text(
+                              "Quitar Filtros",
+                              style: TextStyle(
+                                  color: greenLight,
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 17),
+                            ),
+                            style: ButtonStyle(
+                                backgroundColor:
+                                    MaterialStateProperty.all(Colors.white),
+                                overlayColor: MaterialStateProperty.all(
+                                    greenLight.withOpacity(0.2)),
+                                shape: MaterialStateProperty.all(
+                                    RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(8.0),
+                                        side: BorderSide(color: greenLight)))),
+                          ),
+                        )
+                      ],
+                    )
+            ],
+          ),
+        ));
   }
 }
 
