@@ -7,14 +7,11 @@ import '../entity/user.dart';
 class Configuration extends GetxService
 {
   static const environments = {
-    'RED3': 'Red 3',
-    'RED2': 'Red 2',
-    'RED': 'Red',
-    'STAGE': 'Staging',
-    'PROD': 'Production',
+    'BACKENDLOCAL': 'Conectado a backend levantado',
+    'MOBILE': 'Sin conectarse a backend',
   };
 
-  static const defaultEnvironment = 'PROD';
+  static const defaultEnvironment = 'MOBILE';
 
 
   Map<String, String>? _envMap;
@@ -64,7 +61,8 @@ class Configuration extends GetxService
   }
 
   bool getDebugMode() {
-    return _fromSources('DEBUG_MODE', 'false').toLowerCase() == 'true';
+    return true;
+    //return _fromSources('DEBUG_MODE', 'false').toLowerCase() == 'true';
   }
 
   int getRequestTimeout() {

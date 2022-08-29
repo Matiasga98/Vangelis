@@ -40,6 +40,9 @@ class LoginController extends GetxController {
   Future<bool> logIn() async
   {
     User? result;
+    if (User().environment == "MOBILE"){
+      return true;
+    }
     if (validate()) {
       //progress.showProgress();
       result = await authService.logIn(
