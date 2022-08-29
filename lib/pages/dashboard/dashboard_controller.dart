@@ -22,7 +22,7 @@ class DashboardController extends GetxController with GetSingleTickerProviderSta
   RxBool recommendationExist = false.obs;
   final ReceivePort _port = ReceivePort();
   final Rx<int> currentButtonIndex = 0.obs;
-  RxList<StatelessWidget> bodies = <StatelessWidget>[].obs;
+  RxList<Widget> bodies = <Widget>[].obs;
 
 
   ConnectivityService connectivityService = Get.find();
@@ -454,7 +454,7 @@ class DashboardController extends GetxController with GetSingleTickerProviderSta
 
     Future<void> addBodies() async {
 
-      bodies.add(SearchPage());
+      bodies.add(SearchScreen());
       bodies.add(CollabPage());
       bodies.add(ProfilePage());
     }
