@@ -11,34 +11,36 @@ class Jwt {
 
   @Id()
   var objectBoxId = 0;
-  var userPartyId = User().partyId;
+  //var userPartyId = User().partyId;
   @Property(type: PropertyType.date)
   var lastUpdatedAt = DateTime.now();
-  var idToken = '';
-  var accessToken = '';
-  var tokenType = '';
-  var refreshToken = '';
-  var expiresIn = 0;
-  @Property(type: PropertyType.date)
-  var expireDate = DateTime.now();
-  var scope = '';
-  var jti = '';
+  //var idToken = '';
+  var token = '';
+  var tokenType = 'Bearer';
+  //var refreshToken = '';
+  //var expiresIn = 0;
+  //@Property(type: PropertyType.date)
+  //var expireDate = DateTime.now();
+  //var scope = '';
+  //var jti = '';
 
-  String get username {
+  /*String get username {
     return _usernameFromToken(idToken);
-  }
+  }*/
 
-  Jwt.parameterized(this.accessToken, this.tokenType, this.refreshToken,
-      this.expiresIn, this.scope, this.jti);
+  /*Jwt.parameterized(this.token, this.tokenType, this.refreshToken,
+      this.expiresIn, this.scope, this.jti);*/
+  Jwt.parameterized(this.token);
 
   Jwt.fromJson(Map<String, dynamic> json)
-      : accessToken = json['access_token'],
-        tokenType = json['token_type'],
-        refreshToken = json['refresh_token'],
-        expiresIn = json['expires_in'],
-        scope = json['scope'],
-        jti = json['jti'],
-        expireDate = DateTime.now().add(Duration(seconds: json['expires_in']));
+      : token = json['token']
+        //tokenType = json['token_type']
+        //refreshToken = json['refresh_token'],
+        //expiresIn = json['expires_in'],
+        //scope = json['scope'],
+        //jti = json['jti'],
+        //expireDate = DateTime.now().add(Duration(seconds: json['expires_in']))
+   ;
 
   /*Jwt.fromAuthorizationTokenResponse(AuthorizationTokenResponse response)
       : accessToken = response.accessToken!,
@@ -63,13 +65,13 @@ class Jwt {
         expireDate = response.accessTokenExpirationDateTime!;
 */
   Map<String, dynamic> toJson() => {
-        'access_token': accessToken,
-        'token_type': tokenType,
-        'refresh_token': refreshToken,
-        'expires_in': expiresIn,
-        'expire_date': expireDate,
-        'scope': scope,
-        'jti': jti
+        'token': token,
+        'token_type': tokenType
+        //'refresh_token': refreshToken,
+        //'expires_in': expiresIn,
+        //'expire_date': expireDate,
+        //'scope': scope,
+        //'jti': jti
       };
 }
 

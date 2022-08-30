@@ -9,9 +9,10 @@ import '../../util/constants.dart';
 import '../dashboard/dashboard_controller.dart';
 
 
-class LoginController extends GetxController {
+class RegisterController extends GetxController {
   var usernameController = TextEditingController();
   var passwordController = TextEditingController();
+  var emailController = TextEditingController();
   RxBool isRememberMe = false.obs;
   RxBool isStartAnimation = false.obs;
   final RxBool isOktaLogin = false.obs;
@@ -37,12 +38,20 @@ class LoginController extends GetxController {
     }
   }
 
+  Future<bool> register() async{
+    if(validate()){
+      bool? result = await authService.register(
+          usernameController.text.toString(),
+          passwordController.text.toString(),
+          emailController.text.toString());
+      return result;
+    }
+    return false;
+  }
+
   Future<bool> logIn() async
   {
     User? result;
-    if (User().environment == "MOBILE"){
-      return true;
-    }
     if (validate()) {
       //progress.showProgress();
       result = await authService.logIn(
@@ -67,7 +76,8 @@ class LoginController extends GetxController {
 
   bool validate() {
     if (usernameController.text.toString().isEmpty ||
-        passwordController.text.toString().isEmpty) {
+        passwordController.text.toString().isEmpty ||
+        emailController.text.toString().isEmpty) {
       showMsg(title: alert, message: enterUserDetail);
       return false;
     }

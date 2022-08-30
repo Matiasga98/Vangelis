@@ -454,7 +454,7 @@ class DashboardController extends GetxController with GetSingleTickerProviderSta
 
     Future<void> addBodies() async {
 
-      bodies.add(SearchPage());
+      bodies.add(SearchScreen());
       bodies.add(CollabPage());
       bodies.add(ProfilePage());
     }
