@@ -414,3 +414,6 @@ const alphabetArray = [
   "Y",
   "Z",
 ];
+
+
+String logoRock = "images/logo.png";

@@ -2,10 +2,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:vangelis/helpers/custom_text.dart';
 import 'package:vangelis/pages/dashboard/profile/profile_controller.dart';
 import 'package:vangelis/pages/dashboard/search/search_controller.dart';
 import 'package:vangelis/util/constants.dart';
 
+import '../../../helpers/dialog_buttons.dart';
 import '../../../services/theme_service.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -28,11 +30,13 @@ class _ProfilePageState extends State<ProfilePage>
     "https://i.pinimg.com/736x/c4/03/c6/c403c63b8e1882b6f10c82f601180e2d.jpg",
   ];
 
+  final ProfileController profileController = Get.put(ProfileController());
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    tabController = TabController(length: 3, vsync: this);
+    tabController = TabController(length: 4, vsync: this);
   }
 
   TabController? tabController;
@@ -42,253 +46,325 @@ class _ProfilePageState extends State<ProfilePage>
   @override
   Widget build(BuildContext context) {
     ThemeService().init(context);
-    return Scaffold(
-      backgroundColor: themeConfig!.whiteBlackColor,
-      body: Center(
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              Padding(
-                padding:
-                    const EdgeInsets.only(left: 15.0, right: 15.0, top: 35.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    IconButton(
-                      onPressed: () {},
-                      icon: Icon(
-                        Icons.arrow_back_ios,
-                        size: 30.0,
-                      ),
-                    ),
-                    Text(
-                      "Jenny Wilson",
-                      style: TextStyle(
-                        fontSize: 30.0,
-                        fontWeight: FontWeight.w900,
-                      ),
-                    ),
-                    IconButton(
-                      onPressed: () {},
-                      icon: Icon(
-                        Icons.more_horiz,
-                        size: 30.0,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              SizedBox(height: 70.0),
-              CircleAvatar(
-                backgroundImage: NetworkImage(
-                    "https://free2music.com/images/singer/2019/02/10/troye-sivan_2.jpg"),
-                radius: 70.0,
-              ),
-              SizedBox(height: 20.0),
-              Text(
-                "@Wilson_je",
-                style: TextStyle(
-                  fontWeight: FontWeight.w800,
-                  fontSize: 30.0,
-                ),
-              ),
-              SizedBox(height: 30.0),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
+    return Obx(() => Scaffold(
+          backgroundColor: themeConfig!.whiteBlackColor,
+          body: Center(
+            child: SingleChildScrollView(
+              child: Column(
                 children: [
-                  SizedBox(width: 20.0),
-                  Column(
-                    children: [
-                      Text(
-                        "29",
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 20.0,
+                  Padding(
+                    padding: const EdgeInsets.only(
+                        left: 15.0, right: 15.0, top: 35.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        IconButton(
+                          onPressed: () {},
+                          icon: Icon(
+                            Icons.arrow_back_ios,
+                            size: 30.0,
+                          ),
                         ),
-                      ),
-                      SizedBox(height: 15.0),
-                      Text(
-                        "Following",
-                        style: TextStyle(
-                            color: Colors.black.withOpacity(0.3),
-                            fontSize: 20.0,
-                            fontWeight: FontWeight.w100),
-                      ),
-                    ],
-                  ),
-                  Column(
-                    children: [
-                      Text(
-                        "121.9k",
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 20.0,
+                        Text(
+                          "Jenny Wilson",
+                          style: TextStyle(
+                            fontSize: 30.0,
+                            fontWeight: FontWeight.w900,
+                          ),
                         ),
-                      ),
-                      SizedBox(height: 15.0),
-                      Text(
-                        "Followers",
-                        style: TextStyle(
-                            color: Colors.black.withOpacity(0.3),
-                            fontSize: 20.0,
-                            fontWeight: FontWeight.w300),
-                      ),
-                    ],
-                  ),
-                  Column(
-                    children: [
-                      Text(
-                        "7.5M",
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 20.0,
+                        IconButton(
+                          onPressed: () {},
+                          icon: Icon(
+                            Icons.more_horiz,
+                            size: 30.0,
+                          ),
                         ),
-                      ),
-                      SizedBox(height: 15.0),
-                      Text(
-                        "Like",
-                        style: TextStyle(
-                            color: Colors.black.withOpacity(0.3),
-                            fontSize: 20.0,
-                            fontWeight: FontWeight.w300),
-                      ),
-                    ],
-                  ),
-                  SizedBox(width: 20.w),
-                ],
-              ),
-              SizedBox(height: 30.h),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  ElevatedButton(
-                    onPressed: () {},
-                    child: Text(
-                      "Follow",
-                      style: TextStyle(fontSize: 18.0),
-                    ),
-                    style: ElevatedButton.styleFrom(
-                      fixedSize: Size(140.0, 55.0),
-                      primary: Colors.green,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(15.0),
-                      ),
-                    ),
-                  ),
-                  SizedBox(width: 15.w),
-                  OutlinedButton(
-                    onPressed: () {},
-                    child: Icon(Icons.mail_outline_outlined),
-                    style: OutlinedButton.styleFrom(
-                        primary: Colors.black,
-                        backgroundColor: Colors.black12,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(50.0),
-                        ),
-                        fixedSize: Size(50.0, 60.0)),
-                  )
-                ],
-              ),
-              SizedBox(height: 20.h),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Expanded(
-                    child: TabBar(
-                      isScrollable: true,
-                      controller: tabController,
-                      indicator: BoxDecoration(borderRadius: BorderRadius.zero),
-                      labelColor: Colors.black,
-                      labelStyle: TextStyle(
-                          fontSize: 28.0, fontWeight: FontWeight.bold),
-                      unselectedLabelColor: Colors.black26,
-                      onTap: (tapIndex) {
-                        setState(() {
-                          selectedIndex = tapIndex;
-                        });
-                      },
-                      tabs: [
-                        Tab(text: "Photos"),
-                        Tab(text: "Video"),
-                        Tab(text: "Tagged"),
                       ],
                     ),
                   ),
-                  SizedBox(width: 50.w),
-                  IconButton(
-                    onPressed: () {},
-                    icon: Icon(Icons.more_vert),
-                  )
-                ],
-              ),
-              SizedBox(height: 10.0),
-              SizedBox(
-                width: 5000.w,
-                height: 500.h,
-                child: TabBarView(
-                  physics: NeverScrollableScrollPhysics(),
-                  controller: tabController,
-                  children: [
-                    GridView.builder(
-                      scrollDirection: Axis.vertical,
-
-                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          mainAxisExtent: 250.0, crossAxisCount: 3),
-                      itemBuilder: (context, index) {
-                        return Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Container(
-                            decoration: BoxDecoration(
-                              color: Colors.black,
-                              borderRadius: BorderRadius.circular(20.0),
-                              image: DecorationImage(
-                                image: NetworkImage(listImage[index]),
-                                fit: BoxFit.cover,
+                  SizedBox(height: 70.0),
+                  CircleAvatar(
+                    backgroundImage: NetworkImage(
+                        "https://free2music.com/images/singer/2019/02/10/troye-sivan_2.jpg"),
+                    radius: 70.0,
+                  ),
+                  SizedBox(height: 20.0),
+                  Text(
+                    "@Wilson_je",
+                    style: TextStyle(
+                      fontWeight: FontWeight.w800,
+                      fontSize: 30.0,
+                    ),
+                  ),
+                  SizedBox(height: 30.0),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      SizedBox(
+                        height: 100.h,
+                        width: 500.w,
+                        child: ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          itemBuilder: (context, index) {
+                            return Container(
+                              child: Column(
+                                children: [
+                                  const Icon(Icons.piano),
+                                  CustomText("Piano")
+                                ],
+                              ),
+                              width: 90.w,
+                            );
+                          },
+                          itemCount: 10,
+                        ),
+                      ),
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      SizedBox(
+                        height: 100.h,
+                        width: 500.w,
+                        child: ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          itemBuilder: (context, index) {
+                            return Container(
+                              child: Column(
+                                children: [
+                                  const Icon(CupertinoIcons.music_note_list),
+                                  CustomText("Jazz")
+                                ],
+                              ),
+                              width: 90.w,
+                            );
+                          },
+                          itemCount: 10,
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 30.h),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      OutlinedButton(
+                        onPressed: () {},
+                        child: Icon(
+                          Icons.telegram_rounded,
+                        ),
+                        style: OutlinedButton.styleFrom(
+                            side: BorderSide(
+                              color: Colors.transparent,
+                            ),
+                            primary: Colors.blue,
+                            backgroundColor: Colors.white,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(100.0),
+                            ),
+                            fixedSize: Size(50.0, 60.0)),
+                      ),
+                      SizedBox(width: 15.w),
+                      OutlinedButton(
+                        onPressed: () {},
+                        child: Icon(Icons.whatsapp_rounded),
+                        style: OutlinedButton.styleFrom(
+                            side: BorderSide(
+                              color: Colors.transparent,
+                            ),
+                            primary: Colors.green,
+                            backgroundColor: Colors.white,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(100.0),
+                            ),
+                            fixedSize: Size(50.0, 60.0)),
+                      )
+                    ],
+                  ),
+                  Container(
+                    height: 30.h,
+                  ),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          CustomText(
+                            'Sobre Jenny Wilson',
+                            fontSize: 30.h,
+                          ), // <-- Text
+                          OutlinedButton(
+                            onPressed: () {
+                              showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return AlertDialog(
+                                    title: Text('Editar descripción'),
+                                    content: TextField(
+                                      controller: profileController
+                                          .descriptionController,
+                                    ),
+                                    actions: [
+                                      DialogButtons(
+                                          onCancel: () => {
+                                              Navigator.pop(context, false),
+                                              profileController.onCancel()
+                                          },
+                                          onOk: () => {
+                                                profileController
+                                                    .updateDescription(),
+                                                Navigator.pop(context, true)
+                                              },
+                                          okButtonText: "Aceptar",
+                                          cancelButtonText: "Cancelar"),
+                                    ],
+                                  );
+                                },
+                              );
+                            },
+                            style: OutlinedButton.styleFrom(
+                              minimumSize: Size.zero, // Set this
+                              padding: EdgeInsets.zero, // and this
+                              side: BorderSide(
+                                color: Colors.transparent,
                               ),
                             ),
-                            child: Padding(
-                              padding: const EdgeInsets.only(
-                                  left: 37.0,
-                                  right: 37.0,
-                                  top: 185.0,
-                                  bottom: 15.0),
-                              child: Container(
-                                alignment: Alignment.center,
-                                decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    borderRadius: BorderRadius.circular(15.0)),
-                                child: Text("1.234k"),
-                              ),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                SizedBox(
+                                  width: 5,
+                                ),
+                                Icon(
+                                  // <-- Icon
+                                  Icons.edit,
+                                ),
+                              ],
                             ),
                           ),
-                        );
-                      },
-                      itemCount: 8,
+                        ],
+                      ),
+                      Container(
+                        height: 30.h,
+                      ),
+                      SizedBox(
+                        height: 200.h,
+                        width: 600.w,
+                        child: CustomText(
+                          profileController.description.value,
+                          fontSize: 25.h,
+                          fontWeight: FontWeight.w100,
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 30.h),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Expanded(
+                        child: TabBar(
+                          isScrollable: true,
+                          controller: tabController,
+                          indicator:
+                              BoxDecoration(borderRadius: BorderRadius.zero),
+                          labelColor: Colors.black,
+                          labelStyle: TextStyle(
+                              fontSize: 28.0, fontWeight: FontWeight.bold),
+                          unselectedLabelColor: Colors.black26,
+                          onTap: (tapIndex) {
+                            setState(() {
+                              selectedIndex = tapIndex;
+                            });
+                          },
+                          tabs: [
+                            Tab(text: "Fotos"),
+                            Tab(text: "Videos"),
+                            Tab(text: "Audios"),
+                            Tab(text: "Colaboraciones"),
+                          ],
+                        ),
+                      ),
+                      SizedBox(width: 50.w),
+                      IconButton(
+                        onPressed: () {},
+                        icon: Icon(Icons.more_vert),
+                      )
+                    ],
+                  ),
+                  SizedBox(height: 10.0),
+                  SizedBox(
+                    width: 5000.w,
+                    height: 500.h,
+                    child: TabBarView(
+                      physics: NeverScrollableScrollPhysics(),
+                      controller: tabController,
+                      children: [
+                        GridView.builder(
+                          scrollDirection: Axis.vertical,
+                          gridDelegate:
+                              SliverGridDelegateWithFixedCrossAxisCount(
+                                  mainAxisExtent: 250.0, crossAxisCount: 3),
+                          itemBuilder: (context, index) {
+                            return Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  color: Colors.black,
+                                  borderRadius: BorderRadius.circular(20.0),
+                                  image: DecorationImage(
+                                    image: NetworkImage(listImage[index]),
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.only(
+                                      left: 37.0,
+                                      right: 37.0,
+                                      top: 185.0,
+                                      bottom: 15.0),
+                                  child: Container(
+                                    alignment: Alignment.center,
+                                    decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        borderRadius:
+                                            BorderRadius.circular(15.0)),
+                                    child: Text("1.234k"),
+                                  ),
+                                ),
+                              ),
+                            );
+                          },
+                          itemCount: 8,
+                        ),
+                        Center(
+                          child: Text("You don't have any videos"),
+                        ),
+                        Center(
+                          child: Text("You don't have any tagged"),
+                        ),
+                        Center(
+                          child: Text("You don't have any tagged"),
+                        ),
+                      ],
                     ),
-
-                    Center(
-                      child: Text("You don't have any videos"),
-                    ),
-                    Center(
-                      child: Text("You don't have any tagged"),
-                    ),
-                  ],
-                ),
+                  ),
+                  CircleAvatar(
+                    backgroundImage: NetworkImage(
+                        "https://free2music.com/images/singer/2019/02/10/troye-sivan_2.jpg"),
+                    radius: 70.0,
+                  ),
+                  CircleAvatar(
+                    backgroundImage: NetworkImage(
+                        "https://free2music.com/images/singer/2019/02/10/troye-sivan_2.jpg"),
+                    radius: 70.0,
+                  ),
+                ],
               ),
-              CircleAvatar(
-                backgroundImage: NetworkImage(
-                    "https://free2music.com/images/singer/2019/02/10/troye-sivan_2.jpg"),
-                radius: 70.0,
-              ),
-              CircleAvatar(
-                backgroundImage: NetworkImage(
-                    "https://free2music.com/images/singer/2019/02/10/troye-sivan_2.jpg"),
-                radius: 70.0,
-              ),
-            ],
-          ),
-        ),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
-    );
+            ),
+          ), // This trailing comma makes auto-formatting nicer for build methods.
+        ));
   }
 }
