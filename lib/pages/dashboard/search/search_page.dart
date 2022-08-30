@@ -27,7 +27,7 @@ class _SearchScreenState extends State<SearchScreen> {
     ThemeService().init(context);
     Size size = MediaQuery.of(context).size;
 
-    return Scaffold(
+    return Obx(() =>Scaffold(
         backgroundColor: themeConfig!.whiteBlackColor,
         body: SingleChildScrollView(
           padding: EdgeInsets.symmetric(vertical: 20),
@@ -61,9 +61,7 @@ class _SearchScreenState extends State<SearchScreen> {
                               children: [
                                 IconButton(
                                     onPressed: () {
-                                      _ctrl.closeContext();
-                                      setState(() {});
-                                    },
+                                      _ctrl.closeContext(); },
                                     icon: const Icon(Icons.clear)),
                                 GestureDetector(
                                   onTap: () {
@@ -851,7 +849,7 @@ class _SearchScreenState extends State<SearchScreen> {
                     )
             ],
           ),
-        ));
+        )));
   }
 }
 
