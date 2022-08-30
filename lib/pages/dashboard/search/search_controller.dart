@@ -66,6 +66,8 @@ class SearchController extends GetxController {
     "Cuarteto",
     "Rap",
     "Hip Hop",
+    "Kpop",
+    "Eurobeat",
   ];
   List<MusicianCard> musicians = [
     MusicianCard(finalImage: "images/Hernan.png", name: "Hernan Ezequiel Rodriguez Cary",

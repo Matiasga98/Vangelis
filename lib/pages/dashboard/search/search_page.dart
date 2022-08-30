@@ -27,7 +27,7 @@ class _SearchScreenState extends State<SearchScreen> {
     ThemeService().init(context);
     Size size = MediaQuery.of(context).size;
 
-    return Obx(() =>Scaffold(
+    return Obx(() => Scaffold(
         backgroundColor: themeConfig!.whiteBlackColor,
         body: SingleChildScrollView(
           padding: EdgeInsets.symmetric(vertical: 20),
@@ -61,9 +61,10 @@ class _SearchScreenState extends State<SearchScreen> {
                               children: [
                                 IconButton(
                                     onPressed: () {
-                                      _ctrl.closeContext(); },
+                                      _ctrl.closeContext();
+                                    },
                                     icon: const Icon(Icons.clear)),
-                                GestureDetector(
+                                /*GestureDetector(
                                   onTap: () {
                                     showModalBottomSheet(
                                         context: context,
@@ -97,166 +98,6 @@ class _SearchScreenState extends State<SearchScreen> {
                                                     const SizedBox(
                                                       height: 20,
                                                     ),
-                                                    /*Row(
-                                            children: [
-                                              Text(
-                                                "Distancia Maxima",
-                                                style: TextStyle(
-                                                    fontSize: 16,
-                                                    color: greenDark,
-                                                    fontWeight: FontWeight.w500),
-                                              ),
-                                              const SizedBox(
-                                                width: 50,
-                                              ),
-                                              Container(
-                                                width: size.width / 2,
-                                                height: 30,
-                                                decoration: BoxDecoration(
-                                                    color: greenTint1,
-                                                    borderRadius:
-                                                    BorderRadius.circular(5),
-                                                    border: Border.all(
-                                                        color: const Color(
-                                                            0xffABC7C7))),
-                                                child: Row(
-                                                  children: [
-                                                    Material(
-                                                      borderRadius:
-                                                      BorderRadius.circular(
-                                                          5),
-                                                      color: Colors.transparent,
-                                                      child: InkWell(
-                                                        onTap: () {
-                                                          setState(() {
-                                                            _distance--;
-                                                          });
-                                                        },
-                                                        splashColor: greenTint2,
-                                                        child: Ink(
-                                                          width: 30,
-                                                          height: 30,
-                                                          decoration: BoxDecoration(
-                                                              color: Colors.white,
-                                                              borderRadius:
-                                                              BorderRadius
-                                                                  .circular(
-                                                                  5),
-                                                              border: Border.all(
-                                                                  color: const Color(
-                                                                      0xffABC7C7))),
-                                                          child: const Icon(
-                                                            Icons.remove,
-                                                            color:
-                                                            Color(0xff6B9696),
-                                                            size: 10,
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    Expanded(
-                                                        child: Align(
-                                                            child: FittedBox(
-                                                                fit: BoxFit
-                                                                    .scaleDown,
-                                                                child: Text(
-                                                                    "$_distance")))),
-                                                    Material(
-                                                      borderRadius:
-                                                      BorderRadius.circular(
-                                                          5),
-                                                      color: Colors.transparent,
-                                                      child: InkWell(
-                                                        onTap: () {
-                                                          setState(() {
-                                                            _distance++;
-                                                          });
-                                                        },
-                                                        splashColor: greenTint2,
-                                                        child: Ink(
-                                                          width: 30,
-                                                          height: 30,
-                                                          decoration: BoxDecoration(
-                                                              color: Colors.white,
-                                                              borderRadius:
-                                                              BorderRadius
-                                                                  .circular(
-                                                                  5),
-                                                              border: Border.all(
-                                                                  color: const Color(
-                                                                      0xffABC7C7))),
-                                                          child: const Icon(
-                                                            Icons.add,
-                                                            color:
-                                                            Color(0xff6B9696),
-                                                            size: 10,
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    )
-                                                  ],
-                                                ),
-                                              )
-                                            ],
-                                          ),
-                                              Padding(
-                                            padding: const EdgeInsets.symmetric(
-                                                vertical: 16),
-                                            child: Wrap(
-                                              spacing: 6,
-                                              runSpacing: 12,
-                                              runAlignment: WrapAlignment.start,
-                                              alignment: WrapAlignment.start,
-                                              crossAxisAlignment:
-                                              WrapCrossAlignment.start,
-                                              children: List.generate(
-                                                  maximumDistance.length,
-                                                      (index) => IntrinsicWidth(
-                                                    child: GestureDetector(
-                                                      onTap: () {
-                                                        setState(
-                                                              () {
-                                                            selectedDistance =
-                                                                index;
-                                                          },
-                                                        );
-                                                      },
-                                                      child: Container(
-                                                        height: 30,
-                                                        padding:
-                                                        const EdgeInsets
-                                                            .symmetric(
-                                                            horizontal:
-                                                            16),
-                                                        decoration: BoxDecoration(
-                                                            color: index ==
-                                                                selectedDistance
-                                                                ? greenLight
-                                                                : greenTint1,
-                                                            borderRadius:
-                                                            BorderRadius
-                                                                .circular(
-                                                                15)),
-                                                        alignment:
-                                                        Alignment.center,
-                                                        child: Text(
-                                                          maximumDistance[index],
-                                                          style: TextStyle(
-                                                              color: index ==
-                                                                  selectedDistance
-                                                                  ? Colors
-                                                                  .white
-                                                                  : Colors
-                                                                  .black,
-                                                              fontWeight:
-                                                              FontWeight
-                                                                  .w500),
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  )),
-                                            ),
-                                          ),*/
                                                     const Padding(
                                                       padding: EdgeInsets.only(
                                                           bottom: 15),
@@ -635,7 +476,7 @@ class _SearchScreenState extends State<SearchScreen> {
                                   child: Image.asset(
                                     "images/search.png",
                                   ),
-                                ),
+                                ),*/
                               ]),
                         ),
                         prefixIconConstraints:
@@ -672,54 +513,61 @@ class _SearchScreenState extends State<SearchScreen> {
                                 fontWeight: FontWeight.w500),
                           ),
                         ),
-                        Wrap(
-                          spacing: 6,
-                          runSpacing: 12,
-                          runAlignment: WrapAlignment.start,
-                          alignment: WrapAlignment.start,
-                          crossAxisAlignment: WrapCrossAlignment.start,
-                          children: List.generate(
-                            _ctrl.instruments.length,
-                            (index) => IntrinsicWidth(
-                              child: GestureDetector(
-                                onTap: () {
-                                  setState(() {
-                                    if (_ctrl.selectedInstruments
-                                        .contains(_ctrl.instruments[index])) {
-                                      _ctrl.selectedInstruments
-                                          .remove(_ctrl.instruments[index]);
-                                    } else {
-                                      _ctrl.selectedInstruments
-                                          .add(_ctrl.instruments[index]);
-                                    }
-                                  });
-                                },
-                                child: Container(
-                                  height: 30,
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 16),
-                                  decoration: BoxDecoration(
-                                      color: _ctrl.selectedInstruments.contains(
-                                              _ctrl.instruments[index])
-                                          ? greenLight
-                                          : greenTint1,
-                                      borderRadius: BorderRadius.circular(15)),
-                                  alignment: Alignment.center,
-                                  child: Text(
-                                    _ctrl.instruments[index],
-                                    style: TextStyle(
-                                        color: _ctrl.selectedInstruments
-                                                .contains(
-                                                    _ctrl.instruments[index])
-                                            ? Colors.white
-                                            : Colors.black,
-                                        fontWeight: FontWeight.w500),
+                        SizedBox(
+                            height: 220.h,
+                            child: SingleChildScrollView(
+                              child: Wrap(
+                                spacing: 6,
+                                runSpacing: 12,
+                                runAlignment: WrapAlignment.start,
+                                alignment: WrapAlignment.start,
+                                crossAxisAlignment: WrapCrossAlignment.start,
+                                children: List.generate(
+                                  _ctrl.instruments.length,
+                                  (index) => IntrinsicWidth(
+                                    child: GestureDetector(
+                                      onTap: () {
+                                        setState(() {
+                                          if (_ctrl.selectedInstruments
+                                              .contains(
+                                                  _ctrl.instruments[index])) {
+                                            _ctrl.selectedInstruments.remove(
+                                                _ctrl.instruments[index]);
+                                          } else {
+                                            _ctrl.selectedInstruments
+                                                .add(_ctrl.instruments[index]);
+                                          }
+                                        });
+                                      },
+                                      child: Container(
+                                        height: 30,
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 16),
+                                        decoration: BoxDecoration(
+                                            color: _ctrl.selectedInstruments
+                                                    .contains(_ctrl
+                                                        .instruments[index])
+                                                ? greenLight
+                                                : greenTint1,
+                                            borderRadius:
+                                                BorderRadius.circular(15)),
+                                        alignment: Alignment.center,
+                                        child: Text(
+                                          _ctrl.instruments[index],
+                                          style: TextStyle(
+                                              color: _ctrl.selectedInstruments
+                                                      .contains(_ctrl
+                                                          .instruments[index])
+                                                  ? Colors.white
+                                                  : Colors.black,
+                                              fontWeight: FontWeight.w500),
+                                        ),
+                                      ),
+                                    ),
                                   ),
                                 ),
                               ),
-                            ),
-                          ),
-                        ),
+                            )),
                         const SizedBox(
                           height: 16,
                         ),
@@ -735,56 +583,233 @@ class _SearchScreenState extends State<SearchScreen> {
                                 fontWeight: FontWeight.w500),
                           ),
                         ),
-                        Wrap(
-                          spacing: 6,
-                          runSpacing: 12,
-                          runAlignment: WrapAlignment.start,
-                          alignment: WrapAlignment.start,
-                          crossAxisAlignment: WrapCrossAlignment.start,
-                          children: List.generate(
-                            _ctrl.musicalGenres.length,
-                            (index) => IntrinsicWidth(
-                              child: GestureDetector(
-                                onTap: () {
-                                  setState(() {
-                                    if (_ctrl.selectedGenres
-                                        .contains(_ctrl.musicalGenres[index])) {
-                                      _ctrl.selectedGenres
-                                          .remove(_ctrl.musicalGenres[index]);
-                                    } else {
-                                      _ctrl.selectedGenres
-                                          .add(_ctrl.musicalGenres[index]);
-                                    }
-                                  });
-                                },
-                                child: Container(
-                                  height: 30,
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 16),
-                                  decoration: BoxDecoration(
-                                      color: _ctrl.selectedGenres.contains(
-                                              _ctrl.musicalGenres[index])
-                                          ? greenLight
-                                          : greenTint1,
-                                      borderRadius: BorderRadius.circular(15)),
-                                  alignment: Alignment.center,
-                                  child: Text(
-                                    _ctrl.musicalGenres[index],
-                                    style: TextStyle(
-                                        color: _ctrl.selectedGenres.contains(
-                                                _ctrl.musicalGenres[index])
-                                            ? Colors.white
-                                            : Colors.black,
-                                        fontWeight: FontWeight.w500),
+                        SizedBox(
+                            height: 220.h,
+                            child: SingleChildScrollView(
+                                child: Wrap(
+                              spacing: 6,
+                              runSpacing: 12,
+                              runAlignment: WrapAlignment.start,
+                              alignment: WrapAlignment.start,
+                              crossAxisAlignment: WrapCrossAlignment.start,
+                              children: List.generate(
+                                _ctrl.musicalGenres.length,
+                                (index) => IntrinsicWidth(
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      setState(() {
+                                        if (_ctrl.selectedGenres.contains(
+                                            _ctrl.musicalGenres[index])) {
+                                          _ctrl.selectedGenres.remove(
+                                              _ctrl.musicalGenres[index]);
+                                        } else {
+                                          _ctrl.selectedGenres
+                                              .add(_ctrl.musicalGenres[index]);
+                                        }
+                                      });
+                                    },
+                                    child: Container(
+                                      height: 30,
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 16),
+                                      decoration: BoxDecoration(
+                                          color: _ctrl.selectedGenres.contains(
+                                                  _ctrl.musicalGenres[index])
+                                              ? greenLight
+                                              : greenTint1,
+                                          borderRadius:
+                                              BorderRadius.circular(15)),
+                                      alignment: Alignment.center,
+                                      child: Text(
+                                        _ctrl.musicalGenres[index],
+                                        style: TextStyle(
+                                            color: _ctrl.selectedGenres
+                                                    .contains(_ctrl
+                                                        .musicalGenres[index])
+                                                ? Colors.white
+                                                : Colors.black,
+                                            fontWeight: FontWeight.w500),
+                                      ),
+                                    ),
                                   ),
                                 ),
                               ),
-                            ),
+                            ))),
+                        const SizedBox(
+                          height: 16,
+                        ),
+                        Container(
+                          padding: EdgeInsets.symmetric(
+                              vertical: 16, horizontal: size.width * 0.075),
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            "Sexo",
+                            style: TextStyle(
+                                color: greenDark,
+                                fontSize: 16,
+                                fontWeight: FontWeight.w500),
                           ),
                         ),
+                        SizedBox(
+                            height: 50.h,
+                            child: SingleChildScrollView(
+                              child: Wrap(
+                                spacing: 6,
+                                runSpacing: 12,
+                                runAlignment:
+                                WrapAlignment.start,
+                                alignment:
+                                WrapAlignment.start,
+                                crossAxisAlignment:
+                                WrapCrossAlignment
+                                    .start,
+                                children: [
+                                  IntrinsicWidth(
+                                    child:
+                                    GestureDetector(
+                                      onTap: () {
+                                        setState(
+                                              () {
+                                            _ctrl.selectedGender =
+                                            "Masculino";
+                                          },
+                                        );
+                                      },
+                                      child: Container(
+                                          height: 30,
+                                          padding: const EdgeInsets
+                                              .symmetric(
+                                              horizontal:
+                                              32),
+                                          decoration: BoxDecoration(
+                                              color: "Masculino" ==
+                                                  _ctrl
+                                                      .selectedGender
+                                                  ? greenLight
+                                                  : greenTint1,
+                                              borderRadius:
+                                              BorderRadius.circular(
+                                                  15)),
+                                          alignment:
+                                          Alignment
+                                              .center,
+                                          child: Text(
+                                            "Masculino",
+                                            style: TextStyle(
+                                                color: "Masculino" == _ctrl.selectedGender
+                                                    ? Colors
+                                                    .white
+                                                    : Colors
+                                                    .black,
+                                                fontWeight:
+                                                FontWeight.w500),
+                                          )),
+                                    ),
+                                  ),
+                                  IntrinsicWidth(
+                                    child:
+                                    GestureDetector(
+                                      onTap: () {
+                                        setState(
+                                              () {
+                                            _ctrl.selectedGender =
+                                            "Femenino";
+                                          },
+                                        );
+                                      },
+                                      child: Container(
+                                          height: 30,
+                                          padding: const EdgeInsets
+                                              .symmetric(
+                                              horizontal:
+                                              32),
+                                          decoration: BoxDecoration(
+                                              color: "Femenino" ==
+                                                  _ctrl
+                                                      .selectedGender
+                                                  ? greenLight
+                                                  : greenTint1,
+                                              borderRadius:
+                                              BorderRadius.circular(
+                                                  15)),
+                                          alignment:
+                                          Alignment
+                                              .center,
+                                          child: Text(
+                                            "Femenino",
+                                            style: TextStyle(
+                                                color: "Femenino" == _ctrl.selectedGender
+                                                    ? Colors
+                                                    .white
+                                                    : Colors
+                                                    .black,
+                                                fontWeight:
+                                                FontWeight.w500),
+                                          )),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            )),
                         const SizedBox(
-                          height: 60,
+                          height: 16,
                         ),
+                        Container(
+                          padding: EdgeInsets.symmetric(
+                              vertical: 16, horizontal: size.width * 0.075),
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            "Edad",
+                            style: TextStyle(
+                                color: greenDark,
+                                fontSize: 16,
+                                fontWeight: FontWeight.w500),
+                          ),
+                        ),
+                        SizedBox(
+                            height: 200.h,
+                            child: SingleChildScrollView(
+                              child: Wrap(
+                                spacing: 6,
+                                runSpacing: 12,
+                                runAlignment:
+                                WrapAlignment.start,
+                                alignment:
+                                WrapAlignment.start,
+                                crossAxisAlignment:
+                                WrapCrossAlignment
+                                    .start,
+                                children: List.generate(
+                                    _ctrl.ageRange
+                                        .length,
+                                        (index) =>
+                                        IntrinsicWidth(
+                                          child:
+                                          GestureDetector(
+                                            onTap: () {
+                                              setState(
+                                                    () {
+                                                  _ctrl.selectedAge =
+                                                      index;
+                                                },
+                                              );
+                                            },
+                                            child: Container(
+                                                height: 30,
+                                                padding: const EdgeInsets.symmetric(horizontal: 16),
+                                                decoration: BoxDecoration(color: index == _ctrl.selectedAge ? greenLight : greenTint1, borderRadius: BorderRadius.circular(15)),
+                                                alignment: Alignment.center,
+                                                child: Text(
+                                                  _ctrl.ageRange[
+                                                  index],
+                                                  style: TextStyle(
+                                                      color: index == _ctrl.selectedAge ? Colors.white : Colors.black,
+                                                      fontWeight: FontWeight.w500),
+                                                )),
+                                          ),
+                                        )),
+                              ),
+                            )),
                         Container(
                           width: size.width * 0.9,
                           height: 50,
