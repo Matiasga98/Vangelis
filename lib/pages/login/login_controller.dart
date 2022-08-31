@@ -65,6 +65,11 @@ class LoginController extends GetxController {
     }
   }
 
+  void secretMatiLogin(){
+    usernameController.text = "MatiasLaye";
+    passwordController.text = "Password_123";
+  }
+
   bool validate() {
     if (usernameController.text.toString().isEmpty ||
         passwordController.text.toString().isEmpty) {

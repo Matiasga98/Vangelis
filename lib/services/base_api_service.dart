@@ -9,7 +9,6 @@ import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:path_provider/path_provider.dart';
 
-
 import '../config/config.dart';
 import '../entity/user.dart';
 import '../pages/dashboard/dashboard_controller.dart';
@@ -17,25 +16,25 @@ import '../util/enums.dart';
 import 'auth_service.dart';
 
 abstract class BaseApiService extends GetxService {
-  final Configuration _configuration = Get.find();
+  final Configuration configuration = Get.find();
 
   String _baseUrl = '';
 
   Uri _getParsedUri(String url) {
-    _baseUrl = _configuration.getApiUrl();
+    _baseUrl = configuration.getApiUrl();
     return Uri.parse(_baseUrl + url);
   }
 
   @protected
-  Future<http.Response> get(String url) async
-  {
+  Future<http.Response> get(String url) async {
     await _refreshTokenIfNeeded();
     var user = User();
     Map<String, String> finalHeaders = <String, String>{};
-    finalHeaders['Authorization'] = '${user.token.target!.tokenType} ${User().token.target!.token}';
-    return http
-        .get(_getParsedUri(url), headers: finalHeaders)
-        .onError((error, stackTrace) => Future.value(http.Response("Error", 500)));
+    finalHeaders['Authorization'] =
+        '${user.token.target!.tokenType} ${User().token.target!.token}';
+    finalHeaders['content-type'] = "application/json; charset=UTF-8";
+    return http.get(_getParsedUri(url), headers: finalHeaders).onError(
+        (error, stackTrace) => Future.value(http.Response("Error", 500)));
   }
 
   @protected
@@ -43,26 +42,31 @@ abstract class BaseApiService extends GetxService {
     await _refreshTokenIfNeeded();
     return http
         .patch(_getParsedUri(url), headers: getCompleteHeaders())
-        .timeout(Duration(seconds: _configuration.getRequestTimeout()))
-        .onError((error, stackTrace) => Future.value(http.Response("Error", 500)));
+        .timeout(Duration(seconds: configuration.getRequestTimeout()))
+        .onError(
+            (error, stackTrace) => Future.value(http.Response("Error", 500)));
   }
 
   @protected
-  Future<http.Response> getWithHeaders(String url, Map<String, String> headers) async {
+  Future<http.Response> getWithHeaders(
+      String url, Map<String, String> headers) async {
     await _refreshTokenIfNeeded();
     return http
         .get(_getParsedUri(url), headers: getCompleteHeaders(headers))
-        .timeout(Duration(seconds: _configuration.getRequestTimeout()))
-        .onError((error, stackTrace) => Future.value(http.Response("Error", 500)));
+        .timeout(Duration(seconds: configuration.getRequestTimeout()))
+        .onError(
+            (error, stackTrace) => Future.value(http.Response("Error", 500)));
   }
 
   @protected
   Future<http.Response> post(String url, Object body) async {
     await _refreshTokenIfNeeded();
     return http
-        .post(_getParsedUri(url), headers: getCompleteHeaders(), body: json.encode(body))
-        .timeout(Duration(seconds: _configuration.getRequestTimeout()))
-        .onError((error, stackTrace) => Future.value(http.Response("Error", 500)));
+        .post(_getParsedUri(url),
+            headers: getCompleteHeaders(), body: json.encode(body))
+        .timeout(Duration(seconds: configuration.getRequestTimeout()))
+        .onError(
+            (error, stackTrace) => Future.value(http.Response("Error", 500)));
   }
 
   @protected
@@ -72,8 +76,9 @@ abstract class BaseApiService extends GetxService {
     return http
         .post(_getParsedUri(url),
             headers: getCompleteHeaders(headers), body: json.encode(body))
-        .timeout(Duration(seconds: _configuration.getRequestTimeout()))
-        .onError((error, stackTrace) => Future.value(http.Response("Error", 500)));
+        .timeout(Duration(seconds: configuration.getRequestTimeout()))
+        .onError(
+            (error, stackTrace) => Future.value(http.Response("Error", 500)));
   }
 
   @protected
@@ -109,9 +114,11 @@ abstract class BaseApiService extends GetxService {
   Future<http.Response> put(String url, Object body) async {
     await _refreshTokenIfNeeded();
     return http
-        .put(_getParsedUri(url), headers: getCompleteHeaders(), body: json.encode(body))
-        .timeout(Duration(seconds: _configuration.getRequestTimeout()))
-        .onError((error, stackTrace) => Future.value(http.Response("Error", 500)));
+        .put(_getParsedUri(url),
+            headers: getCompleteHeaders(), body: json.encode(body))
+        .timeout(Duration(seconds: configuration.getRequestTimeout()))
+        .onError(
+            (error, stackTrace) => Future.value(http.Response("Error", 500)));
   }
 
   @protected
@@ -121,8 +128,9 @@ abstract class BaseApiService extends GetxService {
     return http
         .put(_getParsedUri(url),
             headers: getCompleteHeaders(headers), body: json.encode(body))
-        .timeout(Duration(seconds: _configuration.getRequestTimeout()))
-        .onError((error, stackTrace) => Future.value(http.Response("Error", 500)));
+        .timeout(Duration(seconds: configuration.getRequestTimeout()))
+        .onError(
+            (error, stackTrace) => Future.value(http.Response("Error", 500)));
   }
 
   @protected
@@ -131,8 +139,9 @@ abstract class BaseApiService extends GetxService {
     return http
         .delete(_getParsedUri(url),
             headers: getCompleteHeaders(), body: json.encode(body))
-        .timeout(Duration(seconds: _configuration.getRequestTimeout()))
-        .onError((error, stackTrace) => Future.value(http.Response("Error", 500)));
+        .timeout(Duration(seconds: configuration.getRequestTimeout()))
+        .onError(
+            (error, stackTrace) => Future.value(http.Response("Error", 500)));
   }
 
   @protected
@@ -140,9 +149,11 @@ abstract class BaseApiService extends GetxService {
       String url, Map<String, String> headers, Object body) async {
     await _refreshTokenIfNeeded();
     return http
-        .delete(_getParsedUri(url), headers: getCompleteHeaders(headers), body: body)
-        .timeout(Duration(seconds: _configuration.getRequestTimeout()))
-        .onError((error, stackTrace) => Future.value(http.Response("Error", 500)));
+        .delete(_getParsedUri(url),
+            headers: getCompleteHeaders(headers), body: body)
+        .timeout(Duration(seconds: configuration.getRequestTimeout()))
+        .onError(
+            (error, stackTrace) => Future.value(http.Response("Error", 500)));
   }
 
   /*@protected
@@ -215,7 +226,8 @@ abstract class BaseApiService extends GetxService {
     dio.Dio downloader = dio.Dio();
     dio.Response response = await downloader.get(url,
         options: dio.Options(
-            responseType: dio.ResponseType.bytes, headers: getCompleteHeaders()));
+            responseType: dio.ResponseType.bytes,
+            headers: getCompleteHeaders()));
     return Uint8List.fromList(response.data);
   }
 
@@ -231,10 +243,7 @@ abstract class BaseApiService extends GetxService {
       onReceiveProgress: (rcv, total) {
         if (index != -1) {
           if (type == MediaType.video) {
-
-          } else if (type == MediaType.audio) {
-
-          }
+          } else if (type == MediaType.audio) {}
         }
       },
       deleteOnError: true,
@@ -280,7 +289,8 @@ abstract class BaseApiService extends GetxService {
       finalHeaders['Accept'] = 'application/json,text/pain,*/*';
     }
     var user = User();
-    if (!finalHeaders.containsKey('Authorization') && user.token.target != null) {
+    if (!finalHeaders.containsKey('Authorization') &&
+        user.token.target != null) {
       finalHeaders['Authorization'] =
           '${user.token.target!.tokenType} ${User().token.target!.token}';
     }
@@ -291,7 +301,7 @@ abstract class BaseApiService extends GetxService {
     final user = User();
     if (user.token.target != null
         //&& user.token.target!.expireDate.isBefore(DateTime.now())
-    ) {
+        ) {
       final AuthService authService = Get.find();
       await authService.refreshToken();
     }

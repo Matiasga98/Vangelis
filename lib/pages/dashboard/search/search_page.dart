@@ -8,7 +8,7 @@ import 'package:faker/faker.dart';
 import 'package:vangelis/util/constants.dart';
 
 import '../../../config/colors_.dart';
-import 'card_widget.dart';
+
 import '../../../services/theme_service.dart';
 
 class SearchScreen extends StatefulWidget {

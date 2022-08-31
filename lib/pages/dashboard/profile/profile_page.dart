@@ -7,18 +7,24 @@ import 'package:vangelis/pages/dashboard/profile/profile_controller.dart';
 import 'package:vangelis/pages/dashboard/search/search_controller.dart';
 import 'package:vangelis/util/constants.dart';
 
+import '../../../entity/user.dart';
 import '../../../helpers/dialog_buttons.dart';
+import '../../../model/musician.dart';
 import '../../../services/theme_service.dart';
 
 class ProfilePage extends StatefulWidget {
-  const ProfilePage({Key? key}) : super(key: key);
+
+  Musician musician;
+  ProfilePage(this.musician);
 
   @override
-  _ProfilePageState createState() => _ProfilePageState();
+  _ProfilePageState createState() => _ProfilePageState(musician);
 }
 
 class _ProfilePageState extends State<ProfilePage>
     with TickerProviderStateMixin {
+
+
   var listImage = [
     "https://i.pinimg.com/originals/aa/eb/7f/aaeb7f3e5120d0a68f1b814a1af69539.png",
     "https://cdn.fnmnl.tv/wp-content/uploads/2020/09/04145716/Stussy-FA20-Lookbook-D1-Mens-12.jpg",
@@ -41,10 +47,15 @@ class _ProfilePageState extends State<ProfilePage>
 
   TabController? tabController;
   int selectedIndex = 0;
+
   final _ctrl = Get.put(ProfileController());
+
+  Musician musician;
+  _ProfilePageState(this.musician);
 
   @override
   Widget build(BuildContext context) {
+    _ctrl.musician = musician;
     ThemeService().init(context);
     return Obx(() => Scaffold(
           backgroundColor: themeConfig!.whiteBlackColor,
@@ -66,7 +77,7 @@ class _ProfilePageState extends State<ProfilePage>
                           ),
                         ),
                         Text(
-                          "Jenny Wilson",
+                          _ctrl.username.value,
                           style: TextStyle(
                             fontSize: 30.0,
                             fontWeight: FontWeight.w900,
@@ -84,39 +95,32 @@ class _ProfilePageState extends State<ProfilePage>
                   ),
                   SizedBox(height: 70.0),
                   CircleAvatar(
-                    backgroundImage: NetworkImage(
-                        "https://free2music.com/images/singer/2019/02/10/troye-sivan_2.jpg"),
+                    backgroundImage: _ctrl.profilePicture.value.image,
                     radius: 70.0,
                   ),
                   SizedBox(height: 20.0),
-                  Text(
-                    "@Wilson_je",
-                    style: TextStyle(
-                      fontWeight: FontWeight.w800,
-                      fontSize: 30.0,
-                    ),
-                  ),
+
                   SizedBox(height: 30.0),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
                       SizedBox(
-                        height: 100.h,
+                        height: 150.h,
                         width: 500.w,
                         child: ListView.builder(
                           scrollDirection: Axis.horizontal,
                           itemBuilder: (context, index) {
                             return Container(
+                              width: 110.w,
                               child: Column(
                                 children: [
-                                  const Icon(Icons.piano),
-                                  CustomText("Piano")
+                                  _ctrl.instruments[index].imageFromBase64String(),
+                                  CustomText(_ctrl.instruments.value[index].name),
                                 ],
                               ),
-                              width: 90.w,
                             );
                           },
-                          itemCount: 10,
+                          itemCount: _ctrl.instruments.value.length,
                         ),
                       ),
                     ],
@@ -125,22 +129,22 @@ class _ProfilePageState extends State<ProfilePage>
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
                       SizedBox(
-                        height: 100.h,
+                        height: 150.h,
                         width: 500.w,
                         child: ListView.builder(
                           scrollDirection: Axis.horizontal,
                           itemBuilder: (context, index) {
                             return Container(
+                              width: 110.w,
                               child: Column(
                                 children: [
-                                  const Icon(CupertinoIcons.music_note_list),
-                                  CustomText("Jazz")
+                                  _ctrl.genres[index].imageFromBase64String(),
+                                  CustomText(_ctrl.genres.value[index].name),
                                 ],
                               ),
-                              width: 90.w,
                             );
                           },
-                          itemCount: 10,
+                          itemCount: _ctrl.genres.length,
                         ),
                       ),
                     ],
@@ -192,7 +196,7 @@ class _ProfilePageState extends State<ProfilePage>
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           CustomText(
-                            'Sobre Jenny Wilson',
+                            'Sobre ' + _ctrl.username.value,
                             fontSize: 30.h,
                           ), // <-- Text
                           OutlinedButton(
@@ -367,4 +371,6 @@ class _ProfilePageState extends State<ProfilePage>
           ), // This trailing comma makes auto-formatting nicer for build methods.
         ));
   }
+
+
 }

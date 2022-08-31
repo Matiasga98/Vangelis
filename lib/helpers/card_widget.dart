@@ -1,8 +1,11 @@
+import 'dart:convert';
+
 import 'package:faker/faker.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../config/colors_.dart';
+import '../model/musician.dart';
 
 class MusicianCard extends StatelessWidget {
   const MusicianCard({
@@ -38,12 +41,18 @@ class MusicianCard extends StatelessWidget {
         children: [
           ClipRRect(
               borderRadius: BorderRadius.circular(15),
-              child: Image.asset(
-                finalImage,
+              child: finalImage!=""?Image.memory(
+                base64Decode(finalImage),
                 width: 75,
                 height: 75,
                 fit: BoxFit.cover,
-              )),
+              ):Image.asset(
+              "images/Indio Diego.png",
+              width: 75,
+                height: 75,
+                fit: BoxFit.cover,
+          ),
+          ),
           const SizedBox(
             width: 16,
           ),

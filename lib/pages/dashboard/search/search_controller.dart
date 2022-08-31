@@ -5,8 +5,15 @@ import 'package:get/get_core/src/get_main.dart';
 import 'package:vangelis/pages/dashboard/search/search_page.dart';
 
 import '../../../entity/user.dart';
+import '../../../helpers/card_widget.dart';
+import '../../../model/Genre.dart';
+import '../../../model/Instrument.dart';
+import '../../../model/musician.dart';
+import '../../../services/genre_service.dart';
+import '../../../services/instrument_service.dart';
 import '../../../services/theme_service.dart';
-import 'card_widget.dart';
+import '../../../services/user_service.dart';
+
 
 class SearchController extends GetxController {
   var textFilterController = TextEditingController();
@@ -39,7 +46,7 @@ class SearchController extends GetxController {
   ];
   int selectedAge = 0;
   String selectedGender = "Masculino";
-  List<String> instruments = [
+  RxList<String> instruments = [
     "Bajo",
     "Saxo",
     "Clarinete",
@@ -50,8 +57,8 @@ class SearchController extends GetxController {
     "Teremin",
     "Flauta de Embolo",
     "Acordeon",
-  ];
-  List<String> musicalGenres = [
+  ].obs;
+  RxList<String> musicalGenres = [
     "Rock",
     "Jazz",
     "Metal",
@@ -68,7 +75,7 @@ class SearchController extends GetxController {
     "Hip Hop",
     "Kpop",
     "Eurobeat",
-  ];
+  ].obs;
   List<MusicianCard> musicians = [
     MusicianCard(finalImage: "images/Hernan.png", name: "Hernan Ezequiel Rodriguez Cary",
       description: "Bandoneonista", address: "Munro", instruments: ["Bandoneon"],
@@ -82,6 +89,25 @@ class SearchController extends GetxController {
   List<MusicianCard> filteredMusicians = [];
   List<String> selectedInstruments = [];
   List<String> selectedGenres = [];
+  List<Instrument> wholeInstruments = [];
+  List<Genre> wholeGenres =[];
+
+  InstrumentService instrumentService = Get.find();
+  GenreService genreService = Get.find();
+  UserService userService = Get.find();
+
+  @override
+  Future<void> onReady() async {
+    if(User().environment !="MOBILE"){
+      wholeInstruments = await instrumentService.getAllInstruments();
+      instruments.value = wholeInstruments.map((e) => e.name).toList();
+      wholeGenres = await genreService.getAllGenres();
+      musicalGenres.value = wholeGenres.map((e) => e.name).toList();
+    }
+
+    super.onReady();
+  }
+
 
   void closeContext() {
 
@@ -91,10 +117,22 @@ class SearchController extends GetxController {
 
   }
 
-  void openContext() {
+  Future<void> openContext() async {
 
     if(User().environment != "MOBILE"){
-      //filteredMusicians = todo: llamada al back que me traiga usuarios
+      filteredMusicians = [];
+      List<Instrument> filteredInstruments = wholeInstruments.where((element)
+      => selectedInstruments.contains(element.name)).toList();
+      List<Genre> filteredGenres = wholeGenres.where((element)
+      => selectedGenres.contains(element.name)).toList();
+      List<Musician> musicians = await userService.searchUsers(filteredGenres.map((genre)=>genre.id).toList(),
+          filteredInstruments.map((instrument)=>instrument.id).toList(), "");
+      for (Musician musician in musicians){
+        filteredMusicians.add(MusicianCard(finalImage: musician.userAvatar??"", name: musician.userName,
+            description: "hay que cambiar esto", address: "address",
+            instruments: musician.instruments.map((a)=>a.name).toList(),
+            genres: musician.favoriteGenres.map((a)=>a.name).toList()));
+      }
     }
     else{
       filteredMusicians = musicians.where((musician) =>

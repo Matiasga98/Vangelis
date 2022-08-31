@@ -15,7 +15,7 @@ import '../../services/auth_service.dart';
 import '../../services/connectivity_service.dart';
 import '../../services/theme_service.dart';
 import '../../util/constants.dart';
-import 'collab/profile_page.dart';
+import 'collab/collab_page.dart';
 
 class DashboardController extends GetxController with GetSingleTickerProviderStateMixin {
   RxBool isSearched = false.obs;
@@ -455,8 +455,8 @@ class DashboardController extends GetxController with GetSingleTickerProviderSta
     Future<void> addBodies() async {
 
       bodies.add(SearchScreen());
-      bodies.add(CollabPage());
-      bodies.add(ProfilePage());
+      bodies.add(CollabScreen());
+      bodies.add(ProfilePage(User().musicianFromUser()));
     }
 
     /*void _setSubjectAndLayoutFilters(List<LearningActivity> activities) {
