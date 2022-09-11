@@ -495,9 +495,13 @@ class _SearchScreenState extends State<SearchScreen> {
                   ? ListView.builder(
                       shrinkWrap: true,
                       primary: false,
-                      itemCount: _ctrl.filteredMusicians.length,
+                      itemCount: _ctrl.filteredMusicianCards.length,
                       itemBuilder: (context, index) =>
-                          _ctrl.filteredMusicians[index],
+                      GestureDetector(
+                        onTap: () => _ctrl.navigateToProfileOfUserIndex(index),
+                        child: _ctrl.filteredMusicianCards[index],
+                      )
+
                     )
                   : Column(
                       children: [

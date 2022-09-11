@@ -20,6 +20,8 @@ class ProfileController extends GetxController {
   RxList<Genre> genres = <Genre>[].obs;
   Rx<Image> profilePicture = Image(image: AssetImage("images/Indio Diego.png")).obs;
   RxString username = "".obs;
+  RxBool isLoading = true.obs;
+  RxBool isCurrentUser = true.obs;
 
   @override
   void onReady() {
@@ -28,12 +30,22 @@ class ProfileController extends GetxController {
     super.onReady();
   }
 
-  void getProfileInfo(){
+  Future<void> getProfileInfo() async {
+    if(musician.id != User().id){
+      isCurrentUser.value = false;
+    }
+    else{
+      isCurrentUser.value = true;
+    }
     instruments.value = musician.instruments;
     genres.value = musician.favoriteGenres;
     profilePicture.value = musician.imageFromUserBase64String();
     username.value = musician.userName;
     description.value = musician.bio;
+    await Future.delayed(Duration(milliseconds: 1000), () async {
+      isLoading.value = false;
+    });
+
   }
 
 

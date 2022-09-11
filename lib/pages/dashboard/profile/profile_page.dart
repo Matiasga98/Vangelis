@@ -57,7 +57,17 @@ class _ProfilePageState extends State<ProfilePage>
   Widget build(BuildContext context) {
     _ctrl.musician = musician;
     ThemeService().init(context);
-    return Obx(() => Scaffold(
+    return Obx(() =>
+        _ctrl.isLoading.value?
+        Center(
+          child: Image.asset(
+            themeConfig!.loadingGif,
+            height: 100,
+            fit: BoxFit.cover,
+            semanticLabel: barbriLogo,
+          ),
+        )
+        :Scaffold(
           backgroundColor: themeConfig!.whiteBlackColor,
           body: Center(
             child: SingleChildScrollView(
@@ -199,7 +209,9 @@ class _ProfilePageState extends State<ProfilePage>
                             'Sobre ' + _ctrl.username.value,
                             fontSize: 30.h,
                           ), // <-- Text
-                          OutlinedButton(
+                          !_ctrl.isCurrentUser.value?
+                          SizedBox()
+                              :OutlinedButton(
                             onPressed: () {
                               showDialog(
                                 context: context,

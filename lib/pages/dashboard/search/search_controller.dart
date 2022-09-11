@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:vangelis/pages/dashboard/profile/profile_page.dart';
 import 'package:vangelis/pages/dashboard/search/search_page.dart';
 
 import '../../../entity/user.dart';
@@ -13,6 +14,7 @@ import '../../../services/genre_service.dart';
 import '../../../services/instrument_service.dart';
 import '../../../services/theme_service.dart';
 import '../../../services/user_service.dart';
+import '../profile/profile_controller.dart';
 
 
 class SearchController extends GetxController {
@@ -86,11 +88,12 @@ class SearchController extends GetxController {
         description: "Pianista", address: "Villa del Parque", instruments: ["Piano"],
         genres: ["Rock","Metal","Jazz"])
   ];
-  List<MusicianCard> filteredMusicians = [];
+  List<MusicianCard> filteredMusicianCards = [];
   List<String> selectedInstruments = [];
   List<String> selectedGenres = [];
   List<Instrument> wholeInstruments = [];
   List<Genre> wholeGenres =[];
+  List<Musician> filteredMusicians = [];
 
   InstrumentService instrumentService = Get.find();
   GenreService genreService = Get.find();
@@ -120,22 +123,22 @@ class SearchController extends GetxController {
   Future<void> openContext() async {
 
     if(User().environment != "MOBILE"){
-      filteredMusicians = [];
+      filteredMusicianCards = [];
       List<Instrument> filteredInstruments = wholeInstruments.where((element)
       => selectedInstruments.contains(element.name)).toList();
       List<Genre> filteredGenres = wholeGenres.where((element)
       => selectedGenres.contains(element.name)).toList();
-      List<Musician> musicians = await userService.searchUsers(filteredGenres.map((genre)=>genre.id).toList(),
+      filteredMusicians = await userService.searchUsers(filteredGenres.map((genre)=>genre.id).toList(),
           filteredInstruments.map((instrument)=>instrument.id).toList(), "");
-      for (Musician musician in musicians){
-        filteredMusicians.add(MusicianCard(finalImage: musician.userAvatar??"", name: musician.userName,
-            description: "hay que cambiar esto", address: "address",
+      for (Musician musician in filteredMusicians){
+        filteredMusicianCards.add(MusicianCard(finalImage: musician.userAvatar??"", name: musician.userName,
+            description: musician.instruments[0].name, address: musician.favoriteGenres[0].name,
             instruments: musician.instruments.map((a)=>a.name).toList(),
             genres: musician.favoriteGenres.map((a)=>a.name).toList()));
       }
     }
     else{
-      filteredMusicians = musicians.where((musician) =>
+      filteredMusicianCards = musicians.where((musician) =>
           musician.name.contains(textFilterController.text)
           && _filterGenreList(musician) && _filterInstrumentList(musician)
       ).toList();
@@ -152,6 +155,11 @@ class SearchController extends GetxController {
   bool _filterInstrumentList(MusicianCard musician){
     return selectedInstruments.length<=0? true :
     musician.instruments.any((instrument) => selectedInstruments.contains(instrument));
+  }
+
+  void navigateToProfileOfUserIndex(int index){
+    Get.delete<ProfileController>();
+    Get.to(() =>ProfilePage(filteredMusicians[index]));
   }
 
 }
