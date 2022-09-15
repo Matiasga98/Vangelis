@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:vangelis/pages/dashboard/profile/favorite/favorite_page.dart';
 import 'package:vangelis/util/constants.dart';
 
 import '../../../entity/user.dart';
@@ -9,6 +10,7 @@ import '../../../model/Genre.dart';
 import '../../../model/Instrument.dart';
 import '../../../model/musician.dart';
 import '../../../services/theme_service.dart';
+import '../../../services/user_service.dart';
 
 class ProfileController extends GetxController {
 
@@ -22,6 +24,8 @@ class ProfileController extends GetxController {
   RxString username = "".obs;
   RxBool isLoading = true.obs;
   RxBool isCurrentUser = true.obs;
+  RxBool isFavorited = false.obs;
+  UserService userService = Get.find();
 
   @override
   void onReady() {
@@ -41,7 +45,8 @@ class ProfileController extends GetxController {
     genres.value = musician.favoriteGenres;
     profilePicture.value = musician.imageFromUserBase64String();
     username.value = musician.userName;
-    description.value = musician.bio;
+    description.value = musician.bio??"";
+    isFavorited.value = musicianIsFavorite();
     await Future.delayed(Duration(milliseconds: 1000), () async {
       isLoading.value = false;
     });
@@ -59,5 +64,32 @@ class ProfileController extends GetxController {
     descriptionController.text = description.value;
   }
 
+  bool musicianIsFavorite(){
+    return User().favoriteUsers.contains(musician.id);
+  }
+
+  void addUserToFavorites(){
+    User().favoriteUsers.add(musician.id);
+    userService.addFavorites(User().favoriteUsers);
+    isFavorited.value = true;
+    //UserService.addToFavorites(musician.id)
+
+  }
+
+  void removeUserFromFavorites(){
+    User().favoriteUsers.remove(musician.id);
+    userService.addFavorites( User().favoriteUsers);
+    isFavorited.value = false;
+    //UserService.addToFavorites(musician.id)
+
+  }
+
+  void optionsButtonClicked(Object? value){
+    switch(value){
+      case "fav":
+        Get.to(() =>FavoriteScreen());
+    }
+
+  }
 
 }

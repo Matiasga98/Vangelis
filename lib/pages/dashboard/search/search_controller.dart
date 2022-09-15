@@ -132,7 +132,7 @@ class SearchController extends GetxController {
           filteredInstruments.map((instrument)=>instrument.id).toList(), "");
       for (Musician musician in filteredMusicians){
         filteredMusicianCards.add(MusicianCard(finalImage: musician.userAvatar??"", name: musician.userName,
-            description: musician.instruments[0].name, address: musician.favoriteGenres[0].name,
+            description: "musician.instruments[0].name", address: "musician.favoriteGenres[0].name",
             instruments: musician.instruments.map((a)=>a.name).toList(),
             genres: musician.favoriteGenres.map((a)=>a.name).toList()));
       }

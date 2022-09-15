@@ -23,6 +23,7 @@ class User with UpdatableEntity {
   var bio;
   List<Genre> favoriteGenres =[];
   List<Instrument> instruments=[];
+  List<int> favoriteUsers=[];
 
   var userName = '';
   var email = '';
@@ -43,6 +44,7 @@ class User with UpdatableEntity {
   factory User({Map<String, dynamic>? json, Jwt? token})
   {
     if (json != null) {
+      _singleton.id = json["id"] ?? _singleton.id;
       _singleton.bio = json["bio"] ?? _singleton.bio;
       _singleton.userAvatar = json["userAvatar"] ?? _singleton.userAvatar;
       _singleton.userName = json['username'] ?? _singleton.userName;
@@ -55,6 +57,10 @@ class User with UpdatableEntity {
         for (var favoriteGenre in json['favoriteGenres'])
           Genre.fromJson(favoriteGenre)
       ]:[];
+      _singleton.favoriteUsers = json["favorite_users"]!=null?
+        json["favorite_users"].cast<int>()
+        :[];
+          _singleton.favoriteUsers;
 
       _singleton.isDark = Get.isDarkMode;
     }
@@ -99,13 +105,16 @@ class User with UpdatableEntity {
   favoriteGenres =json['favoriteGenres']!=null? [
   for (var favoriteGenre in json['favoriteGenres'])
   Genre.fromJson(favoriteGenre)
-  ]:[];
+  ]:[],
+  favoriteUsers = json["favorite_users"]?? _singleton.favoriteUsers;
+
 
 
   Map<String, dynamic> toJson() => {
         //'firstName': _singleton.firstName,
         //'lastName': _singleton.lastName,
         //'partyId': _singleton.partyId,
+        'id' : _singleton.id,
         'username': _singleton.userName,
         'email': _singleton.email,
         'defaultLocale': _singleton.defaultLocale,

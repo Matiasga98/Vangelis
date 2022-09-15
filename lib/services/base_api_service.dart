@@ -38,11 +38,15 @@ abstract class BaseApiService extends GetxService {
   }
 
   @protected
-  Future<http.Response> patch(String url) async {
+  Future<http.Response> patch(String url, Object body) async {
     await _refreshTokenIfNeeded();
+    var user = User();
+    Map<String, String> finalHeaders = <String, String>{};
+    finalHeaders['Authorization'] =
+    '${user.token.target!.tokenType} ${User().token.target!.token}';
+    finalHeaders['Content-Type'] = "application/json";
     return http
-        .patch(_getParsedUri(url), headers: getCompleteHeaders())
-        .timeout(Duration(seconds: configuration.getRequestTimeout()))
+        .patch(_getParsedUri(url),body: json.encode(body), headers: finalHeaders)
         .onError(
             (error, stackTrace) => Future.value(http.Response("Error", 500)));
   }

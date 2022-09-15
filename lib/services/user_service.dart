@@ -10,6 +10,7 @@ class UserService extends BaseApiService {
   final _getUserUrl = 'users/me';
   final _baseUserUrl = 'users';
 
+
   @override
   Future<User?> getUser(String username, [Jwt? token]) async {
     var user = User();
@@ -66,5 +67,45 @@ class UserService extends BaseApiService {
       var a = e;
     }
     return [];
+  }
+
+  @override
+  Future<void> addFavorites(List<int> ids) async {
+    try{
+      var body = {
+        "longList" : ids
+      };
+      var response = await patch(_baseUserUrl+"/favorites",body);
+      if(BaseApiService.isSuccessful(response)){
+        //log algo salio bien
+      }
+      else{
+        //log algo salio mal
+      }
+    }
+    catch(e){
+      var a = e;
+    }
+
+  }
+
+  @override
+  Future<List<Musician>> getFavorites(int id) async {
+    var response =await get(_baseUserUrl+"/favorites/$id");
+
+    if(BaseApiService.isSuccessful(response)){
+      var decoded = json.decode(utf8.decode(response.bodyBytes));
+      List<Musician> musicians = [];
+      for (var user in decoded) {
+        musicians.add(Musician.fromJson(user));
+      }
+      return musicians;
+    }
+    else{
+      //log algo salio mal
+      return [];
+    }
+
+
   }
 }
