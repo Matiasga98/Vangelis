@@ -116,6 +116,7 @@ class ProfileController extends GetxController {
   Future<void> handleSignIn() async {
     try {
       await _googleSignIn.signIn();
+      _handleGetChannels();
     } catch (error)
     {
       var e = error;
@@ -127,6 +128,13 @@ class ProfileController extends GetxController {
     var httpClient = (await _googleSignIn.authenticatedClient())!;
     var youTubeApi = YouTubeApi(httpClient);
 
-    var channelsListRequest = youTubeApi.search;
+    var userChannel = await youTubeApi.channels.list(['id'], mine: true);
+    var userChannelId = userChannel.items?[0].id;
+    
+    if(userChannelId != null)
+    {
+      var userVideos = await youTubeApi.search.list(['snippet'], channelId: userChannelId, type: ["video"]);
+      var myVideos = userVideos.items;
+    }
   }
 }
