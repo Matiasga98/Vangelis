@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:vangelis/helpers/custom_text.dart';
 import 'package:vangelis/pages/dashboard/profile/profile_controller.dart';
 import 'package:vangelis/pages/dashboard/search/search_controller.dart';
@@ -208,6 +209,24 @@ class _ProfilePageState extends State<ProfilePage>
                                 color: Colors.transparent,
                               ),
                               primary: Colors.green,
+                              backgroundColor: Colors.white,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(100.0),
+                              ),
+                              fixedSize: Size(50.0, 60.0)),
+                        ),
+                        SizedBox(width: 15.w),
+                        OutlinedButton(
+                          onPressed: ()
+                          {
+                            _ctrl.handleSignIn();
+                          },
+                          child: Icon(Icons.youtube_searched_for),
+                          style: OutlinedButton.styleFrom(
+                              side: BorderSide(
+                                color: Colors.transparent,
+                              ),
+                              primary: Colors.red,
                               backgroundColor: Colors.white,
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(100.0),

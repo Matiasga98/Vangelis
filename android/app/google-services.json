@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "341052028438",
+    "project_id": "vangelis",
+    "storage_bucket": "vangelis.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:341052028438:android:b0410b15f4b1c367c5a737",
+        "android_client_info": {
+          "package_name": "com.vangelis.vangelis"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "341052028438-chkssri1hthdd25vgo4t457p4pk566ho.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.vangelis.vangelis",
+            "certificate_hash": "ab35ed49d9b003811f117d819c60de575c72f7f6"
+          }
+        },
+        {
+          "client_id": "341052028438-o3mu7m71ubcncjnddrvd55llrjr6m26n.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDmGUiW0jfvMpzf2JUq08DPV7V15h3eTEc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "341052028438-o3mu7m71ubcncjnddrvd55llrjr6m26n.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

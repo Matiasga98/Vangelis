@@ -5,6 +5,10 @@ import 'package:get/get_core/src/get_main.dart';
 import 'package:vangelis/pages/dashboard/profile/favorite/favorite_page.dart';
 import 'package:vangelis/util/constants.dart';
 
+import 'package:googleapis/youtube/v3.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:extension_google_sign_in_as_googleapis_auth/extension_google_sign_in_as_googleapis_auth.dart';
+
 import '../../../entity/user.dart';
 import '../../../model/Genre.dart';
 import '../../../model/Instrument.dart';
@@ -15,6 +19,15 @@ import '../../../services/user_service.dart';
 class ProfileController extends GetxController {
 
   late Musician musician;
+
+  final GoogleSignIn _googleSignIn = GoogleSignIn(
+    scopes: <String>[
+      'email',
+      'https://www.googleapis.com/auth/youtube.readonly',
+    ],
+  );
+
+  GoogleSignInAccount? _currentUser;
 
   RxString description = "texto".obs;
   final descriptionController = TextEditingController();
@@ -28,8 +41,16 @@ class ProfileController extends GetxController {
   UserService userService = Get.find();
 
   @override
-  void onReady() {
-
+  void onReady()
+  {
+    _googleSignIn.onCurrentUserChanged.listen((GoogleSignInAccount? account)
+    {
+      _currentUser = account;
+    });
+    if(_currentUser != null) {
+      _handleGetChannels();
+    }
+  _googleSignIn.signInSilently();
     getProfileInfo();
     super.onReady();
   }
@@ -92,4 +113,20 @@ class ProfileController extends GetxController {
 
   }
 
+  Future<void> handleSignIn() async {
+    try {
+      await _googleSignIn.signIn();
+    } catch (error)
+    {
+      var e = error;
+    }
+  }
+
+  Future<void> _handleGetChannels() async
+  {
+    var httpClient = (await _googleSignIn.authenticatedClient())!;
+    var youTubeApi = YouTubeApi(httpClient);
+
+    var channelsListRequest = youTubeApi.search;
+  }
 }
