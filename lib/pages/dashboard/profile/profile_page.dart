@@ -15,6 +15,7 @@ import '../../../services/theme_service.dart';
 
 class ProfilePage extends StatefulWidget {
   Musician musician;
+
   ProfilePage(this.musician);
 
   @override
@@ -49,6 +50,7 @@ class _ProfilePageState extends State<ProfilePage>
   final _ctrl = Get.put(ProfileController());
 
   Musician musician;
+
   _ProfilePageState(this.musician);
 
   @override
@@ -92,41 +94,92 @@ class _ProfilePageState extends State<ProfilePage>
                           ),
                           _ctrl.isCurrentUser.value
                               ? PopupMenuButton(
-                            onSelected: (value) {
-                              _ctrl.optionsButtonClicked(value);
-                            },
-                            itemBuilder: (BuildContext bc) {
-                              return const [
-                                PopupMenuItem(
-                                  child: Text("Ver Favoritos"),
-                                  value: 'fav',
-                                ),
-
-                              ];
-                            },
-                          )
-                              : _ctrl.isFavorited.value?
-                          IconButton(
-                            onPressed: () {_ctrl.removeUserFromFavorites();},
-                            icon: Icon(
-                              Icons.star,
-                              size: 30.0,
-                            ),
-                          )
-                          :IconButton(
-                                  onPressed: () {_ctrl.addUserToFavorites();},
-                                  icon: Icon(
-                                    Icons.star_border,
-                                    size: 30.0,
-                                  ),
-                                ),
+                                  onSelected: (value) {
+                                    _ctrl.optionsButtonClicked(value);
+                                  },
+                                  itemBuilder: (BuildContext bc) {
+                                    return const [
+                                      PopupMenuItem(
+                                        child: Text("Ver Favoritos"),
+                                        value: 'fav',
+                                      ),
+                                    ];
+                                  },
+                                )
+                              : _ctrl.isFavorited.value
+                                  ? IconButton(
+                                      onPressed: () {
+                                        _ctrl.removeUserFromFavorites();
+                                      },
+                                      icon: Icon(
+                                        Icons.star,
+                                        size: 30.0,
+                                      ),
+                                    )
+                                  : IconButton(
+                                      onPressed: () {
+                                        _ctrl.addUserToFavorites();
+                                      },
+                                      icon: Icon(
+                                        Icons.star_border,
+                                        size: 30.0,
+                                      ),
+                                    ),
                         ],
                       ),
                     ),
                     SizedBox(height: 70.0),
-                    CircleAvatar(
-                      backgroundImage: _ctrl.profilePicture.value.image,
-                      radius: 70.0,
+                    Stack(
+                      children: [
+                        CircleAvatar(
+                          backgroundImage: _ctrl.profilePicture.value.image,
+                          radius: 70.0,
+                        ),
+                        _ctrl.isCurrentUser.value
+                            ? Positioned(
+                                top: -0,
+                                right: -0,
+                                child: OutlinedButton(
+                                  onPressed: () {
+                                    showDialog(
+                                      context: context,
+                                      builder: (context) {
+                                        return AlertDialog(
+                                          title: Text('Acutalizar foto'),
+                                          actions: [
+                                            DialogButtons(
+                                                onCancel: () => {
+                                                      Navigator.pop(
+                                                          context, false),
+                                                    },
+                                                onOk: () => {
+                                                      profileController
+                                                          .updateProfilePicture(),
+                                                      Navigator.pop(
+                                                          context, true)
+                                                    },
+                                                okButtonText: "Aceptar",
+                                                cancelButtonText: "Cancelar"),
+                                          ],
+                                        );
+                                      },
+                                    );
+                                  },
+                                  child: Icon(
+                                    Icons.edit,
+                                  ),
+                                  style: OutlinedButton.styleFrom(
+                                      side: BorderSide(
+                                        color: Colors.black12,
+                                      ),
+                                      primary: Colors.blue,
+                                      backgroundColor: Colors.white,
+                                      shape: CircleBorder(),
+                                      fixedSize: Size(10.0, 20.0)),
+                                ),
+                              )
+                            : SizedBox()
+                      ],
                     ),
                     SizedBox(height: 20.0),
                     SizedBox(height: 30.0),
@@ -139,19 +192,123 @@ class _ProfilePageState extends State<ProfilePage>
                           child: ListView.builder(
                             scrollDirection: Axis.horizontal,
                             itemBuilder: (context, index) {
-                              return Container(
-                                width: 110.w,
-                                child: Column(
-                                  children: [
-                                    _ctrl.instruments[index]
-                                        .imageFromBase64String(),
-                                    CustomText(
-                                        _ctrl.instruments.value[index].name),
-                                  ],
-                                ),
+                              return Stack(
+                                children: [
+                                  Container(
+                                    width: 110.w,
+                                    child: Column(
+                                      children: [
+                                        index < _ctrl.instruments.length
+                                            ? _ctrl.instruments[index]
+                                            .imageFromBase64String()
+                                            : OutlinedButton(
+                                          onPressed: () {
+                                            showDialog(
+                                              context: context,
+                                              builder: (context) {
+                                                //TODO: Modificar esto para que muestre un dropdown con los instrumentos posibles
+                                                return AlertDialog(
+                                                  title:
+                                                  Text('Agregar instrumento'),
+                                                  content: CustomText(
+                                                      "Seleccione a continuación los instrumentos:"),
+                                                  actions: [
+                                                    DialogButtons(
+                                                        onCancel: () => {
+                                                          Navigator.pop(
+                                                              context,
+                                                              false),
+                                                        },
+                                                        onOk: () => {
+                                                          profileController
+                                                              .addInstrumentToFavorites(
+                                                              1),
+                                                          Navigator.pop(
+                                                              context,
+                                                              true)
+                                                        },
+                                                        okButtonText:
+                                                        "Aceptar",
+                                                        cancelButtonText:
+                                                        "Cancelar"),
+                                                  ],
+                                                );
+                                              },
+                                            );
+                                          },
+                                          child: Icon(
+                                            Icons.add,
+                                          ),
+                                          style: OutlinedButton.styleFrom(
+                                              side: BorderSide(
+                                                color: Colors.black12,
+                                              ),
+                                              primary: Colors.green,
+                                              backgroundColor: Colors.white,
+                                              shape: CircleBorder(),
+                                              fixedSize: Size(10.0, 20.0)),
+                                        ),
+                                        index < _ctrl.instruments.length
+                                            ? CustomText(
+                                            _ctrl.instruments.value[index].name)
+                                            : SizedBox()
+                                      ],
+                                    ),
+                                  ),
+                                  _ctrl.isCurrentUser.value && index < _ctrl.instruments.length
+                                      ? Positioned(
+                                          top: -14,
+                                          right: -14,
+                                          child: IconButton(
+                                            onPressed: () {
+                                              showDialog(
+                                                context: context,
+                                                builder: (context) {
+                                                  return AlertDialog(
+                                                    title: Text(
+                                                        'Eliminar instrumento'),
+                                                    content: CustomText(
+                                                        "¿Está seguro de que desea eliminar " +
+                                                            _ctrl
+                                                                .instruments
+                                                                .value[index]
+                                                                .name +
+                                                            " de su lista de instrumentos?"),
+                                                    actions: [
+                                                      DialogButtons(
+                                                          onCancel: () => {
+                                                                Navigator.pop(
+                                                                    context,
+                                                                    false),
+                                                              },
+                                                          onOk: () => {
+                                                                profileController
+                                                                    .removeInstrument(
+                                                                        index),
+                                                                Navigator.pop(
+                                                                    context,
+                                                                    true)
+                                                              },
+                                                          okButtonText:
+                                                              "Aceptar",
+                                                          cancelButtonText:
+                                                              "Cancelar"),
+                                                    ],
+                                                  );
+                                                },
+                                              );
+                                            },
+                                            icon: Icon(
+                                              Icons.cancel_rounded,
+                                              color: Colors.red,
+                                            ),
+                                          ),
+                                        )
+                                      : SizedBox()
+                                ],
                               );
                             },
-                            itemCount: _ctrl.instruments.value.length,
+                            itemCount: _ctrl.instruments.value.length+1,
                           ),
                         ),
                       ],
@@ -165,17 +322,123 @@ class _ProfilePageState extends State<ProfilePage>
                           child: ListView.builder(
                             scrollDirection: Axis.horizontal,
                             itemBuilder: (context, index) {
-                              return Container(
-                                width: 110.w,
-                                child: Column(
-                                  children: [
-                                    _ctrl.genres[index].imageFromBase64String(),
-                                    CustomText(_ctrl.genres.value[index].name),
-                                  ],
-                                ),
+                              return Stack(
+                                children: [
+                                  Container(
+                                    width: 110.w,
+                                    child: Column(
+                                      children: [
+                                        index < _ctrl.genres.length
+                                            ? _ctrl.genres[index]
+                                                .imageFromBase64String()
+                                            : OutlinedButton(
+                                          onPressed: () {
+                                            showDialog(
+                                              context: context,
+                                              builder: (context) {
+                                                //TODO: Modificar esto para que muestre un dropdown con los generos posibles
+                                                return AlertDialog(
+                                                  title:
+                                                  Text('Agregar genero'),
+                                                  content: CustomText(
+                                                      "Seleccione a continuación los generos:"),
+                                                  actions: [
+                                                    DialogButtons(
+                                                        onCancel: () => {
+                                                          Navigator.pop(
+                                                              context,
+                                                              false),
+                                                        },
+                                                        onOk: () => {
+                                                          profileController
+                                                              .addGenreToFavorites(
+                                                              1),
+                                                          Navigator.pop(
+                                                              context,
+                                                              true)
+                                                        },
+                                                        okButtonText:
+                                                        "Aceptar",
+                                                        cancelButtonText:
+                                                        "Cancelar"),
+                                                  ],
+                                                );
+                                              },
+                                            );
+                                          },
+                                          child: Icon(
+                                            Icons.add,
+                                          ),
+                                          style: OutlinedButton.styleFrom(
+                                              side: BorderSide(
+                                                color: Colors.black12,
+                                              ),
+                                              primary: Colors.green,
+                                              backgroundColor: Colors.white,
+                                              shape: CircleBorder(),
+                                              fixedSize: Size(10.0, 20.0)),
+                                        ),
+                                        index < _ctrl.genres.length
+                                            ? CustomText(
+                                                _ctrl.genres.value[index].name)
+                                            : SizedBox()
+                                      ],
+                                    ),
+                                  ),
+                                  _ctrl.isCurrentUser.value && index < _ctrl.genres.length
+                                      ? Positioned(
+                                          top: -14,
+                                          right: -14,
+                                          child: IconButton(
+                                            onPressed: () {
+                                              showDialog(
+                                                context: context,
+                                                builder: (context) {
+                                                  return AlertDialog(
+                                                    title:
+                                                        Text('Eliminar genero'),
+                                                    content: CustomText(
+                                                        "¿Está seguro de que desea eliminar " +
+                                                            _ctrl
+                                                                .genres
+                                                                .value[index]
+                                                                .name +
+                                                            " de su lista de generos?"),
+                                                    actions: [
+                                                      DialogButtons(
+                                                          onCancel: () => {
+                                                                Navigator.pop(
+                                                                    context,
+                                                                    false),
+                                                              },
+                                                          onOk: () => {
+                                                                profileController
+                                                                    .removeGenre(
+                                                                        index),
+                                                                Navigator.pop(
+                                                                    context,
+                                                                    true)
+                                                              },
+                                                          okButtonText:
+                                                              "Aceptar",
+                                                          cancelButtonText:
+                                                              "Cancelar"),
+                                                    ],
+                                                  );
+                                                },
+                                              );
+                                            },
+                                            icon: Icon(
+                                              Icons.cancel_rounded,
+                                              color: Colors.red,
+                                            ),
+                                          ),
+                                        )
+                                      : SizedBox(),
+                                ],
                               );
                             },
-                            itemCount: _ctrl.genres.length,
+                            itemCount: _ctrl.genres.length + 1,
                           ),
                         ),
                       ],
@@ -217,8 +480,7 @@ class _ProfilePageState extends State<ProfilePage>
                         ),
                         SizedBox(width: 15.w),
                         OutlinedButton(
-                          onPressed: ()
-                          {
+                          onPressed: () {
                             _ctrl.handleSignIn();
                           },
                           child: Icon(Icons.youtube_searched_for),
@@ -267,7 +529,7 @@ class _ProfilePageState extends State<ProfilePage>
                                                         Navigator.pop(
                                                             context, false),
                                                         profileController
-                                                            .onCancel()
+                                                            .onCancelEditDescription()
                                                       },
                                                   onOk: () => {
                                                         profileController
@@ -367,7 +629,6 @@ class _ProfilePageState extends State<ProfilePage>
                             ];
                           },
                         ),
-
                       ],
                     ),
                     SizedBox(height: 10.0),

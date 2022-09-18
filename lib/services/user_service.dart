@@ -70,6 +70,30 @@ class UserService extends BaseApiService {
   }
 
   @override
+  Future<User?> addGenresToFavourites(List<int> ids) async {
+    try{
+      var body = {
+        "genres" : ids
+      };
+      var response = await patch(_baseUserUrl+"/genres",body);
+      if(BaseApiService.isSuccessful(response)){
+        //log algo salio bien
+        var userJson = json.decode(utf8.decode(response.bodyBytes));
+        var user = User.fromJson(userJson);
+        return user;
+      }
+      else{
+        print("hola");
+        //log algo salio mal
+      }
+    }
+    catch(e){
+      var a = e;
+    }
+
+  }
+
+  @override
   Future<void> addFavorites(List<int> ids) async {
     try{
       var body = {
@@ -78,6 +102,28 @@ class UserService extends BaseApiService {
       var response = await patch(_baseUserUrl+"/favorites",body);
       if(BaseApiService.isSuccessful(response)){
         //log algo salio bien
+      }
+      else{
+        //log algo salio mal
+      }
+    }
+    catch(e){
+      var a = e;
+    }
+
+  }
+
+  @override
+  Future<User?> addInstrumentsToFavourites(List<int> ids) async {
+    try{
+      var body = {
+        "longList" : ids
+      };
+      var response = await patch(_baseUserUrl+"/instruments",body);
+      if(BaseApiService.isSuccessful(response)){
+        //log algo salio bien
+        var userJson = json.decode(utf8.decode(response.bodyBytes));
+        return User.fromJson(userJson);
       }
       else{
         //log algo salio mal

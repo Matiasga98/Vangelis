@@ -74,14 +74,18 @@ class ProfileController extends GetxController {
 
   }
 
-
   void updateDescription() {
     description.value = descriptionController.text;
     musician.bio = description.value;
     //todo: llamar al back para editarla
   }
 
-  void onCancel(){
+  void updateProfilePicture() {
+    debugPrint("editar foto");
+    //todo: llamar al back para editarla
+  }
+
+  void onCancelEditDescription(){
     descriptionController.text = description.value;
   }
 
@@ -95,6 +99,44 @@ class ProfileController extends GetxController {
     isFavorited.value = true;
     //UserService.addToFavorites(musician.id)
 
+  }
+
+  Future<void> addInstrumentToFavorites(int id) async {
+    var instrumentsIds = instruments.map((instrument) => instrument.id).toList();
+    instrumentsIds.addIf(!instrumentsIds.any((instrumentId) => instrumentId == id), id);
+    User? user = await userService.addInstrumentsToFavourites(instrumentsIds);
+    if(user != null){
+      instruments.value = user.instruments;
+    }
+  }
+
+  Future<void> addGenreToFavorites(int id) async {
+    var genreIds = genres.map((genre) => genre.id).toList();
+    genreIds.addIf(!genreIds.any((genreId) => genreId == id), id);
+    User? user = await userService.addGenresToFavourites(genreIds);
+    if(user != null){
+      genres.value = user.favoriteGenres;
+    }
+  }
+
+  Future<void> removeGenre(int index) async {
+    int newGenreId = genres[index].id;
+    var newGenres = genres.where((g) => g.id != newGenreId);
+    var genresIds = newGenres.map((genre) => genre.id).toList();
+    User? user = await userService.addGenresToFavourites(genresIds);
+    if(user != null){
+      genres.value = user.favoriteGenres;
+    }
+  }
+
+  Future<void> removeInstrument(int index) async {
+    int newInstrumentId = instruments[index].id;
+    var newInstruments = instruments.where((i) => i.id != newInstrumentId);
+    var instrumentsIds = newInstruments.map((instrument) => instrument.id).toList();
+    User? user = await userService.addInstrumentsToFavourites(instrumentsIds);
+    if(user != null){
+      instruments.value = user.instruments;
+    }
   }
 
   void removeUserFromFavorites(){

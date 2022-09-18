@@ -106,7 +106,7 @@ class User with UpdatableEntity {
   for (var favoriteGenre in json['favoriteGenres'])
   Genre.fromJson(favoriteGenre)
   ]:[],
-  favoriteUsers = json["favorite_users"]?? _singleton.favoriteUsers;
+  favoriteUsers = json["favorite_users"].cast<int>()?? _singleton.favoriteUsers;
 
 
 
