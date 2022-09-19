@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -35,7 +36,7 @@ class _ProfilePageState extends State<ProfilePage>
     "https://i.pinimg.com/736x/c4/03/c6/c403c63b8e1882b6f10c82f601180e2d.jpg",
   ];
 
-  final ProfileController profileController = Get.put(ProfileController());
+  //final ProfileController profileController = Get.put(ProfileController());
 
   @override
   void initState() {
@@ -153,7 +154,7 @@ class _ProfilePageState extends State<ProfilePage>
                                                           context, false),
                                                     },
                                                 onOk: () => {
-                                                      profileController
+                                                      _ctrl
                                                           .updateProfilePicture(),
                                                       Navigator.pop(
                                                           context, true)
@@ -201,7 +202,7 @@ class _ProfilePageState extends State<ProfilePage>
                                         index < _ctrl.instruments.length
                                             ? _ctrl.instruments[index]
                                             .imageFromBase64String()
-                                            : OutlinedButton(
+                                            : _ctrl.isCurrentUser.value? OutlinedButton(
                                           onPressed: () {
                                             showDialog(
                                               context: context,
@@ -220,7 +221,7 @@ class _ProfilePageState extends State<ProfilePage>
                                                               false),
                                                         },
                                                         onOk: () => {
-                                                          profileController
+                                                          _ctrl
                                                               .addInstrumentToFavorites(
                                                               1),
                                                           Navigator.pop(
@@ -247,7 +248,7 @@ class _ProfilePageState extends State<ProfilePage>
                                               backgroundColor: Colors.white,
                                               shape: CircleBorder(),
                                               fixedSize: Size(10.0, 20.0)),
-                                        ),
+                                        ) : SizedBox(),
                                         index < _ctrl.instruments.length
                                             ? CustomText(
                                             _ctrl.instruments.value[index].name)
@@ -282,7 +283,7 @@ class _ProfilePageState extends State<ProfilePage>
                                                                     false),
                                                               },
                                                           onOk: () => {
-                                                                profileController
+                                                                _ctrl
                                                                     .removeInstrument(
                                                                         index),
                                                                 Navigator.pop(
@@ -331,7 +332,7 @@ class _ProfilePageState extends State<ProfilePage>
                                         index < _ctrl.genres.length
                                             ? _ctrl.genres[index]
                                                 .imageFromBase64String()
-                                            : OutlinedButton(
+                                            : _ctrl.isCurrentUser.value? OutlinedButton(
                                           onPressed: () {
                                             showDialog(
                                               context: context,
@@ -350,7 +351,7 @@ class _ProfilePageState extends State<ProfilePage>
                                                               false),
                                                         },
                                                         onOk: () => {
-                                                          profileController
+                                                          _ctrl
                                                               .addGenreToFavorites(
                                                               1),
                                                           Navigator.pop(
@@ -377,7 +378,7 @@ class _ProfilePageState extends State<ProfilePage>
                                               backgroundColor: Colors.white,
                                               shape: CircleBorder(),
                                               fixedSize: Size(10.0, 20.0)),
-                                        ),
+                                        ): SizedBox(),
                                         index < _ctrl.genres.length
                                             ? CustomText(
                                                 _ctrl.genres.value[index].name)
@@ -412,7 +413,7 @@ class _ProfilePageState extends State<ProfilePage>
                                                                     false),
                                                               },
                                                           onOk: () => {
-                                                                profileController
+                                                                _ctrl
                                                                     .removeGenre(
                                                                         index),
                                                                 Navigator.pop(
@@ -519,23 +520,29 @@ class _ProfilePageState extends State<ProfilePage>
                                         builder: (context) {
                                           return AlertDialog(
                                             title: Text('Editar descripción'),
-                                            content: TextField(
-                                              controller: profileController
+                                            content: TextFormField(
+                                              controller: _ctrl
                                                   .descriptionController,
+                                                inputFormatters: [
+                                                  LengthLimitingTextInputFormatter(270),
+                                                ]
                                             ),
                                             actions: [
                                               DialogButtons(
                                                   onCancel: () => {
                                                         Navigator.pop(
                                                             context, false),
-                                                        profileController
+                                                        _ctrl
                                                             .onCancelEditDescription()
                                                       },
                                                   onOk: () => {
-                                                        profileController
-                                                            .updateDescription(),
-                                                        Navigator.pop(
-                                                            context, true)
+                                                    //TODO: Cambiar esto para que se controle con algún validador y sino es valido que alerte
+                                                    if(_ctrl.descriptionController.text != "")
+                                                    {_ctrl
+                                                        .updateDescription(),
+                                                      Navigator.pop(
+                                                          context, true)
+                                                    }
                                                       },
                                                   okButtonText: "Aceptar",
                                                   cancelButtonText: "Cancelar"),
@@ -573,7 +580,7 @@ class _ProfilePageState extends State<ProfilePage>
                           height: 200.h,
                           width: 600.w,
                           child: CustomText(
-                            profileController.description.value,
+                            _ctrl.description.value,
                             fontSize: 25.h,
                             fontWeight: FontWeight.w100,
                           ),

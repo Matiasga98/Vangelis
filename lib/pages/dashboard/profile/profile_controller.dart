@@ -67,17 +67,19 @@ class ProfileController extends GetxController {
     profilePicture.value = musician.imageFromUserBase64String();
     username.value = musician.userName;
     description.value = musician.bio??"";
+    descriptionController.text = musician.bio??"";
     isFavorited.value = musicianIsFavorite();
     await Future.delayed(Duration(milliseconds: 1000), () async {
       isLoading.value = false;
     });
-
   }
 
-  void updateDescription() {
-    description.value = descriptionController.text;
-    musician.bio = description.value;
-    //todo: llamar al back para editarla
+  Future<User?> updateDescription() async {
+    User? user = await userService.updateBio(descriptionController.text);
+    if(user != null){
+      musician.bio = user.bio;
+      description.value = user.bio;
+    }
   }
 
   void updateProfilePicture() {

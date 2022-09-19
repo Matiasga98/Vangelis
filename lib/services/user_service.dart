@@ -136,6 +136,28 @@ class UserService extends BaseApiService {
   }
 
   @override
+  Future<User?> updateBio(String newBio) async {
+    try{
+      var body = {
+        "bio" : newBio
+      };
+      var response = await patch(_baseUserUrl+"/description",newBio);
+      if(BaseApiService.isSuccessful(response)){
+        //log algo salio bien
+        var userJson = json.decode(utf8.decode(response.bodyBytes));
+        return User.fromJson(userJson);
+      }
+      else{
+        //log algo salio mal
+      }
+    }
+    catch(e){
+      var a = e;
+    }
+
+  }
+
+  @override
   Future<List<Musician>> getFavorites(int id) async {
     var response =await get(_baseUserUrl+"/favorites/$id");
 
@@ -151,7 +173,5 @@ class UserService extends BaseApiService {
       //log algo salio mal
       return [];
     }
-
-
   }
 }
