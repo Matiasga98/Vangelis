@@ -57,390 +57,422 @@ class _ProfilePageState extends State<ProfilePage>
     ThemeService().init(context);
     return Obx(() => _ctrl.isLoading.value
         ? Center(
-            child: Image.asset(
-              themeConfig!.loadingGif,
-              height: 100,
-              fit: BoxFit.cover,
-              semanticLabel: barbriLogo,
-            ),
-          )
+      child: Image.asset(
+        themeConfig!.loadingGif,
+        height: 100,
+        fit: BoxFit.cover,
+        semanticLabel: barbriLogo,
+      ),
+    )
         : Scaffold(
-            backgroundColor: themeConfig!.whiteBlackColor,
-            body: Center(
-              child: SingleChildScrollView(
-                child: Column(
+      backgroundColor: themeConfig!.whiteBlackColor,
+      body: Center(
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(
+                    left: 15.0, right: 15.0, top: 35.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Padding(
-                      padding: const EdgeInsets.only(
-                          left: 15.0, right: 15.0, top: 35.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          IconButton(
-                            onPressed: () {},
-                            icon: Icon(
-                              Icons.arrow_back_ios,
-                              size: 30.0,
-                            ),
-                          ),
-                          Text(
-                            _ctrl.username.value,
-                            style: TextStyle(
-                              fontSize: 30.0,
-                              fontWeight: FontWeight.w900,
-                            ),
-                          ),
-                          _ctrl.isCurrentUser.value
-                              ? PopupMenuButton(
-                            onSelected: (value) {
-                              _ctrl.optionsButtonClicked(value);
-                            },
-                            itemBuilder: (BuildContext bc) {
-                              return const [
-                                PopupMenuItem(
-                                  child: Text("Ver Favoritos"),
-                                  value: 'fav',
-                                ),
-
-                              ];
-                            },
-                          )
-                              : _ctrl.isFavorited.value?
-                          IconButton(
-                            onPressed: () {_ctrl.removeUserFromFavorites();},
-                            icon: Icon(
-                              Icons.star,
-                              size: 30.0,
-                            ),
-                          )
-                          :IconButton(
-                                  onPressed: () {_ctrl.addUserToFavorites();},
-                                  icon: Icon(
-                                    Icons.star_border,
-                                    size: 30.0,
-                                  ),
-                                ),
-                        ],
+                    IconButton(
+                      onPressed: () {},
+                      icon: Icon(
+                        Icons.arrow_back_ios,
+                        size: 30.0,
                       ),
                     ),
-                    SizedBox(height: 70.0),
-                    CircleAvatar(
-                      backgroundImage: _ctrl.profilePicture.value.image,
-                      radius: 70.0,
-                    ),
-                    SizedBox(height: 20.0),
-                    SizedBox(height: 30.0),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        SizedBox(
-                          height: 150.h,
-                          width: 500.w,
-                          child: ListView.builder(
-                            scrollDirection: Axis.horizontal,
-                            itemBuilder: (context, index) {
-                              return Container(
-                                width: 110.w,
-                                child: Column(
-                                  children: [
-                                    _ctrl.instruments[index]
-                                        .imageFromBase64String(),
-                                    CustomText(
-                                        _ctrl.instruments.value[index].name),
-                                  ],
-                                ),
-                              );
-                            },
-                            itemCount: _ctrl.instruments.value.length,
-                          ),
-                        ),
-                      ],
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        SizedBox(
-                          height: 150.h,
-                          width: 500.w,
-                          child: ListView.builder(
-                            scrollDirection: Axis.horizontal,
-                            itemBuilder: (context, index) {
-                              return Container(
-                                width: 110.w,
-                                child: Column(
-                                  children: [
-                                    _ctrl.genres[index].imageFromBase64String(),
-                                    CustomText(_ctrl.genres.value[index].name),
-                                  ],
-                                ),
-                              );
-                            },
-                            itemCount: _ctrl.genres.length,
-                          ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: 30.h),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        OutlinedButton(
-                          onPressed: () {},
-                          child: Icon(
-                            Icons.telegram_rounded,
-                          ),
-                          style: OutlinedButton.styleFrom(
-                              side: BorderSide(
-                                color: Colors.transparent,
-                              ),
-                              primary: Colors.blue,
-                              backgroundColor: Colors.white,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(100.0),
-                              ),
-                              fixedSize: Size(50.0, 60.0)),
-                        ),
-                        SizedBox(width: 15.w),
-                        OutlinedButton(
-                          onPressed: () {},
-                          child: Icon(Icons.whatsapp_rounded),
-                          style: OutlinedButton.styleFrom(
-                              side: BorderSide(
-                                color: Colors.transparent,
-                              ),
-                              primary: Colors.green,
-                              backgroundColor: Colors.white,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(100.0),
-                              ),
-                              fixedSize: Size(50.0, 60.0)),
-                        ),
-                        SizedBox(width: 15.w),
-                        OutlinedButton(
-                          onPressed: ()
-                          {
-                            _ctrl.handleSignIn();
-                          },
-                          child: Icon(Icons.youtube_searched_for),
-                          style: OutlinedButton.styleFrom(
-                              side: BorderSide(
-                                color: Colors.transparent,
-                              ),
-                              primary: Colors.red,
-                              backgroundColor: Colors.white,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(100.0),
-                              ),
-                              fixedSize: Size(50.0, 60.0)),
-                        )
-                      ],
-                    ),
-                    Container(
-                      height: 30.h,
-                    ),
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            CustomText(
-                              'Sobre ' + _ctrl.username.value,
-                              fontSize: 30.h,
-                            ), // <-- Text
-                            !_ctrl.isCurrentUser.value
-                                ? SizedBox()
-                                : OutlinedButton(
-                                    onPressed: () {
-                                      showDialog(
-                                        context: context,
-                                        builder: (context) {
-                                          return AlertDialog(
-                                            title: Text('Editar descripción'),
-                                            content: TextField(
-                                              controller: profileController
-                                                  .descriptionController,
-                                            ),
-                                            actions: [
-                                              DialogButtons(
-                                                  onCancel: () => {
-                                                        Navigator.pop(
-                                                            context, false),
-                                                        profileController
-                                                            .onCancel()
-                                                      },
-                                                  onOk: () => {
-                                                        profileController
-                                                            .updateDescription(),
-                                                        Navigator.pop(
-                                                            context, true)
-                                                      },
-                                                  okButtonText: "Aceptar",
-                                                  cancelButtonText: "Cancelar"),
-                                            ],
-                                          );
-                                        },
-                                      );
-                                    },
-                                    style: OutlinedButton.styleFrom(
-                                      minimumSize: Size.zero, // Set this
-                                      padding: EdgeInsets.zero, // and this
-                                      side: BorderSide(
-                                        color: Colors.transparent,
-                                      ),
-                                    ),
-                                    child: Row(
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        SizedBox(
-                                          width: 5,
-                                        ),
-                                        Icon(
-                                          // <-- Icon
-                                          Icons.edit,
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                          ],
-                        ),
-                        Container(
-                          height: 30.h,
-                        ),
-                        SizedBox(
-                          height: 200.h,
-                          width: 600.w,
-                          child: CustomText(
-                            profileController.description.value,
-                            fontSize: 25.h,
-                            fontWeight: FontWeight.w100,
-                          ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: 30.h),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Expanded(
-                          child: TabBar(
-                            isScrollable: true,
-                            controller: tabController,
-                            indicator:
-                                BoxDecoration(borderRadius: BorderRadius.zero),
-                            labelColor: Colors.black,
-                            labelStyle: TextStyle(
-                                fontSize: 28.0, fontWeight: FontWeight.bold),
-                            unselectedLabelColor: Colors.black26,
-                            onTap: (tapIndex) {
-                              setState(() {
-                                selectedIndex = tapIndex;
-                              });
-                            },
-                            tabs: [
-                              Tab(text: "Fotos"),
-                              Tab(text: "Videos"),
-                              Tab(text: "Audios"),
-                              Tab(text: "Colaboraciones"),
-                            ],
-                          ),
-                        ),
-                        SizedBox(width: 50.w),
-                        PopupMenuButton(
-                          onSelected: (value) {
-                            // your logic
-                          },
-                          itemBuilder: (BuildContext bc) {
-                            return const [
-                              PopupMenuItem(
-                                child: Text("Hello"),
-                                value: '/hello',
-                              ),
-                              PopupMenuItem(
-                                child: Text("About"),
-                                value: '/about',
-                              ),
-                              PopupMenuItem(
-                                child: Text("Contact"),
-                                value: '/contact',
-                              )
-                            ];
-                          },
-                        ),
-
-                      ],
-                    ),
-                    SizedBox(height: 10.0),
-                    SizedBox(
-                      width: 5000.w,
-                      height: 500.h,
-                      child: TabBarView(
-                        physics: NeverScrollableScrollPhysics(),
-                        controller: tabController,
-                        children: [
-                          GridView.builder(
-                            scrollDirection: Axis.vertical,
-                            gridDelegate:
-                                SliverGridDelegateWithFixedCrossAxisCount(
-                                    mainAxisExtent: 250.0, crossAxisCount: 3),
-                            itemBuilder: (context, index) {
-                              return Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    color: Colors.black,
-                                    borderRadius: BorderRadius.circular(20.0),
-                                    image: DecorationImage(
-                                      image: NetworkImage(listImage[index]),
-                                      fit: BoxFit.cover,
-                                    ),
-                                  ),
-                                  child: Padding(
-                                    padding: const EdgeInsets.only(
-                                        left: 37.0,
-                                        right: 37.0,
-                                        top: 185.0,
-                                        bottom: 15.0),
-                                    child: Container(
-                                      alignment: Alignment.center,
-                                      decoration: BoxDecoration(
-                                          color: Colors.white,
-                                          borderRadius:
-                                              BorderRadius.circular(15.0)),
-                                      child: Text("1.234k"),
-                                    ),
-                                  ),
-                                ),
-                              );
-                            },
-                            itemCount: 8,
-                          ),
-                          Center(
-                            child: Text("You don't have any videos"),
-                          ),
-                          Center(
-                            child: Text("You don't have any tagged"),
-                          ),
-                          Center(
-                            child: Text("You don't have any tagged"),
-                          ),
-                        ],
+                    Text(
+                      _ctrl.username.value,
+                      style: TextStyle(
+                        fontSize: 30.0,
+                        fontWeight: FontWeight.w900,
                       ),
                     ),
-                    CircleAvatar(
-                      backgroundImage: NetworkImage(
-                          "https://free2music.com/images/singer/2019/02/10/troye-sivan_2.jpg"),
-                      radius: 70.0,
-                    ),
-                    CircleAvatar(
-                      backgroundImage: NetworkImage(
-                          "https://free2music.com/images/singer/2019/02/10/troye-sivan_2.jpg"),
-                      radius: 70.0,
+                    _ctrl.isCurrentUser.value
+                        ? PopupMenuButton(
+                      onSelected: (value) {
+                        _ctrl.optionsButtonClicked(value);
+                      },
+                      itemBuilder: (BuildContext bc) {
+                        return const [
+                          PopupMenuItem(
+                            child: Text("Ver Favoritos"),
+                            value: 'fav',
+                          ),
+
+                        ];
+                      },
+                    )
+                        : _ctrl.isFavorited.value?
+                    IconButton(
+                      onPressed: () {_ctrl.removeUserFromFavorites();},
+                      icon: Icon(
+                        Icons.star,
+                        size: 30.0,
+                      ),
+                    )
+                        :IconButton(
+                      onPressed: () {_ctrl.addUserToFavorites();},
+                      icon: Icon(
+                        Icons.star_border,
+                        size: 30.0,
+                      ),
                     ),
                   ],
                 ),
               ),
-            ), // This trailing comma makes auto-formatting nicer for build methods.
-          ));
+              SizedBox(height: 70.0),
+              CircleAvatar(
+                backgroundImage: _ctrl.profilePicture.value.image,
+                radius: 70.0,
+              ),
+              SizedBox(height: 20.0),
+              SizedBox(height: 30.0),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  SizedBox(
+                    height: 150.h,
+                    width: 500.w,
+                    child: ListView.builder(
+                      scrollDirection: Axis.horizontal,
+                      itemBuilder: (context, index) {
+                        return Container(
+                          width: 110.w,
+                          child: Column(
+                            children: [
+                              _ctrl.instruments[index]
+                                  .imageFromBase64String(),
+                              CustomText(
+                                  _ctrl.instruments.value[index].name),
+                            ],
+                          ),
+                        );
+                      },
+                      itemCount: _ctrl.instruments.value.length,
+                    ),
+                  ),
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  SizedBox(
+                    height: 150.h,
+                    width: 500.w,
+                    child: ListView.builder(
+                      scrollDirection: Axis.horizontal,
+                      itemBuilder: (context, index) {
+                        return Container(
+                          width: 110.w,
+                          child: Column(
+                            children: [
+                              _ctrl.genres[index].imageFromBase64String(),
+                              CustomText(_ctrl.genres.value[index].name),
+                            ],
+                          ),
+                        );
+                      },
+                      itemCount: _ctrl.genres.length,
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: 30.h),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  OutlinedButton(
+                    onPressed: () {},
+                    child: Icon(
+                      Icons.telegram_rounded,
+                    ),
+                    style: OutlinedButton.styleFrom(
+                        side: BorderSide(
+                          color: Colors.transparent,
+                        ),
+                        primary: Colors.blue,
+                        backgroundColor: Colors.white,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(100.0),
+                        ),
+                        fixedSize: Size(50.0, 60.0)),
+                  ),
+                  SizedBox(width: 15.w),
+                  OutlinedButton(
+                    onPressed: () {},
+                    child: Icon(Icons.whatsapp_rounded),
+                    style: OutlinedButton.styleFrom(
+                        side: BorderSide(
+                          color: Colors.transparent,
+                        ),
+                        primary: Colors.green,
+                        backgroundColor: Colors.white,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(100.0),
+                        ),
+                        fixedSize: Size(50.0, 60.0)),
+                  ),
+                  SizedBox(width: 15.w),
+                  OutlinedButton(
+                    onPressed: ()
+                    {
+                      _ctrl.handleSignIn();
+                    },
+                    child: Icon(Icons.youtube_searched_for),
+                    style: OutlinedButton.styleFrom(
+                        side: BorderSide(
+                          color: Colors.transparent,
+                        ),
+                        primary: Colors.red,
+                        backgroundColor: Colors.white,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(100.0),
+                        ),
+                        fixedSize: Size(50.0, 60.0)),
+                  )
+                ],
+              ),
+              Container(
+                height: 30.h,
+              ),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      CustomText(
+                        'Sobre ' + _ctrl.username.value,
+                        fontSize: 30.h,
+                      ), // <-- Text
+                      !_ctrl.isCurrentUser.value
+                          ? SizedBox()
+                          : OutlinedButton(
+                        onPressed: () {
+                          showDialog(
+                            context: context,
+                            builder: (context) {
+                              return AlertDialog(
+                                title: Text('Editar descripción'),
+                                content: TextField(
+                                  controller: profileController
+                                      .descriptionController,
+                                ),
+                                actions: [
+                                  DialogButtons(
+                                      onCancel: () => {
+                                        Navigator.pop(
+                                            context, false),
+                                        profileController
+                                            .onCancel()
+                                      },
+                                      onOk: () => {
+                                        profileController
+                                            .updateDescription(),
+                                        Navigator.pop(
+                                            context, true)
+                                      },
+                                      okButtonText: "Aceptar",
+                                      cancelButtonText: "Cancelar"),
+                                ],
+                              );
+                            },
+                          );
+                        },
+                        style: OutlinedButton.styleFrom(
+                          minimumSize: Size.zero, // Set this
+                          padding: EdgeInsets.zero, // and this
+                          side: BorderSide(
+                            color: Colors.transparent,
+                          ),
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            SizedBox(
+                              width: 5,
+                            ),
+                            Icon(
+                              // <-- Icon
+                              Icons.edit,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                  Container(
+                    height: 30.h,
+                  ),
+                  SizedBox(
+                    height: 200.h,
+                    width: 600.w,
+                    child: CustomText(
+                      profileController.description.value,
+                      fontSize: 25.h,
+                      fontWeight: FontWeight.w100,
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: 30.h),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Expanded(
+                    child: TabBar(
+                      isScrollable: true,
+                      controller: tabController,
+                      indicator:
+                      BoxDecoration(borderRadius: BorderRadius.zero),
+                      labelColor: Colors.black,
+                      labelStyle: TextStyle(
+                          fontSize: 28.0, fontWeight: FontWeight.bold),
+                      unselectedLabelColor: Colors.black26,
+                      onTap: (tapIndex) {
+                        setState(() {
+                          selectedIndex = tapIndex;
+                        });
+                      },
+                      tabs: [
+                        Tab(text: "Fotos"),
+                        Tab(text: "Videos"),
+                        Tab(text: "Audios"),
+                        Tab(text: "Colaboraciones"),
+                      ],
+                    ),
+                  ),
+                  SizedBox(width: 50.w),
+                  PopupMenuButton(
+                    onSelected: (value) {
+                      // your logic
+                    },
+                    itemBuilder: (BuildContext bc) {
+                      return const [
+                        PopupMenuItem(
+                          child: Text("Hello"),
+                          value: '/hello',
+                        ),
+                        PopupMenuItem(
+                          child: Text("About"),
+                          value: '/about',
+                        ),
+                        PopupMenuItem(
+                          child: Text("Contact"),
+                          value: '/contact',
+                        )
+                      ];
+                    },
+                  ),
+
+                ],
+              ),
+              SizedBox(height: 10.0),
+              SizedBox(
+                width: 5000.w,
+                height: 500.h,
+                child: TabBarView(
+                  physics: NeverScrollableScrollPhysics(),
+                  controller: tabController,
+                  children: [
+                    GridView.builder(
+                      scrollDirection: Axis.vertical,
+                      gridDelegate:
+                      SliverGridDelegateWithFixedCrossAxisCount(
+                          mainAxisExtent: 250.0, crossAxisCount: 3),
+                      itemBuilder: (context, index) {
+                        return Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: Colors.black,
+                              borderRadius: BorderRadius.circular(20.0),
+                              image: DecorationImage(
+                                image: NetworkImage(listImage[index]),
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.only(
+                                  left: 37.0,
+                                  right: 37.0,
+                                  top: 185.0,
+                                  bottom: 15.0),
+                              child: Container(
+                                alignment: Alignment.center,
+                                decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius:
+                                    BorderRadius.circular(15.0)),
+                                child: Text("1.234k"),
+                              ),
+                            ),
+                          ),
+                        );
+                      },
+                      itemCount: 8,
+                    ),
+                    GridView.builder(
+                      scrollDirection: Axis.vertical,
+                      gridDelegate:
+                      SliverGridDelegateWithFixedCrossAxisCount(
+                          mainAxisExtent: 250.0, crossAxisCount: 3),
+                      itemBuilder: (context, index) {
+                        return Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child:
+                          GestureDetector(
+                            onTap: () {
+                              showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return _ctrl.openVideo(index);
+                                },
+                              );
+                            },
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: Colors.black,
+                                borderRadius: BorderRadius.circular(20.0),
+                                image: DecorationImage(
+                                  image: NetworkImage(_ctrl.userVideos[index].snippet!.thumbnails!.high!.url!),
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+
+                            ) ,
+                          )
+                          ,
+                        );
+                      },
+                      itemCount: _ctrl.userVideos.length,
+                    ),
+                    Center(
+                      child: Text("You don't have any tagged"),
+                    ),
+                    Center(
+                      child: Text("You don't have any tagged"),
+                    ),
+                  ],
+                ),
+              ),
+              CircleAvatar(
+                backgroundImage: NetworkImage(
+                    "https://free2music.com/images/singer/2019/02/10/troye-sivan_2.jpg"),
+                radius: 70.0,
+              ),
+              CircleAvatar(
+                backgroundImage: NetworkImage(
+                    "https://free2music.com/images/singer/2019/02/10/troye-sivan_2.jpg"),
+                radius: 70.0,
+              ),
+            ],
+          ),
+        ),
+      ), // This trailing comma makes auto-formatting nicer for build methods.
+    ));
   }
 }
