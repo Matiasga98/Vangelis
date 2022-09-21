@@ -8,6 +8,8 @@ class Instrument{
   var icon;
   String name;
 
+  Instrument({required this.id, required this.icon, required this.name});
+
   Instrument.fromJson(Map<String, dynamic> json)
       : id = json['id'],
         name = json['name'],

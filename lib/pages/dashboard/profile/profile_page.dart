@@ -11,6 +11,7 @@ import 'package:vangelis/util/constants.dart';
 
 import '../../../entity/user.dart';
 import '../../../helpers/dialog_buttons.dart';
+import '../../../model/Instrument.dart';
 import '../../../model/musician.dart';
 import '../../../services/theme_service.dart';
 
@@ -81,14 +82,14 @@ class _ProfilePageState extends State<ProfilePage>
                         children: [
                           IconButton(
                             onPressed: () {},
-                            icon: Icon(
+                            icon: const Icon(
                               Icons.arrow_back_ios,
                               size: 30.0,
                             ),
                           ),
                           Text(
                             _ctrl.username.value,
-                            style: TextStyle(
+                            style: const TextStyle(
                               fontSize: 30.0,
                               fontWeight: FontWeight.w900,
                             ),
@@ -101,8 +102,8 @@ class _ProfilePageState extends State<ProfilePage>
                                   itemBuilder: (BuildContext bc) {
                                     return const [
                                       PopupMenuItem(
-                                        child: Text("Ver Favoritos"),
                                         value: 'fav',
+                                        child: Text("Ver Favoritos"),
                                       ),
                                     ];
                                   },
@@ -112,7 +113,7 @@ class _ProfilePageState extends State<ProfilePage>
                                       onPressed: () {
                                         _ctrl.removeUserFromFavorites();
                                       },
-                                      icon: Icon(
+                                      icon: const Icon(
                                         Icons.star,
                                         size: 30.0,
                                       ),
@@ -121,7 +122,7 @@ class _ProfilePageState extends State<ProfilePage>
                                       onPressed: () {
                                         _ctrl.addUserToFavorites();
                                       },
-                                      icon: Icon(
+                                      icon: const Icon(
                                         Icons.star_border,
                                         size: 30.0,
                                       ),
@@ -129,7 +130,7 @@ class _ProfilePageState extends State<ProfilePage>
                         ],
                       ),
                     ),
-                    SizedBox(height: 70.0),
+                    const SizedBox(height: 70.0),
                     Stack(
                       children: [
                         CircleAvatar(
@@ -146,7 +147,7 @@ class _ProfilePageState extends State<ProfilePage>
                                       context: context,
                                       builder: (context) {
                                         return AlertDialog(
-                                          title: Text('Acutalizar foto'),
+                                          title: const Text('Acutalizar foto'),
                                           actions: [
                                             DialogButtons(
                                                 onCancel: () => {
@@ -166,24 +167,24 @@ class _ProfilePageState extends State<ProfilePage>
                                       },
                                     );
                                   },
-                                  child: Icon(
-                                    Icons.edit,
-                                  ),
                                   style: OutlinedButton.styleFrom(
-                                      side: BorderSide(
+                                      side: const BorderSide(
                                         color: Colors.black12,
                                       ),
                                       primary: Colors.blue,
                                       backgroundColor: Colors.white,
-                                      shape: CircleBorder(),
-                                      fixedSize: Size(10.0, 20.0)),
+                                      shape: const CircleBorder(),
+                                      fixedSize: const Size(10.0, 20.0)),
+                                  child: const Icon(
+                                    Icons.edit,
+                                  ),
                                 ),
                               )
-                            : SizedBox()
+                            : const SizedBox()
                       ],
                     ),
-                    SizedBox(height: 20.0),
-                    SizedBox(height: 30.0),
+                    const SizedBox(height: 20.0),
+                    const SizedBox(height: 30.0),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
@@ -201,62 +202,69 @@ class _ProfilePageState extends State<ProfilePage>
                                       children: [
                                         index < _ctrl.instruments.length
                                             ? _ctrl.instruments[index]
-                                            .imageFromBase64String()
-                                            : _ctrl.isCurrentUser.value? OutlinedButton(
-                                          onPressed: () {
-                                            showDialog(
-                                              context: context,
-                                              builder: (context) {
-                                                //TODO: Modificar esto para que muestre un dropdown con los instrumentos posibles
-                                                return AlertDialog(
-                                                  title:
-                                                  Text('Agregar instrumento'),
-                                                  content: CustomText(
-                                                      "Seleccione a continuación los instrumentos:"),
-                                                  actions: [
-                                                    DialogButtons(
-                                                        onCancel: () => {
-                                                          Navigator.pop(
-                                                              context,
-                                                              false),
+                                                .imageFromBase64String()
+                                            : _ctrl.isCurrentUser.value && _ctrl.possibleInstruments.isNotEmpty
+                                                ? OutlinedButton(
+                                                    onPressed: () {
+                                                      showDialog(
+                                                        context: context,
+                                                        builder: (context) {
+                                                          return AlertDialog(
+                                                            title: const Text(
+                                                                'Agregar instrumento'),
+                                                            content: GenerateDropdownInstrument(),
+                                                            actions: [
+                                                              DialogButtons(
+                                                                  onCancel:
+                                                                      () => {
+                                                                            Navigator.pop(context,
+                                                                                false),
+                                                                          },
+                                                                  onOk:
+                                                                      () => {
+                                                                            _ctrl.addInstrumentToFavorites(),
+                                                                            Navigator.pop(context,
+                                                                                true)
+                                                                          },
+                                                                  okButtonText:
+                                                                      "Aceptar",
+                                                                  cancelButtonText:
+                                                                      "Cancelar"),
+                                                            ],
+                                                          );
                                                         },
-                                                        onOk: () => {
-                                                          _ctrl
-                                                              .addInstrumentToFavorites(
-                                                              1),
-                                                          Navigator.pop(
-                                                              context,
-                                                              true)
-                                                        },
-                                                        okButtonText:
-                                                        "Aceptar",
-                                                        cancelButtonText:
-                                                        "Cancelar"),
-                                                  ],
-                                                );
-                                              },
-                                            );
-                                          },
-                                          child: Icon(
-                                            Icons.add,
-                                          ),
-                                          style: OutlinedButton.styleFrom(
-                                              side: BorderSide(
-                                                color: Colors.black12,
-                                              ),
-                                              primary: Colors.green,
-                                              backgroundColor: Colors.white,
-                                              shape: CircleBorder(),
-                                              fixedSize: Size(10.0, 20.0)),
-                                        ) : SizedBox(),
+                                                      );
+                                                    },
+                                                    style: OutlinedButton
+                                                        .styleFrom(
+                                                            side:
+                                                                const BorderSide(
+                                                              color: Colors
+                                                                  .black12,
+                                                            ),
+                                                            primary:
+                                                                Colors.green,
+                                                            backgroundColor:
+                                                                Colors.white,
+                                                            shape:
+                                                                const CircleBorder(),
+                                                            fixedSize:
+                                                                const Size(10.0,
+                                                                    20.0)),
+                                                    child: const Icon(
+                                                      Icons.add,
+                                                    ),
+                                                  )
+                                                : const SizedBox(),
                                         index < _ctrl.instruments.length
-                                            ? CustomText(
-                                            _ctrl.instruments.value[index].name)
-                                            : SizedBox()
+                                            ? CustomText(_ctrl
+                                                .instruments.value[index].name)
+                                            : const SizedBox()
                                       ],
                                     ),
                                   ),
-                                  _ctrl.isCurrentUser.value && index < _ctrl.instruments.length
+                                  _ctrl.isCurrentUser.value &&
+                                          index < _ctrl.instruments.length
                                       ? Positioned(
                                           top: -14,
                                           right: -14,
@@ -266,15 +274,10 @@ class _ProfilePageState extends State<ProfilePage>
                                                 context: context,
                                                 builder: (context) {
                                                   return AlertDialog(
-                                                    title: Text(
+                                                    title: const Text(
                                                         'Eliminar instrumento'),
                                                     content: CustomText(
-                                                        "¿Está seguro de que desea eliminar " +
-                                                            _ctrl
-                                                                .instruments
-                                                                .value[index]
-                                                                .name +
-                                                            " de su lista de instrumentos?"),
+                                                        "¿Está seguro de que desea eliminar ${_ctrl.instruments.value[index].name} de su lista de instrumentos?"),
                                                     actions: [
                                                       DialogButtons(
                                                           onCancel: () => {
@@ -282,14 +285,14 @@ class _ProfilePageState extends State<ProfilePage>
                                                                     context,
                                                                     false),
                                                               },
-                                                          onOk: () => {
-                                                                _ctrl
-                                                                    .removeInstrument(
+                                                          onOk:
+                                                              () => {
+                                                                    _ctrl.removeInstrument(
                                                                         index),
-                                                                Navigator.pop(
-                                                                    context,
-                                                                    true)
-                                                              },
+                                                                    Navigator.pop(
+                                                                        context,
+                                                                        true)
+                                                                  },
                                                           okButtonText:
                                                               "Aceptar",
                                                           cancelButtonText:
@@ -299,17 +302,17 @@ class _ProfilePageState extends State<ProfilePage>
                                                 },
                                               );
                                             },
-                                            icon: Icon(
+                                            icon: const Icon(
                                               Icons.cancel_rounded,
                                               color: Colors.red,
                                             ),
                                           ),
                                         )
-                                      : SizedBox()
+                                      : const SizedBox()
                                 ],
                               );
                             },
-                            itemCount: _ctrl.instruments.value.length+1,
+                            itemCount: _ctrl.instruments.value.length + 1,
                           ),
                         ),
                       ],
@@ -332,61 +335,71 @@ class _ProfilePageState extends State<ProfilePage>
                                         index < _ctrl.genres.length
                                             ? _ctrl.genres[index]
                                                 .imageFromBase64String()
-                                            : _ctrl.isCurrentUser.value? OutlinedButton(
-                                          onPressed: () {
-                                            showDialog(
-                                              context: context,
-                                              builder: (context) {
-                                                //TODO: Modificar esto para que muestre un dropdown con los generos posibles
-                                                return AlertDialog(
-                                                  title:
-                                                  Text('Agregar genero'),
-                                                  content: CustomText(
-                                                      "Seleccione a continuación los generos:"),
-                                                  actions: [
-                                                    DialogButtons(
-                                                        onCancel: () => {
-                                                          Navigator.pop(
-                                                              context,
-                                                              false),
+                                            : _ctrl.isCurrentUser.value
+                                                ? OutlinedButton(
+                                                    onPressed: () {
+                                                      showDialog(
+                                                        context: context,
+                                                        builder: (context) {
+                                                          //TODO: Modificar esto para que muestre un dropdown con los generos posibles
+                                                          return AlertDialog(
+                                                            title: const Text(
+                                                                'Agregar genero'),
+                                                            content:
+                                                                const CustomText(
+                                                                    "Seleccione a continuación los generos:"),
+                                                            actions: [
+                                                              DialogButtons(
+                                                                  onCancel:
+                                                                      () => {
+                                                                            Navigator.pop(context,
+                                                                                false),
+                                                                          },
+                                                                  onOk:
+                                                                      () => {
+                                                                            _ctrl.addGenreToFavorites(1),
+                                                                            Navigator.pop(context,
+                                                                                true)
+                                                                          },
+                                                                  okButtonText:
+                                                                      "Aceptar",
+                                                                  cancelButtonText:
+                                                                      "Cancelar"),
+                                                            ],
+                                                          );
                                                         },
-                                                        onOk: () => {
-                                                          _ctrl
-                                                              .addGenreToFavorites(
-                                                              1),
-                                                          Navigator.pop(
-                                                              context,
-                                                              true)
-                                                        },
-                                                        okButtonText:
-                                                        "Aceptar",
-                                                        cancelButtonText:
-                                                        "Cancelar"),
-                                                  ],
-                                                );
-                                              },
-                                            );
-                                          },
-                                          child: Icon(
-                                            Icons.add,
-                                          ),
-                                          style: OutlinedButton.styleFrom(
-                                              side: BorderSide(
-                                                color: Colors.black12,
-                                              ),
-                                              primary: Colors.green,
-                                              backgroundColor: Colors.white,
-                                              shape: CircleBorder(),
-                                              fixedSize: Size(10.0, 20.0)),
-                                        ): SizedBox(),
+                                                      );
+                                                    },
+                                                    style: OutlinedButton
+                                                        .styleFrom(
+                                                            side:
+                                                                const BorderSide(
+                                                              color: Colors
+                                                                  .black12,
+                                                            ),
+                                                            primary:
+                                                                Colors.green,
+                                                            backgroundColor:
+                                                                Colors.white,
+                                                            shape:
+                                                                const CircleBorder(),
+                                                            fixedSize:
+                                                                const Size(10.0,
+                                                                    20.0)),
+                                                    child: const Icon(
+                                                      Icons.add,
+                                                    ),
+                                                  )
+                                                : const SizedBox(),
                                         index < _ctrl.genres.length
                                             ? CustomText(
                                                 _ctrl.genres.value[index].name)
-                                            : SizedBox()
+                                            : const SizedBox()
                                       ],
                                     ),
                                   ),
-                                  _ctrl.isCurrentUser.value && index < _ctrl.genres.length
+                                  _ctrl.isCurrentUser.value &&
+                                          index < _ctrl.genres.length
                                       ? Positioned(
                                           top: -14,
                                           right: -14,
@@ -396,15 +409,10 @@ class _ProfilePageState extends State<ProfilePage>
                                                 context: context,
                                                 builder: (context) {
                                                   return AlertDialog(
-                                                    title:
-                                                        Text('Eliminar genero'),
+                                                    title: const Text(
+                                                        'Eliminar genero'),
                                                     content: CustomText(
-                                                        "¿Está seguro de que desea eliminar " +
-                                                            _ctrl
-                                                                .genres
-                                                                .value[index]
-                                                                .name +
-                                                            " de su lista de generos?"),
+                                                        "¿Está seguro de que desea eliminar ${_ctrl.genres.value[index].name} de su lista de generos?"),
                                                     actions: [
                                                       DialogButtons(
                                                           onCancel: () => {
@@ -412,14 +420,14 @@ class _ProfilePageState extends State<ProfilePage>
                                                                     context,
                                                                     false),
                                                               },
-                                                          onOk: () => {
-                                                                _ctrl
-                                                                    .removeGenre(
+                                                          onOk:
+                                                              () => {
+                                                                    _ctrl.removeGenre(
                                                                         index),
-                                                                Navigator.pop(
-                                                                    context,
-                                                                    true)
-                                                              },
+                                                                    Navigator.pop(
+                                                                        context,
+                                                                        true)
+                                                                  },
                                                           okButtonText:
                                                               "Aceptar",
                                                           cancelButtonText:
@@ -429,13 +437,13 @@ class _ProfilePageState extends State<ProfilePage>
                                                 },
                                               );
                                             },
-                                            icon: Icon(
+                                            icon: const Icon(
                                               Icons.cancel_rounded,
                                               color: Colors.red,
                                             ),
                                           ),
                                         )
-                                      : SizedBox(),
+                                      : const SizedBox(),
                                 ],
                               );
                             },
@@ -450,11 +458,8 @@ class _ProfilePageState extends State<ProfilePage>
                       children: [
                         OutlinedButton(
                           onPressed: () {},
-                          child: Icon(
-                            Icons.telegram_rounded,
-                          ),
                           style: OutlinedButton.styleFrom(
-                              side: BorderSide(
+                              side: const BorderSide(
                                 color: Colors.transparent,
                               ),
                               primary: Colors.blue,
@@ -462,14 +467,16 @@ class _ProfilePageState extends State<ProfilePage>
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(100.0),
                               ),
-                              fixedSize: Size(50.0, 60.0)),
+                              fixedSize: const Size(50.0, 60.0)),
+                          child: const Icon(
+                            Icons.telegram_rounded,
+                          ),
                         ),
                         SizedBox(width: 15.w),
                         OutlinedButton(
                           onPressed: () {},
-                          child: Icon(Icons.whatsapp_rounded),
                           style: OutlinedButton.styleFrom(
-                              side: BorderSide(
+                              side: const BorderSide(
                                 color: Colors.transparent,
                               ),
                               primary: Colors.green,
@@ -477,16 +484,16 @@ class _ProfilePageState extends State<ProfilePage>
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(100.0),
                               ),
-                              fixedSize: Size(50.0, 60.0)),
+                              fixedSize: const Size(50.0, 60.0)),
+                          child: const Icon(Icons.whatsapp_rounded),
                         ),
                         SizedBox(width: 15.w),
                         OutlinedButton(
                           onPressed: () {
                             _ctrl.handleSignIn();
                           },
-                          child: Icon(Icons.youtube_searched_for),
                           style: OutlinedButton.styleFrom(
-                              side: BorderSide(
+                              side: const BorderSide(
                                 color: Colors.transparent,
                               ),
                               primary: Colors.red,
@@ -494,7 +501,8 @@ class _ProfilePageState extends State<ProfilePage>
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(100.0),
                               ),
-                              fixedSize: Size(50.0, 60.0)),
+                              fixedSize: const Size(50.0, 60.0)),
+                          child: const Icon(Icons.youtube_searched_for),
                         )
                       ],
                     ),
@@ -508,25 +516,26 @@ class _ProfilePageState extends State<ProfilePage>
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             CustomText(
-                              'Sobre ' + _ctrl.username.value,
+                              'Sobre ${_ctrl.username.value}',
                               fontSize: 30.h,
                             ), // <-- Text
                             !_ctrl.isCurrentUser.value
-                                ? SizedBox()
+                                ? const SizedBox()
                                 : OutlinedButton(
                                     onPressed: () {
                                       showDialog(
                                         context: context,
                                         builder: (context) {
                                           return AlertDialog(
-                                            title: Text('Editar descripción'),
+                                            title: const Text(
+                                                'Editar descripción'),
                                             content: TextFormField(
-                                              controller: _ctrl
-                                                  .descriptionController,
+                                                controller:
+                                                    _ctrl.descriptionController,
                                                 inputFormatters: [
-                                                  LengthLimitingTextInputFormatter(270),
-                                                ]
-                                            ),
+                                                  LengthLimitingTextInputFormatter(
+                                                      270),
+                                                ]),
                                             actions: [
                                               DialogButtons(
                                                   onCancel: () => {
@@ -536,13 +545,17 @@ class _ProfilePageState extends State<ProfilePage>
                                                             .onCancelEditDescription()
                                                       },
                                                   onOk: () => {
-                                                    //TODO: Cambiar esto para que se controle con algún validador y sino es valido que alerte
-                                                    if(_ctrl.descriptionController.text != "")
-                                                    {_ctrl
-                                                        .updateDescription(),
-                                                      Navigator.pop(
-                                                          context, true)
-                                                    }
+                                                        //TODO: Cambiar esto para que se controle con algún validador y sino es valido que alerte
+                                                        if (_ctrl
+                                                                .descriptionController
+                                                                .text !=
+                                                            "")
+                                                          {
+                                                            _ctrl
+                                                                .updateDescription(),
+                                                            Navigator.pop(
+                                                                context, true)
+                                                          }
                                                       },
                                                   okButtonText: "Aceptar",
                                                   cancelButtonText: "Cancelar"),
@@ -554,13 +567,13 @@ class _ProfilePageState extends State<ProfilePage>
                                     style: OutlinedButton.styleFrom(
                                       minimumSize: Size.zero, // Set this
                                       padding: EdgeInsets.zero, // and this
-                                      side: BorderSide(
+                                      side: const BorderSide(
                                         color: Colors.transparent,
                                       ),
                                     ),
                                     child: Row(
                                       mainAxisSize: MainAxisSize.min,
-                                      children: [
+                                      children: const [
                                         SizedBox(
                                           width: 5,
                                         ),
@@ -595,10 +608,10 @@ class _ProfilePageState extends State<ProfilePage>
                           child: TabBar(
                             isScrollable: true,
                             controller: tabController,
-                            indicator:
-                                BoxDecoration(borderRadius: BorderRadius.zero),
+                            indicator: const BoxDecoration(
+                                borderRadius: BorderRadius.zero),
                             labelColor: Colors.black,
-                            labelStyle: TextStyle(
+                            labelStyle: const TextStyle(
                                 fontSize: 28.0, fontWeight: FontWeight.bold),
                             unselectedLabelColor: Colors.black26,
                             onTap: (tapIndex) {
@@ -606,7 +619,7 @@ class _ProfilePageState extends State<ProfilePage>
                                 selectedIndex = tapIndex;
                               });
                             },
-                            tabs: [
+                            tabs: const [
                               Tab(text: "Fotos"),
                               Tab(text: "Videos"),
                               Tab(text: "Audios"),
@@ -622,34 +635,34 @@ class _ProfilePageState extends State<ProfilePage>
                           itemBuilder: (BuildContext bc) {
                             return const [
                               PopupMenuItem(
-                                child: Text("Hello"),
                                 value: '/hello',
+                                child: Text("Hello"),
                               ),
                               PopupMenuItem(
-                                child: Text("About"),
                                 value: '/about',
+                                child: Text("About"),
                               ),
                               PopupMenuItem(
-                                child: Text("Contact"),
                                 value: '/contact',
+                                child: Text("Contact"),
                               )
                             ];
                           },
                         ),
                       ],
                     ),
-                    SizedBox(height: 10.0),
+                    const SizedBox(height: 10.0),
                     SizedBox(
                       width: 5000.w,
                       height: 500.h,
                       child: TabBarView(
-                        physics: NeverScrollableScrollPhysics(),
+                        physics: const NeverScrollableScrollPhysics(),
                         controller: tabController,
                         children: [
                           GridView.builder(
                             scrollDirection: Axis.vertical,
                             gridDelegate:
-                                SliverGridDelegateWithFixedCrossAxisCount(
+                                const SliverGridDelegateWithFixedCrossAxisCount(
                                     mainAxisExtent: 250.0, crossAxisCount: 3),
                             itemBuilder: (context, index) {
                               return Padding(
@@ -675,7 +688,7 @@ class _ProfilePageState extends State<ProfilePage>
                                           color: Colors.white,
                                           borderRadius:
                                               BorderRadius.circular(15.0)),
-                                      child: Text("1.234k"),
+                                      child: const Text("1.234k"),
                                     ),
                                   ),
                                 ),
@@ -683,24 +696,24 @@ class _ProfilePageState extends State<ProfilePage>
                             },
                             itemCount: 8,
                           ),
-                          Center(
+                          const Center(
                             child: Text("You don't have any videos"),
                           ),
-                          Center(
+                          const Center(
                             child: Text("You don't have any tagged"),
                           ),
-                          Center(
+                          const Center(
                             child: Text("You don't have any tagged"),
                           ),
                         ],
                       ),
                     ),
-                    CircleAvatar(
+                    const CircleAvatar(
                       backgroundImage: NetworkImage(
                           "https://free2music.com/images/singer/2019/02/10/troye-sivan_2.jpg"),
                       radius: 70.0,
                     ),
-                    CircleAvatar(
+                    const CircleAvatar(
                       backgroundImage: NetworkImage(
                           "https://free2music.com/images/singer/2019/02/10/troye-sivan_2.jpg"),
                       radius: 70.0,
@@ -710,5 +723,55 @@ class _ProfilePageState extends State<ProfilePage>
               ),
             ), // This trailing comma makes auto-formatting nicer for build methods.
           ));
+  }
+
+  Widget GenerateDropdownInstrument(){
+    Instrument instrumentToAdd = _ctrl
+        .instrumentToAdd;
+    return DropdownButtonFormField<
+        Instrument>(
+      value: instrumentToAdd,
+      isExpanded: true,
+      icon: const Icon(Icons
+          .arrow_drop_down),
+      elevation: 16,
+      style: const TextStyle(
+          color: Colors
+              .deepPurple),
+
+      onChanged:
+          (Instrument?
+      value) {
+        // This is called when the user selects an item.
+        setState(() {
+          instrumentToAdd = value!;
+          _ctrl.instrumentToAdd = value;
+        });
+      },
+      onSaved:
+          (Instrument?
+      value) {
+        // This is called when the user selects an item.
+        setState(() {
+          instrumentToAdd = value!;
+          _ctrl.instrumentToAdd = value;
+        });
+      },
+      items: _ctrl
+          .possibleInstruments
+          .map<
+          DropdownMenuItem<
+              Instrument>>((Instrument
+      instrument) {
+        return DropdownMenuItem<
+            Instrument>(
+          value:
+          instrument,
+          child: Text(
+              instrument
+                  .name),
+        );
+      }).toList(),
+    );
   }
 }
