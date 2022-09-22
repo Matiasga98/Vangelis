@@ -42,7 +42,8 @@ class ProfileController extends GetxController {
   UserService userService = Get.find();
   InstrumentService instrumentService = Get.find();
 
-  List<Instrument> possibleInstruments = <Instrument>[];
+  List<Instrument> filteredPossibleInstruments = <Instrument>[];
+  List<Instrument> allPossibleinstruments = <Instrument>[];
   Instrument instrumentToAdd = Instrument(icon: null, name: '', id: 0);
 
   @override
@@ -86,9 +87,18 @@ class ProfileController extends GetxController {
   }
 
   Future<void> getInstruments() async {
-    List<Instrument>? allPossibleinstruments = await instrumentService.getAllInstruments();
-    possibleInstruments = allPossibleinstruments.where((ins) => !instruments.any((ins2) => ins.id == ins2.id)).toList();
-    instrumentToAdd = possibleInstruments.first;
+    allPossibleinstruments = await instrumentService.getAllInstruments();
+    filterPossibleInstruments();
+  }
+
+  void filterPossibleInstruments() {
+    filteredPossibleInstruments = allPossibleinstruments.where((ins) => !instruments.any((ins2) => ins.id == ins2.id)).toList();
+    if(filteredPossibleInstruments.isNotEmpty){
+      instrumentToAdd = filteredPossibleInstruments.first;
+    }
+    else{
+      instrumentToAdd = Instrument(icon: null, name: '', id: 0);
+    }
   }
 
   void updateProfilePicture() {
@@ -117,8 +127,8 @@ class ProfileController extends GetxController {
     User? user = await userService
         .addInstrumentsToFavourites(newInstruments.map((i) => i.id).toList());
     if (user != null) {
-      getInstruments();
       instruments.value = user.instruments;
+      filterPossibleInstruments();
     }
   }
 
@@ -148,8 +158,8 @@ class ProfileController extends GetxController {
         newInstruments.map((instrument) => instrument.id).toList();
     User? user = await userService.addInstrumentsToFavourites(instrumentsIds);
     if (user != null) {
-      getInstruments();
       instruments.value = user.instruments;
+      filterPossibleInstruments();
     }
   }
 

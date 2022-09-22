@@ -191,129 +191,7 @@ class _ProfilePageState extends State<ProfilePage>
                         SizedBox(
                           height: 150.h,
                           width: 500.w,
-                          child: ListView.builder(
-                            scrollDirection: Axis.horizontal,
-                            itemBuilder: (context, index) {
-                              return Stack(
-                                children: [
-                                  Container(
-                                    width: 110.w,
-                                    child: Column(
-                                      children: [
-                                        index < _ctrl.instruments.length
-                                            ? _ctrl.instruments[index]
-                                                .imageFromBase64String()
-                                            : _ctrl.isCurrentUser.value && _ctrl.possibleInstruments.isNotEmpty
-                                                ? OutlinedButton(
-                                                    onPressed: () {
-                                                      showDialog(
-                                                        context: context,
-                                                        builder: (context) {
-                                                          return AlertDialog(
-                                                            title: const Text(
-                                                                'Agregar instrumento'),
-                                                            content: GenerateDropdownInstrument(),
-                                                            actions: [
-                                                              DialogButtons(
-                                                                  onCancel:
-                                                                      () => {
-                                                                            Navigator.pop(context,
-                                                                                false),
-                                                                          },
-                                                                  onOk:
-                                                                      () => {
-                                                                            _ctrl.addInstrumentToFavorites(),
-                                                                            Navigator.pop(context,
-                                                                                true)
-                                                                          },
-                                                                  okButtonText:
-                                                                      "Aceptar",
-                                                                  cancelButtonText:
-                                                                      "Cancelar"),
-                                                            ],
-                                                          );
-                                                        },
-                                                      );
-                                                    },
-                                                    style: OutlinedButton
-                                                        .styleFrom(
-                                                            side:
-                                                                const BorderSide(
-                                                              color: Colors
-                                                                  .black12,
-                                                            ),
-                                                            primary:
-                                                                Colors.green,
-                                                            backgroundColor:
-                                                                Colors.white,
-                                                            shape:
-                                                                const CircleBorder(),
-                                                            fixedSize:
-                                                                const Size(10.0,
-                                                                    20.0)),
-                                                    child: const Icon(
-                                                      Icons.add,
-                                                    ),
-                                                  )
-                                                : const SizedBox(),
-                                        index < _ctrl.instruments.length
-                                            ? CustomText(_ctrl
-                                                .instruments.value[index].name)
-                                            : const SizedBox()
-                                      ],
-                                    ),
-                                  ),
-                                  _ctrl.isCurrentUser.value &&
-                                          index < _ctrl.instruments.length
-                                      ? Positioned(
-                                          top: -14,
-                                          right: -14,
-                                          child: IconButton(
-                                            onPressed: () {
-                                              showDialog(
-                                                context: context,
-                                                builder: (context) {
-                                                  return AlertDialog(
-                                                    title: const Text(
-                                                        'Eliminar instrumento'),
-                                                    content: CustomText(
-                                                        "¿Está seguro de que desea eliminar ${_ctrl.instruments.value[index].name} de su lista de instrumentos?"),
-                                                    actions: [
-                                                      DialogButtons(
-                                                          onCancel: () => {
-                                                                Navigator.pop(
-                                                                    context,
-                                                                    false),
-                                                              },
-                                                          onOk:
-                                                              () => {
-                                                                    _ctrl.removeInstrument(
-                                                                        index),
-                                                                    Navigator.pop(
-                                                                        context,
-                                                                        true)
-                                                                  },
-                                                          okButtonText:
-                                                              "Aceptar",
-                                                          cancelButtonText:
-                                                              "Cancelar"),
-                                                    ],
-                                                  );
-                                                },
-                                              );
-                                            },
-                                            icon: const Icon(
-                                              Icons.cancel_rounded,
-                                              color: Colors.red,
-                                            ),
-                                          ),
-                                        )
-                                      : const SizedBox()
-                                ],
-                              );
-                            },
-                            itemCount: _ctrl.instruments.value.length + 1,
-                          ),
+                          child: GenerateInstrumentsList(),
                         ),
                       ],
                     ),
@@ -758,7 +636,7 @@ class _ProfilePageState extends State<ProfilePage>
         });
       },
       items: _ctrl
-          .possibleInstruments
+          .filteredPossibleInstruments
           .map<
           DropdownMenuItem<
               Instrument>>((Instrument
@@ -772,6 +650,132 @@ class _ProfilePageState extends State<ProfilePage>
                   .name),
         );
       }).toList(),
+    );
+  }
+
+  Widget GenerateInstrumentsList(){
+    return ListView.builder(
+      scrollDirection: Axis.horizontal,
+      itemBuilder: (context, index) {
+        return Stack(
+          children: [
+            Container(
+              width: 110.w,
+              child: Column(
+                children: [
+                  index < _ctrl.instruments.length
+                      ? _ctrl.instruments[index]
+                      .imageFromBase64String()
+                      : _ctrl.isCurrentUser.value && _ctrl.filteredPossibleInstruments.isNotEmpty
+                      ? OutlinedButton(
+                    onPressed: () {
+                      showDialog(
+                        context: context,
+                        builder: (context) {
+                          return AlertDialog(
+                            title: const Text(
+                                'Agregar instrumento'),
+                            content: GenerateDropdownInstrument(),
+                            actions: [
+                              DialogButtons(
+                                  onCancel:
+                                      () => {
+                                    Navigator.pop(context,
+                                        false),
+                                  },
+                                  onOk:
+                                      () => {
+                                    _ctrl.addInstrumentToFavorites(),
+                                    Navigator.pop(context,
+                                        true)
+                                  },
+                                  okButtonText:
+                                  "Aceptar",
+                                  cancelButtonText:
+                                  "Cancelar"),
+                            ],
+                          );
+                        },
+                      );
+                    },
+                    style: OutlinedButton
+                        .styleFrom(
+                        side:
+                        const BorderSide(
+                          color: Colors
+                              .black12,
+                        ),
+                        primary:
+                        Colors.green,
+                        backgroundColor:
+                        Colors.white,
+                        shape:
+                        const CircleBorder(),
+                        fixedSize:
+                        const Size(10.0,
+                            20.0)),
+                    child: const Icon(
+                      Icons.add,
+                    ),
+                  )
+                      : const SizedBox(),
+                  index < _ctrl.instruments.length
+                      ? CustomText(_ctrl
+                      .instruments.value[index].name)
+                      : const SizedBox()
+                ],
+              ),
+            ),
+            _ctrl.isCurrentUser.value &&
+                index < _ctrl.instruments.length && _ctrl.instruments.length > 1
+                ? Positioned(
+              top: -14,
+              right: -14,
+              child: IconButton(
+                onPressed: () {
+                  showDialog(
+                    context: context,
+                    builder: (context) {
+                      return AlertDialog(
+                        title: const Text(
+                            'Eliminar instrumento'),
+                        content: CustomText(
+                            "¿Está seguro de que desea eliminar ${_ctrl.instruments.value[index].name} de su lista de instrumentos?"),
+                        actions: [
+                          DialogButtons(
+                              onCancel: () => {
+                                Navigator.pop(
+                                    context,
+                                    false),
+                              },
+                              onOk:
+                                  () => {
+                                _ctrl.removeInstrument(
+                                    index),
+                                Navigator.pop(
+                                    context,
+                                    true)
+                              },
+                              okButtonText:
+                              "Aceptar",
+                              cancelButtonText:
+                              "Cancelar"),
+                        ],
+                      );
+                    },
+                  );
+                },
+                icon: const Icon(
+                  Icons.cancel_rounded,
+                  color: Colors.red,
+                ),
+              ),
+            )
+                : const SizedBox()
+          ],
+        );
+      },
+      itemCount: _ctrl.instruments.value.length + 1,
     );
   }
 }
