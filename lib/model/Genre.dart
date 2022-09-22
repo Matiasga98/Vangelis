@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:typed_data';
 import 'package:flutter/widgets.dart';
 import 'package:vangelis/util/constants.dart';
 
@@ -8,6 +7,8 @@ class Genre{
   int id;
   var icon;
   String name;
+
+  Genre({required this.id, required this.icon, required this.name});
 
   Genre.fromJson(Map<String, dynamic> json)
       : id = json['id'],

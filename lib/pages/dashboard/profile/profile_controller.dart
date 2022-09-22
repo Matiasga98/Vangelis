@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:vangelis/pages/dashboard/profile/favorite/favorite_page.dart';
-import 'package:vangelis/util/constants.dart';
+import 'package:vangelis/services/genre_service.dart';
 
 import 'package:googleapis/youtube/v3.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -14,7 +14,6 @@ import '../../../model/Genre.dart';
 import '../../../model/Instrument.dart';
 import '../../../model/musician.dart';
 import '../../../services/instrument_service.dart';
-import '../../../services/theme_service.dart';
 import '../../../services/user_service.dart';
 
 class ProfileController extends GetxController {
@@ -41,10 +40,15 @@ class ProfileController extends GetxController {
   RxBool isFavorited = false.obs;
   UserService userService = Get.find();
   InstrumentService instrumentService = Get.find();
+  GenreService genreService = Get.find();
 
   List<Instrument> filteredPossibleInstruments = <Instrument>[];
-  List<Instrument> allPossibleinstruments = <Instrument>[];
+  List<Instrument> allPossibleInstruments = <Instrument>[];
   Instrument instrumentToAdd = Instrument(icon: null, name: '', id: 0);
+
+  List<Genre> filteredPossibleGenres = <Genre>[];
+  List<Genre> allPossibleGenres = <Genre>[];
+  Genre genreToAdd = Genre(icon: null, name: '', id: 0);
 
   @override
   void onReady() {
@@ -57,6 +61,7 @@ class ProfileController extends GetxController {
     _googleSignIn.signInSilently();
     getProfileInfo();
     getInstruments();
+    getGenres();
     descriptionController.text = musician.bio ?? "";
     super.onReady();
   }
@@ -87,17 +92,32 @@ class ProfileController extends GetxController {
   }
 
   Future<void> getInstruments() async {
-    allPossibleinstruments = await instrumentService.getAllInstruments();
+    allPossibleInstruments = await instrumentService.getAllInstruments();
     filterPossibleInstruments();
   }
 
   void filterPossibleInstruments() {
-    filteredPossibleInstruments = allPossibleinstruments.where((ins) => !instruments.any((ins2) => ins.id == ins2.id)).toList();
+    filteredPossibleInstruments = allPossibleInstruments.where((ins) => !instruments.any((ins2) => ins.id == ins2.id)).toList();
     if(filteredPossibleInstruments.isNotEmpty){
       instrumentToAdd = filteredPossibleInstruments.first;
     }
     else{
       instrumentToAdd = Instrument(icon: null, name: '', id: 0);
+    }
+  }
+
+  Future<void> getGenres() async {
+    allPossibleGenres = await genreService.getAllGenres();
+    filterPossibleGenres();
+  }
+
+  void filterPossibleGenres() {
+    filteredPossibleGenres = allPossibleGenres.where((gen) => !genres.any((gen2) => gen.id == gen2.id)).toList();
+    if(filteredPossibleGenres.isNotEmpty){
+      genreToAdd = filteredPossibleGenres.first;
+    }
+    else{
+      genreToAdd = Genre(icon: null, name: '', id: 0);
     }
   }
 
@@ -132,22 +152,26 @@ class ProfileController extends GetxController {
     }
   }
 
-  Future<void> addGenreToFavorites(int id) async {
-    var genreIds = genres.map((genre) => genre.id).toList();
-    genreIds.addIf(!genreIds.any((genreId) => genreId == id), id);
-    User? user = await userService.addGenresToFavourites(genreIds);
+  Future<void> addGenreToFavorites() async {
+    List<Genre> newGenres = List.from(genres);
+    newGenres.addIf(!genres.any((gen) => gen.id == genreToAdd.id), genreToAdd);
+    User? user = await userService
+        .addGenresToFavourites(newGenres.map((i) => i.id).toList());
     if (user != null) {
       genres.value = user.favoriteGenres;
+      filterPossibleGenres();
     }
   }
 
   Future<void> removeGenre(int index) async {
     int newGenreId = genres[index].id;
-    var newGenres = genres.where((g) => g.id != newGenreId);
-    var genresIds = newGenres.map((genre) => genre.id).toList();
+    var newGenres = genres.where((i) => i.id != newGenreId);
+    var genresIds =
+    newGenres.map((genre) => genre.id).toList();
     User? user = await userService.addGenresToFavourites(genresIds);
     if (user != null) {
       genres.value = user.favoriteGenres;
+      filterPossibleGenres();
     }
   }
 

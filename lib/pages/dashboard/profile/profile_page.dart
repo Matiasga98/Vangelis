@@ -3,14 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 import 'package:vangelis/helpers/custom_text.dart';
 import 'package:vangelis/pages/dashboard/profile/profile_controller.dart';
-import 'package:vangelis/pages/dashboard/search/search_controller.dart';
 import 'package:vangelis/util/constants.dart';
 
-import '../../../entity/user.dart';
 import '../../../helpers/dialog_buttons.dart';
+import '../../../model/Genre.dart';
 import '../../../model/Instrument.dart';
 import '../../../model/musician.dart';
 import '../../../services/theme_service.dart';
@@ -201,132 +199,7 @@ class _ProfilePageState extends State<ProfilePage>
                         SizedBox(
                           height: 150.h,
                           width: 500.w,
-                          child: ListView.builder(
-                            scrollDirection: Axis.horizontal,
-                            itemBuilder: (context, index) {
-                              return Stack(
-                                children: [
-                                  Container(
-                                    width: 110.w,
-                                    child: Column(
-                                      children: [
-                                        index < _ctrl.genres.length
-                                            ? _ctrl.genres[index]
-                                                .imageFromBase64String()
-                                            : _ctrl.isCurrentUser.value
-                                                ? OutlinedButton(
-                                                    onPressed: () {
-                                                      showDialog(
-                                                        context: context,
-                                                        builder: (context) {
-                                                          //TODO: Modificar esto para que muestre un dropdown con los generos posibles
-                                                          return AlertDialog(
-                                                            title: const Text(
-                                                                'Agregar genero'),
-                                                            content:
-                                                                const CustomText(
-                                                                    "Seleccione a continuación los generos:"),
-                                                            actions: [
-                                                              DialogButtons(
-                                                                  onCancel:
-                                                                      () => {
-                                                                            Navigator.pop(context,
-                                                                                false),
-                                                                          },
-                                                                  onOk:
-                                                                      () => {
-                                                                            _ctrl.addGenreToFavorites(1),
-                                                                            Navigator.pop(context,
-                                                                                true)
-                                                                          },
-                                                                  okButtonText:
-                                                                      "Aceptar",
-                                                                  cancelButtonText:
-                                                                      "Cancelar"),
-                                                            ],
-                                                          );
-                                                        },
-                                                      );
-                                                    },
-                                                    style: OutlinedButton
-                                                        .styleFrom(
-                                                            side:
-                                                                const BorderSide(
-                                                              color: Colors
-                                                                  .black12,
-                                                            ),
-                                                            primary:
-                                                                Colors.green,
-                                                            backgroundColor:
-                                                                Colors.white,
-                                                            shape:
-                                                                const CircleBorder(),
-                                                            fixedSize:
-                                                                const Size(10.0,
-                                                                    20.0)),
-                                                    child: const Icon(
-                                                      Icons.add,
-                                                    ),
-                                                  )
-                                                : const SizedBox(),
-                                        index < _ctrl.genres.length
-                                            ? CustomText(
-                                                _ctrl.genres.value[index].name)
-                                            : const SizedBox()
-                                      ],
-                                    ),
-                                  ),
-                                  _ctrl.isCurrentUser.value &&
-                                          index < _ctrl.genres.length
-                                      ? Positioned(
-                                          top: -14,
-                                          right: -14,
-                                          child: IconButton(
-                                            onPressed: () {
-                                              showDialog(
-                                                context: context,
-                                                builder: (context) {
-                                                  return AlertDialog(
-                                                    title: const Text(
-                                                        'Eliminar genero'),
-                                                    content: CustomText(
-                                                        "¿Está seguro de que desea eliminar ${_ctrl.genres.value[index].name} de su lista de generos?"),
-                                                    actions: [
-                                                      DialogButtons(
-                                                          onCancel: () => {
-                                                                Navigator.pop(
-                                                                    context,
-                                                                    false),
-                                                              },
-                                                          onOk:
-                                                              () => {
-                                                                    _ctrl.removeGenre(
-                                                                        index),
-                                                                    Navigator.pop(
-                                                                        context,
-                                                                        true)
-                                                                  },
-                                                          okButtonText:
-                                                              "Aceptar",
-                                                          cancelButtonText:
-                                                              "Cancelar"),
-                                                    ],
-                                                  );
-                                                },
-                                              );
-                                            },
-                                            icon: const Icon(
-                                              Icons.cancel_rounded,
-                                              color: Colors.red,
-                                            ),
-                                          ),
-                                        )
-                                      : const SizedBox(),
-                                ],
-                              );
-                            },
-                            itemCount: _ctrl.genres.length + 1,
-                          ),
+                          child: GenerateGenresList(),
                         ),
                       ],
                     ),
@@ -603,56 +476,6 @@ class _ProfilePageState extends State<ProfilePage>
           ));
   }
 
-  Widget GenerateDropdownInstrument(){
-    Instrument instrumentToAdd = _ctrl
-        .instrumentToAdd;
-    return DropdownButtonFormField<
-        Instrument>(
-      value: instrumentToAdd,
-      isExpanded: true,
-      icon: const Icon(Icons
-          .arrow_drop_down),
-      elevation: 16,
-      style: const TextStyle(
-          color: Colors
-              .deepPurple),
-
-      onChanged:
-          (Instrument?
-      value) {
-        // This is called when the user selects an item.
-        setState(() {
-          instrumentToAdd = value!;
-          _ctrl.instrumentToAdd = value;
-        });
-      },
-      onSaved:
-          (Instrument?
-      value) {
-        // This is called when the user selects an item.
-        setState(() {
-          instrumentToAdd = value!;
-          _ctrl.instrumentToAdd = value;
-        });
-      },
-      items: _ctrl
-          .filteredPossibleInstruments
-          .map<
-          DropdownMenuItem<
-              Instrument>>((Instrument
-      instrument) {
-        return DropdownMenuItem<
-            Instrument>(
-          value:
-          instrument,
-          child: Text(
-              instrument
-                  .name),
-        );
-      }).toList(),
-    );
-  }
-
   Widget GenerateInstrumentsList(){
     return ListView.builder(
       scrollDirection: Axis.horizontal,
@@ -776,6 +599,232 @@ class _ProfilePageState extends State<ProfilePage>
         );
       },
       itemCount: _ctrl.instruments.value.length + 1,
+    );
+  }
+
+  Widget GenerateDropdownInstrument(){
+    Instrument instrumentToAdd = _ctrl
+        .instrumentToAdd;
+    return DropdownButtonFormField<
+        Instrument>(
+      value: instrumentToAdd,
+      isExpanded: true,
+      icon: const Icon(Icons
+          .arrow_drop_down),
+      elevation: 16,
+      style: const TextStyle(
+          color: Colors
+              .deepPurple),
+
+      onChanged:
+          (Instrument?
+      value) {
+        // This is called when the user selects an item.
+        setState(() {
+          instrumentToAdd = value!;
+          _ctrl.instrumentToAdd = value;
+        });
+      },
+      onSaved:
+          (Instrument?
+      value) {
+        // This is called when the user selects an item.
+        setState(() {
+          instrumentToAdd = value!;
+          _ctrl.instrumentToAdd = value;
+        });
+      },
+      items: _ctrl
+          .filteredPossibleInstruments
+          .map<
+          DropdownMenuItem<
+              Instrument>>((Instrument
+      instrument) {
+        return DropdownMenuItem<
+            Instrument>(
+          value:
+          instrument,
+          child: Text(
+              instrument
+                  .name),
+        );
+      }).toList(),
+    );
+  }
+
+  Widget GenerateGenresList(){
+    return ListView.builder(
+      scrollDirection: Axis.horizontal,
+      itemBuilder: (context, index) {
+        return Stack(
+          children: [
+            Container(
+              width: 110.w,
+              child: Column(
+                children: [
+                  index < _ctrl.genres.length
+                      ? _ctrl.genres[index]
+                      .imageFromBase64String()
+                      : _ctrl.isCurrentUser.value && _ctrl.filteredPossibleGenres.isNotEmpty
+                      ? OutlinedButton(
+                    onPressed: () {
+                      showDialog(
+                        context: context,
+                        builder: (context) {
+                          return AlertDialog(
+                            title: const Text(
+                                'Agregar genero'),
+                            content: GenerateDropdownGenre(),
+                            actions: [
+                              DialogButtons(
+                                  onCancel:
+                                      () => {
+                                    Navigator.pop(context,
+                                        false),
+                                  },
+                                  onOk:
+                                      () => {
+                                    _ctrl.addGenreToFavorites(),
+                                    Navigator.pop(context,
+                                        true)
+                                  },
+                                  okButtonText:
+                                  "Aceptar",
+                                  cancelButtonText:
+                                  "Cancelar"),
+                            ],
+                          );
+                        },
+                      );
+                    },
+                    style: OutlinedButton
+                        .styleFrom(
+                        side:
+                        const BorderSide(
+                          color: Colors
+                              .black12,
+                        ),
+                        primary:
+                        Colors.green,
+                        backgroundColor:
+                        Colors.white,
+                        shape:
+                        const CircleBorder(),
+                        fixedSize:
+                        const Size(10.0,
+                            20.0)),
+                    child: const Icon(
+                      Icons.add,
+                    ),
+                  )
+                      : const SizedBox(),
+                  index < _ctrl.genres.length
+                      ? CustomText(_ctrl
+                      .genres.value[index].name)
+                      : const SizedBox()
+                ],
+              ),
+            ),
+            _ctrl.isCurrentUser.value &&
+                index < _ctrl.genres.length && _ctrl.genres.length > 1
+                ? Positioned(
+              top: -14,
+              right: -14,
+              child: IconButton(
+                onPressed: () {
+                  showDialog(
+                    context: context,
+                    builder: (context) {
+                      return AlertDialog(
+                        title: const Text(
+                            'Eliminar genero'),
+                        content: CustomText(
+                            "¿Está seguro de que desea eliminar ${_ctrl.genres.value[index].name} de su lista de generos?"),
+                        actions: [
+                          DialogButtons(
+                              onCancel: () => {
+                                Navigator.pop(
+                                    context,
+                                    false),
+                              },
+                              onOk:
+                                  () => {
+                                _ctrl.removeGenre(
+                                    index),
+                                Navigator.pop(
+                                    context,
+                                    true)
+                              },
+                              okButtonText:
+                              "Aceptar",
+                              cancelButtonText:
+                              "Cancelar"),
+                        ],
+                      );
+                    },
+                  );
+                },
+                icon: const Icon(
+                  Icons.cancel_rounded,
+                  color: Colors.red,
+                ),
+              ),
+            )
+                : const SizedBox()
+          ],
+        );
+      },
+      itemCount: _ctrl.genres.value.length + 1,
+    );
+  }
+
+  Widget GenerateDropdownGenre(){
+    Genre genreToAdd = _ctrl
+        .genreToAdd;
+    return DropdownButtonFormField<
+        Genre>(
+      value: genreToAdd,
+      isExpanded: true,
+      icon: const Icon(Icons
+          .arrow_drop_down),
+      elevation: 16,
+      style: const TextStyle(
+          color: Colors
+              .deepPurple),
+
+      onChanged:
+          (Genre?
+      value) {
+        // This is called when the user selects an item.
+        setState(() {
+          genreToAdd = value!;
+          _ctrl.genreToAdd = value;
+        });
+      },
+      onSaved:
+          (Genre?
+      value) {
+        // This is called when the user selects an item.
+        setState(() {
+          genreToAdd = value!;
+          _ctrl.genreToAdd = value;
+        });
+      },
+      items: _ctrl
+          .filteredPossibleGenres
+          .map<
+          DropdownMenuItem<
+              Genre>>((Genre
+      genre) {
+        return DropdownMenuItem<
+            Genre>(
+          value:
+          genre,
+          child: Text(
+              genre
+                  .name),
+        );
+      }).toList(),
     );
   }
 }
