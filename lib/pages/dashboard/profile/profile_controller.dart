@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/avd.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:vangelis/pages/dashboard/profile/favorite/favorite_page.dart';
@@ -132,38 +133,139 @@ class ProfileController extends GetxController {
     }
   }
 
-  YoutubePlayerController _controller = YoutubePlayerController(
+  YoutubePlayerController _videoController = YoutubePlayerController(
     initialVideoId: 'iLnmTe5Q2Qw',
     flags: YoutubePlayerFlags(
       autoPlay: true,
-      mute: true,
+      mute: false,
+      hideControls: true,
     ),
   );
 
-  Widget openVideo(int index)  {
+  YoutubePlayerController _videoController2 = YoutubePlayerController(
+    initialVideoId: 'dQw4w9WgXcQ',
+    flags: YoutubePlayerFlags(
+      autoPlay: true,
+      mute: false,
+      hideControls: true,
+    ),
+  );
 
-    _controller.load(userVideos[index].id!.videoId!);
+
+
+  Widget openVideo(int index) {
+    _videoController.load(userVideos[index].id!.videoId!);
+    RxDouble _sliderValue = 0.0.obs;
+    RxBool isPlaying = true.obs;
     return AlertDialog(
         title: Text('video'),
-        content: YoutubePlayer(
-          controller: _controller,
-          showVideoProgressIndicator: true,
-          onReady: () {
-            _controller.addListener(listener);
-            _controller.load(userVideos[index].id!.videoId!);
-          },
-        )
-    );
+        content: Obx(() => Column(
+              children: [
+                YoutubePlayer(
+                  controller: _videoController,
+                  showVideoProgressIndicator: true,
+                  onReady: () {
+                    _videoController.addListener(listener);
+                    _videoController.load(userVideos[index].id!.videoId!);
+                  },
+                ),
+                Row(
+                  children: [
+                    IconButton(
+                        onPressed: () {
+                          if (isPlaying.value) {
+                            _videoController.pause();
+                            _videoController2.pause();
+                            isPlaying.value = false;
+                          } else {
+                            _videoController.play();
+                            _videoController2.play();
+                            isPlaying.value = true;
+                          }
+                        },
+                        icon: Icon(
+                            isPlaying.value ? Icons.pause : Icons.play_arrow)),
+                    IconButton(
+                        onPressed: () {
 
+                          var miliseconds =
+                              ((_sliderValue.value) * 1000).truncate();
+                          _videoController.seekTo(Duration(
+                              milliseconds: miliseconds));
+                          _videoController2.seekTo(Duration(seconds: 0));
+                          isPlaying.value = true;
+                        },
+                        icon: Icon(Icons.refresh)),
+                    IconButton(
+                        onPressed: () {
+                          if (_sliderValue.value < 20.0) {
+                            _sliderValue.value += 0.1;
+                            String stringValue =
+                                _sliderValue.value.toStringAsFixed(2);
+                            _sliderValue.value = double.parse(stringValue);
+                          }
+                        },
+                        icon: Icon(Icons.add)),
+                    IconButton(
+                        onPressed: () {
+                          if (_sliderValue.value > 0) {
+                            _sliderValue.value -= 0.1;
+                            String stringValue =
+                                _sliderValue.value.toStringAsFixed(2);
+                            _sliderValue.value = double.parse(stringValue);
+                          }
+                        },
+                        icon: Icon(Icons.remove))
+                  ],
+                ),
+                Row(
+                  children: [
+                    Container(
+                      width: 80.w,
+                      child: Text(_sliderValue.toString()),
+                    ),
+                    Expanded(
+                        child: Slider(
+                      value: _sliderValue.value,
+                      min: 0.0,
+                      max: 20.0,
+                      divisions: 200,
+                      activeColor: Colors.green,
+                      inactiveColor: Colors.orange,
+                      label: 'Set start value',
+                      onChanged: (double newValue) {
+                        String stringValue = newValue.toStringAsFixed(2);
+                        _sliderValue.value = double.parse(stringValue);
+                      },
+                    )),
+                  ],
+                ),
+                YoutubePlayer(
+                  controller: _videoController2,
+                  showVideoProgressIndicator: true,
+                  onReady: () {
+                    _videoController2.addListener(listener2);
+                    //_videoController2.load(userVideos[index].id!.videoId!);
+                  },
+                ),
+              ],
+            )));
   }
 
   late PlayerState _playerState;
   late YoutubeMetaData _videoMetaData;
 
+  void listener2() {
+    if (!_videoController2.value.isFullScreen) {
+      _playerState = _videoController2.value.playerState;
+      _videoMetaData = _videoController2.metadata;
+    }
+  }
+
   void listener() {
-    if (!_controller.value.isFullScreen) {
-      _playerState = _controller.value.playerState;
-      _videoMetaData = _controller.metadata;
+    if (!_videoController.value.isFullScreen) {
+      _playerState = _videoController.value.playerState;
+      _videoMetaData = _videoController.metadata;
     }
   }
 }
