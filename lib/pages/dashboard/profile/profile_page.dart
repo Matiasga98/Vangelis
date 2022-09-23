@@ -426,12 +426,14 @@ class _ProfilePageState extends State<ProfilePage>
                           child:
                           GestureDetector(
                             onTap: () {
-                              showDialog(
+                              _ctrl.goToVideoPage();
+                              /*showDialog(
                                 context: context,
                                 builder: (context) {
+
                                   return _ctrl.openVideo(index);
                                 },
-                              );
+                              );*/
                             },
                             child: Container(
                               decoration: BoxDecoration(

@@ -4,6 +4,7 @@ import 'package:flutter_svg/avd.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:vangelis/pages/dashboard/profile/favorite/favorite_page.dart';
+import 'package:vangelis/pages/dashboard/profile/video/video_page.dart';
 import 'package:vangelis/util/constants.dart';
 
 import 'package:googleapis/youtube/v3.dart';
@@ -142,16 +143,10 @@ class ProfileController extends GetxController {
     ),
   );
 
-  YoutubePlayerController _videoController2 = YoutubePlayerController(
-    initialVideoId: 'dQw4w9WgXcQ',
-    flags: YoutubePlayerFlags(
-      autoPlay: true,
-      mute: false,
-      hideControls: true,
-    ),
-  );
 
-
+  void goToVideoPage(){
+    Get.to(() => VideoScreen());
+  }
 
   Widget openVideo(int index) {
     _videoController.load(userVideos[index].id!.videoId!);
@@ -175,11 +170,9 @@ class ProfileController extends GetxController {
                         onPressed: () {
                           if (isPlaying.value) {
                             _videoController.pause();
-                            _videoController2.pause();
                             isPlaying.value = false;
                           } else {
                             _videoController.play();
-                            _videoController2.play();
                             isPlaying.value = true;
                           }
                         },
@@ -192,7 +185,6 @@ class ProfileController extends GetxController {
                               ((_sliderValue.value) * 1000).truncate();
                           _videoController.seekTo(Duration(
                               milliseconds: miliseconds));
-                          _videoController2.seekTo(Duration(seconds: 0));
                           isPlaying.value = true;
                         },
                         icon: Icon(Icons.refresh)),
@@ -240,27 +232,12 @@ class ProfileController extends GetxController {
                     )),
                   ],
                 ),
-                YoutubePlayer(
-                  controller: _videoController2,
-                  showVideoProgressIndicator: true,
-                  onReady: () {
-                    _videoController2.addListener(listener2);
-                    //_videoController2.load(userVideos[index].id!.videoId!);
-                  },
-                ),
               ],
             )));
   }
 
   late PlayerState _playerState;
   late YoutubeMetaData _videoMetaData;
-
-  void listener2() {
-    if (!_videoController2.value.isFullScreen) {
-      _playerState = _videoController2.value.playerState;
-      _videoMetaData = _videoController2.metadata;
-    }
-  }
 
   void listener() {
     if (!_videoController.value.isFullScreen) {
