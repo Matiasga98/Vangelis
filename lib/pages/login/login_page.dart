@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-
 import '../../config/config.dart';
 import '../../helpers/custom_button.dart';
 import '../../helpers/custom_text.dart';
@@ -83,13 +82,15 @@ class LoginPage extends StatelessWidget {
   List<Widget> _getFields(bool isOktaLogin) {
     final fields = <Widget>[];
     fields.addAll([
-      CustomText(
+      GestureDetector(
+        onTap: () => _ctrl.secretMatiLogin(),
+          child: CustomText(
         loginIn,
         fontSize: 40.h,
         fontFamily: regularFont,
         fontWeight: FontWeight.w400,
         textColor: themeConfig!.blackWhiteColor,
-      ),
+      )),
       SizedBox(height: 30.h)
     ]);
     if (!isOktaLogin) {
@@ -148,7 +149,7 @@ class LoginPage extends StatelessWidget {
 
   Widget _register() {
     return GestureDetector(
-      key : const Key(forgotPasswordGestureDetector),
+      key: const Key(forgotPasswordGestureDetector),
       onTap: () {
         Get.toNamed(RouterName.registerPageTag);
       },

@@ -3,6 +3,8 @@ import 'package:vangelis/repository/storage/user_storage.dart';
 import 'package:vangelis/repository/user_repository.dart';
 import 'package:vangelis/services/auth_service.dart';
 import 'package:vangelis/services/connectivity_service.dart';
+import 'package:vangelis/services/genre_service.dart';
+import 'package:vangelis/services/instrument_service.dart';
 import 'package:vangelis/services/progress_service.dart';
 import 'package:vangelis/services/theme_service.dart';
 import 'package:vangelis/services/user_service.dart';
@@ -20,6 +22,8 @@ class DependencyBindings extends Bindings {
     Get.put(UserStorage());
     Get.put(UserService());
     Get.put(AuthService());
+    Get.put(InstrumentService());
+    Get.put(GenreService());
 
 
 

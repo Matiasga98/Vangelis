@@ -11,7 +11,7 @@ class Configuration extends GetxService
     'MOBILE': 'Sin conectarse a backend',
   };
 
-  static const defaultEnvironment = 'MOBILE';
+  static const defaultEnvironment = 'BACKENDLOCAL';
 
 
   Map<String, String>? _envMap;

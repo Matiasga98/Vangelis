@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:vangelis/pages/dashboard/search/search_controller.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -13,6 +15,8 @@ import 'package:vangelis/util/constants.dart';
 import '../../../config/colors_.dart';
 import 'card_widget.dart';
 import '../../../services/theme_service.dart';
+import '../../../services/theme_service.dart';
+import 'collab_controller.dart';
 
 class CollabScreen extends StatefulWidget {
   const CollabScreen({Key? key}) : super(key: key);
@@ -83,6 +87,11 @@ class _CollabScreenState extends State<CollabScreen> {
                         ),
                         prefixIconConstraints:
                         const BoxConstraints(maxWidth: 50),
+
+                              ]),
+                        ),
+                        prefixIconConstraints:
+                        const BoxConstraints(maxHeight: 17, maxWidth: 50),
                         isDense: true,
                         contentPadding: const EdgeInsets.symmetric(
                             vertical: 0, horizontal: 0),
@@ -125,16 +134,16 @@ class _CollabScreenState extends State<CollabScreen> {
                           alignment: WrapAlignment.start,
                           crossAxisAlignment: WrapCrossAlignment.start,
                           children: List.generate(
-                            _ctrl.instruments.length,
+                            _ctrl.instruments.value.length,
                                 (index) => IntrinsicWidth(
                               child: GestureDetector(
                                 onTap: () {
                                   setState(() {
                                     if (_ctrl.selectedInstruments
                                         .contains(
-                                        _ctrl.instruments[index])) {
+                                        _ctrl.instruments.value[index])) {
                                       _ctrl.selectedInstruments.remove(
-                                          _ctrl.instruments[index]);
+                                          _ctrl.instruments.value[index]);
                                     } else {
                                       _ctrl.selectedInstruments
                                           .add(_ctrl.instruments[index]);
@@ -155,7 +164,7 @@ class _CollabScreenState extends State<CollabScreen> {
                                       BorderRadius.circular(15)),
                                   alignment: Alignment.center,
                                   child: Text(
-                                    _ctrl.instruments[index],
+                                    _ctrl.instruments.value[index],
                                     style: TextStyle(
                                         color: _ctrl.selectedInstruments
                                             .contains(_ctrl
@@ -195,15 +204,15 @@ class _CollabScreenState extends State<CollabScreen> {
                             alignment: WrapAlignment.start,
                             crossAxisAlignment: WrapCrossAlignment.start,
                             children: List.generate(
-                              _ctrl.musicalGenres.length,
+                              _ctrl.musicalGenres.value.length,
                                   (index) => IntrinsicWidth(
                                 child: GestureDetector(
                                   onTap: () {
                                     setState(() {
                                       if (_ctrl.selectedGenres.contains(
-                                          _ctrl.musicalGenres[index])) {
+                                          _ctrl.musicalGenres.value[index])) {
                                         _ctrl.selectedGenres.remove(
-                                            _ctrl.musicalGenres[index]);
+                                            _ctrl.musicalGenres.value[index]);
                                       } else {
                                         _ctrl.selectedGenres
                                             .add(_ctrl.musicalGenres[index]);
@@ -216,14 +225,14 @@ class _CollabScreenState extends State<CollabScreen> {
                                         horizontal: 16),
                                     decoration: BoxDecoration(
                                         color: _ctrl.selectedGenres.contains(
-                                            _ctrl.musicalGenres[index])
+                                            _ctrl.musicalGenres.value[index])
                                             ? greenLight
                                             : greenTint1,
                                         borderRadius:
                                         BorderRadius.circular(15)),
                                     alignment: Alignment.center,
                                     child: Text(
-                                      _ctrl.musicalGenres[index],
+                                      _ctrl.musicalGenres.value[index],
                                       style: TextStyle(
                                           color: _ctrl.selectedGenres
                                               .contains(_ctrl
@@ -240,178 +249,6 @@ class _CollabScreenState extends State<CollabScreen> {
                   const SizedBox(
                     height: 16,
                   ),
-                  Container(
-                    padding: EdgeInsets.symmetric(
-                        vertical: 16, horizontal: size.width * 0.075),
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      "Sexo",
-                      style: TextStyle(
-                          color: greenDark,
-                          fontSize: 16,
-                          fontWeight: FontWeight.w500),
-                    ),
-                  ),
-                  SizedBox(
-                      height: 50.h,
-                      child: SingleChildScrollView(
-                        child: Wrap(
-                          spacing: 6,
-                          runSpacing: 12,
-                          runAlignment:
-                          WrapAlignment.start,
-                          alignment:
-                          WrapAlignment.start,
-                          crossAxisAlignment:
-                          WrapCrossAlignment
-                              .start,
-                          children: [
-                            IntrinsicWidth(
-                              child:
-                              GestureDetector(
-                                onTap: () {
-                                  setState(
-                                        () {
-                                      _ctrl.selectedGender =
-                                      "Masculino";
-                                    },
-                                  );
-                                },
-                                child: Container(
-                                    height: 30,
-                                    padding: const EdgeInsets
-                                        .symmetric(
-                                        horizontal:
-                                        32),
-                                    decoration: BoxDecoration(
-                                        color: "Masculino" ==
-                                            _ctrl
-                                                .selectedGender
-                                            ? greenLight
-                                            : greenTint1,
-                                        borderRadius:
-                                        BorderRadius.circular(
-                                            15)),
-                                    alignment:
-                                    Alignment
-                                        .center,
-                                    child: Text(
-                                      "Masculino",
-                                      style: TextStyle(
-                                          color: "Masculino" == _ctrl.selectedGender
-                                              ? Colors
-                                              .white
-                                              : Colors
-                                              .black,
-                                          fontWeight:
-                                          FontWeight.w500),
-                                    )),
-                              ),
-                            ),
-                            IntrinsicWidth(
-                              child:
-                              GestureDetector(
-                                onTap: () {
-                                  setState(
-                                        () {
-                                      _ctrl.selectedGender =
-                                      "Femenino";
-                                    },
-                                  );
-                                },
-                                child: Container(
-                                    height: 30,
-                                    padding: const EdgeInsets
-                                        .symmetric(
-                                        horizontal:
-                                        32),
-                                    decoration: BoxDecoration(
-                                        color: "Femenino" ==
-                                            _ctrl
-                                                .selectedGender
-                                            ? greenLight
-                                            : greenTint1,
-                                        borderRadius:
-                                        BorderRadius.circular(
-                                            15)),
-                                    alignment:
-                                    Alignment
-                                        .center,
-                                    child: Text(
-                                      "Femenino",
-                                      style: TextStyle(
-                                          color: "Femenino" == _ctrl.selectedGender
-                                              ? Colors
-                                              .white
-                                              : Colors
-                                              .black,
-                                          fontWeight:
-                                          FontWeight.w500),
-                                    )),
-                              ),
-                            ),
-                          ],
-                        ),
-                      )),
-                  const SizedBox(
-                    height: 16,
-                  ),
-                  Container(
-                    padding: EdgeInsets.symmetric(
-                        vertical: 16, horizontal: size.width * 0.075),
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      "Edad",
-                      style: TextStyle(
-                          color: greenDark,
-                          fontSize: 16,
-                          fontWeight: FontWeight.w500),
-                    ),
-                  ),
-                  SizedBox(
-                      height: 200.h,
-                      child: SingleChildScrollView(
-                        child: Wrap(
-                          spacing: 6,
-                          runSpacing: 12,
-                          runAlignment:
-                          WrapAlignment.start,
-                          alignment:
-                          WrapAlignment.start,
-                          crossAxisAlignment:
-                          WrapCrossAlignment
-                              .start,
-                          children: List.generate(
-                              _ctrl.ageRange
-                                  .length,
-                                  (index) =>
-                                  IntrinsicWidth(
-                                    child:
-                                    GestureDetector(
-                                      onTap: () {
-                                        setState(
-                                              () {
-                                            _ctrl.selectedAge =
-                                                index;
-                                          },
-                                        );
-                                      },
-                                      child: Container(
-                                          height: 30,
-                                          padding: const EdgeInsets.symmetric(horizontal: 16),
-                                          decoration: BoxDecoration(color: index == _ctrl.selectedAge ? greenLight : greenTint1, borderRadius: BorderRadius.circular(15)),
-                                          alignment: Alignment.center,
-                                          child: Text(
-                                            _ctrl.ageRange[
-                                            index],
-                                            style: TextStyle(
-                                                color: index == _ctrl.selectedAge ? Colors.white : Colors.black,
-                                                fontWeight: FontWeight.w500),
-                                          )),
-                                    ),
-                                  )),
-                        ),
-                      )),
                   Container(
                     width: size.width * 0.9,
                     height: 50,
