@@ -87,11 +87,6 @@ class _CollabScreenState extends State<CollabScreen> {
                         ),
                         prefixIconConstraints:
                         const BoxConstraints(maxWidth: 50),
-
-                              ]),
-                        ),
-                        prefixIconConstraints:
-                        const BoxConstraints(maxHeight: 17, maxWidth: 50),
                         isDense: true,
                         contentPadding: const EdgeInsets.symmetric(
                             vertical: 0, horizontal: 0),

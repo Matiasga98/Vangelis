@@ -267,7 +267,7 @@ class DashboardController extends GetxController with GetSingleTickerProviderSta
 
       bodies.add(SearchScreen());
       bodies.add(CollabScreen());
-      bodies.add(ProfilePage());
+      bodies.add(ProfilePage(User().musicianFromUser()));
       }
 
 }

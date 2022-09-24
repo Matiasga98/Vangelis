@@ -83,6 +83,14 @@ class CollabController extends GetxController {
   List<String> selectedInstruments = [];
   List<String> selectedGenres = [];
 
+  List<Genre> wholeGenres = [];
+
+  List<Instrument> wholeInstruments= [];
+
+  List filteredMusicians = [];
+
+  List<MusicianCard> musicians = [];
+
   void closeContext() {
 
     textFilterController.clear();
@@ -150,22 +158,6 @@ class CollabController extends GetxController {
     "Kpop",
     "Eurobeat",
   ].obs;
-  List<MusicianCard> musicians = [
-    MusicianCard(finalImage: "images/Hernan.png", name: "Hernan Ezequiel Rodriguez Cary",
-        description: "Busca un guitarrista para esta pista de rock progresivo", address: "Munro",
-        instruments: ["Guitarra"],genres: ["Rock"]),
-    MusicianCard(finalImage: "images/Indio Diego.png", name: "Diego Daniel Gagliardi",
-        description: "Busca cualquier instrumento para esta pista de Metal",address: "Ituzaingo",
-        instruments: [], genres: ["Metal"]),
-    MusicianCard(finalImage: "images/Mantecolati.png", name: "Matias Gamal Laye Berardi",
-        description: "Busca una pista de bandoneon", address: "Villa del Parque",
-        instruments: ["Bandoneon"], genres: [])
-  ];
-  List<MusicianCard> filteredMusicians = [];
-  List<String> selectedInstruments = [];
-  List<String> selectedGenres = [];
-  List<Instrument> wholeInstruments = [];
-  List<Genre> wholeGenres =[];
 
   InstrumentService instrumentService = Get.find();
   GenreService genreService = Get.find();
@@ -181,15 +173,6 @@ class CollabController extends GetxController {
     }
 
     super.onReady();
-  }
-
-
-  void closeContext() {
-
-    textFilterController.clear();
-
-    searchState.value = false;
-
   }
 
   Future<void> openContext() async {
@@ -211,32 +194,9 @@ class CollabController extends GetxController {
       //filteredMusicians = todo: llamada al back que me traiga usuarios
     }
     else{
-      filteredMusicians = musicians.where((musician) =>
-      musician.name.contains(textFilterController.text)
-          && _filterGenreList(musician) && _filterInstrumentList(musician)
-      ).toList();
-
-    }
-
-    searchState.value = true;
-
-  }
-  bool _filterGenreList(MusicianCard musician){
-    return selectedGenres.length<=0? true :
-    musician.genres.any((genre) => selectedGenres.contains(genre));
-  }
-  bool _filterInstrumentList(MusicianCard musician){
-    return selectedInstruments.length<=0? true :
-    musician.instruments.any((instrument) => selectedInstruments.contains(instrument));
-  }
-
-    if(User().environment != "MOBILE"){
-      //filteredMusicians = todo: llamada al back que me traiga usuarios
-    }
-    else{
-      filteredCollabs = collabs.where((musician) =>
-      musician.name.contains(textFilterController.text)
-          && _filterGenreList(musician) && _filterInstrumentList(musician)
+      filteredCollabs = collabs.where((collab) =>
+      collab.name.contains(textFilterController.text)
+          && _filterGenreList(collab) && _filterInstrumentList(collab)
       ).toList();
 
     }
