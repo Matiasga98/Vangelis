@@ -5,7 +5,14 @@ import 'package:get/get_core/src/get_main.dart';
 import 'package:vangelis/pages/dashboard/collab/collab_page.dart';
 
 import '../../../entity/user.dart';
+import '../../../helpers/card_widget.dart';
+import '../../../model/Genre.dart';
+import '../../../model/Instrument.dart';
+import '../../../model/musician.dart';
+import '../../../services/genre_service.dart';
+import '../../../services/instrument_service.dart';
 import '../../../services/theme_service.dart';
+import '../../../services/user_service.dart';
 import 'card_widget.dart';
 
 class CollabController extends GetxController {
@@ -39,36 +46,7 @@ class CollabController extends GetxController {
   ];
   int selectedAge = 0;
   String selectedGender = "Masculino";
-  List<String> instruments = [
-    "Bajo",
-    "Saxo",
-    "Clarinete",
-    "Guitarra",
-    "Bateria",
-    "Bandoneon",
-    "Vocalista",
-    "Teremin",
-    "Flauta de Embolo",
-    "Acordeon",
-  ];
-  List<String> musicalGenres = [
-    "Rock",
-    "Jazz",
-    "Metal",
-    "Cumbia",
-    "Reggae",
-    "Blues",
-    "Tango",
-    "Trap",
-    "Pop",
-    "Folclore",
-    "Chamame",
-    "Cuarteto",
-    "Rap",
-    "Hip Hop",
-    "Kpop",
-    "Eurobeat",
-  ];
+
   List<CollabCard> collabs = [
     CollabCard(open: true, finalImage: "images/Hernan.png", name: "Hernan Ezequiel Rodriguez Cary",
         description: "Bandoneonista", address: "Munro", instruments: ["Bandoneon"],
@@ -98,36 +76,7 @@ class CollabController extends GetxController {
     searchState.value = false;
 
   }
-  var textFilterController = TextEditingController();
-  RxBool searchState = false.obs;
 
-  double distance = 5;
-  List<String> maximumDistance = [
-    "1km-",
-    "5km-",
-    "10km-",
-    "15km-",
-    "20km-",
-    "20km+"
-  ];
-  int selectedDistance = 1;
-
-  double age = 15;
-  List<String> ageRange = [
-    "15+",
-    "18+",
-    "20+",
-    "25+",
-    "30+",
-    "35+",
-    "40+",
-    "45+",
-    "50+",
-    "60+",
-    "65+"
-  ];
-  int selectedAge = 0;
-  String selectedGender = "Masculino";
   RxList<String> instruments = [
     "Bajo",
     "Saxo",
