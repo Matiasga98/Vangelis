@@ -2,7 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
-import 'package:vangelis/pages/dashboard/collab/createCollab/create_collab_page.dart';
+import 'package:vangelis/config/colors_.dart';
+import 'package:vangelis/helpers/custom_button.dart';
+import 'package:vangelis/helpers/custom_text_field.dart';
 import 'package:vangelis/pages/dashboard/search/search_controller.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -11,23 +13,21 @@ import 'package:get/get_core/src/get_main.dart';
 import 'package:vangelis/pages/dashboard/collab/collab_controller.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:faker/faker.dart';
+import 'package:vangelis/services/theme_service.dart';
 import 'package:vangelis/util/constants.dart';
 
-import '../../../config/colors_.dart';
-import 'card_widget.dart';
-import '../../../services/theme_service.dart';
-import '../../../services/theme_service.dart';
-import 'collab_controller.dart';
 
-class CollabScreen extends StatefulWidget {
-  const CollabScreen({Key? key}) : super(key: key);
+import 'create_collab_controller.dart';
+
+class CreateCollabScreen extends StatefulWidget {
+  const CreateCollabScreen({Key? key}) : super(key: key);
 
   @override
-  State<CollabScreen> createState() => _CollabScreenState();
+  State<CreateCollabScreen> createState() => _CreateCollabScreenState();
 }
 
-class _CollabScreenState extends State<CollabScreen> {
-  final _ctrl = Get.put(CollabController());
+class _CreateCollabScreenState extends State<CreateCollabScreen> {
+  final _ctrl = Get.put(CreateCollabController());
   Faker faker = Faker();
 
   @override
@@ -37,86 +37,26 @@ class _CollabScreenState extends State<CollabScreen> {
     _ctrl.openContext();
 
     return Obx(() => Scaffold(
-      floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.add),
-        backgroundColor: Colors.blue,
-        onPressed: () => {
-            Get.to(() => CreateCollabScreen())
-        },
-      ),
         backgroundColor: themeConfig!.whiteBlackColor,
         body: SingleChildScrollView(
           padding: EdgeInsets.symmetric(vertical: 20),
           child: Column(
             children: [
-              Center(
-                child: SizedBox(
-                  width: size.width * 0.9,
-                  child: TextFormField(
-                    controller: _ctrl.textFilterController,
-                    cursorColor: greenMed,
-                    enableSuggestions: true,
-                    textAlign: TextAlign.start,
-                    decoration: InputDecoration(
-                        hintText: "Buscar por Nombre",
-                        filled: true,
-                        alignLabelWithHint: true,
-                        fillColor: const Color(0xffDCEBEA),
-                        hintStyle: TextStyle(fontSize: 15, color: greenDark),
-                        prefixIcon: SizedBox(
-                          child: Row(
-                            children: [IconButton(
-                              onPressed: () {
-                                _ctrl.closeContext();
-                              },
-                              icon: Icon(Icons.search_rounded, size: 25),
-                              color: greenDark
-                            )],
-                          ),
-                        ),
-                        suffixIcon: SizedBox(
-                          width: 165.w,
-                          child: Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: [
-                                IconButton(
-                                    onPressed: () {
-                                      _ctrl.closeContext();
-                                    },
-                                    icon: const Icon(Icons.clear)),
-                              ]),
-                        ),
-                        prefixIconConstraints:
-                        const BoxConstraints(maxWidth: 50),
-                        isDense: true,
-                        contentPadding: const EdgeInsets.symmetric(
-                            vertical: 0, horizontal: 0),
-                        prefixStyle: TextStyle(color: greenDark),
-                        border: const OutlineInputBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(8)),
-                            borderSide: BorderSide.none)),
-                  ),
-                ),
+              CustomTextField(
+                keyValue: "title",
+                fontSize: 26.h,
+                hint: "titulo",
+                label: "titulo",
+                textEditingController: _ctrl.titleController,
               ),
-              _ctrl.searchState.isTrue
-                  ? ListView.builder(
-                shrinkWrap: true,
-                primary: false,
-                itemCount: _ctrl.filteredCollabCards.length,
-                itemBuilder: (context, index) =>
-                GestureDetector(
-                  onTap: () => {
-                    _ctrl.loadVideo(index).then((value) =>
-                    showDialog(context: context, builder: (context){
-                      return _ctrl.openVideo(index);
-                    })).then((value) => _ctrl.unloadVideo())
-                  },
-                  child: _ctrl.filteredCollabCards[index],
-                )
-
-              )
-                  : Column(
-                children: [
+              SizedBox(height: 30.h),
+              CustomTextField(
+                keyValue: "description",
+                fontSize: 26.h,
+                hint: "descripcion",
+                label: "descripcion",
+                textEditingController: _ctrl.descriptionController,
+              ),
                   Container(
                     padding: EdgeInsets.symmetric(
                         vertical: 16, horizontal: size.width * 0.075),
@@ -254,70 +194,80 @@ class _CollabScreenState extends State<CollabScreen> {
                   const SizedBox(
                     height: 16,
                   ),
-                  Container(
-                    width: size.width * 0.9,
-                    height: 50,
-                    margin: const EdgeInsets.symmetric(vertical: 7),
-                    child: ElevatedButton(
-                      onPressed: () {
-                        setState(() {
-                          _ctrl.openContext();
-                        });
-                      },
-                      child: const Text(
-                        "Buscar",
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.w500,
-                            fontSize: 17),
-                      ),
-                      style: ButtonStyle(
-                          backgroundColor:
-                          MaterialStateProperty.all(greenLight),
-                          shape: MaterialStateProperty.all(
-                              RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8.0),
-                              ))),
-                    ),
+              GestureDetector(
+                onTap: () {
+                  _ctrl
+                      .openVideos()
+                      .then((value) => showDialog(
+                      context: context,
+                      builder: (context) {
+                        return AlertDialog(
+                            title: Text(
+                                'Select a video to add to profile'),
+                            content: Obx(() =>
+                                Container(
+                                    height: 500.h,
+                                    width: 500.w,
+                                    child: ListView
+                                        .builder(
+                                        scrollDirection:
+                                        Axis
+                                            .horizontal,
+                                        itemCount: _ctrl
+                                            .userVideos
+                                            .length,
+                                        itemBuilder:
+                                            (context,
+                                            index) {
+                                          return GestureDetector(
+                                              onTap: () =>
+                                                  _ctrl.addVideoToSelected(index),
+                                              child: Padding(
+                                                  padding: const EdgeInsets.all(60.0),
+                                                  child: Container(
+                                                    decoration: BoxDecoration(
+                                                      color: Colors.black,
+                                                      borderRadius: BorderRadius.circular(20.0),
+                                                      image: DecorationImage(
+                                                        image: NetworkImage(_ctrl.userVideos[index].snippet!.thumbnails!.high!.url!),
+                                                        fit: BoxFit.cover,
+                                                      ),
+                                                    ),
+                                                    child: Padding(
+                                                      padding: const EdgeInsets.only(left: 100.0, right: 100.0, top: 1.0, bottom: 1.0),
+                                                    ),
+                                                  )));
+                                        }))));
+                      }));
+                },
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    border: Border.all(color: Colors.black),
+                    borderRadius:
+                    BorderRadius.circular(20.0),
                   ),
-                  Container(
-                    width: size.width * 0.9,
-                    height: 50,
-                    margin: const EdgeInsets.symmetric(vertical: 7),
-                    child: ElevatedButton(
-                      onPressed: () {
-                        setState(() {
-                          _ctrl.selectedInstruments.clear();
-                          _ctrl.selectedAge = 0;
-                          _ctrl.selectedGender = "Masculino";
-                          _ctrl.selectedDistance = 0;
-                          _ctrl.age = 0;
-                          _ctrl.distance = 0;
-                        });
-                      },
-                      child: Text(
-                        "Quitar Filtros",
-                        style: TextStyle(
-                            color: greenLight,
-                            fontWeight: FontWeight.w500,
-                            fontSize: 17),
-                      ),
-                      style: ButtonStyle(
-                          backgroundColor:
-                          MaterialStateProperty.all(Colors.white),
-                          overlayColor: MaterialStateProperty.all(
-                              greenLight.withOpacity(0.2)),
-                          shape: MaterialStateProperty.all(
-                              RoundedRectangleBorder(
-                                  borderRadius:
-                                  BorderRadius.circular(8.0),
-                                  side: BorderSide(color: greenLight)))),
-                    ),
-                  )
-                ],
+                  child: Icon(Icons.add),
+                ),
+              ),
+
+
+              _ctrl.videoSelected.value?Container(
+                height: 200.h,
+                width: 300.w,
+                child: Image(
+                  image: NetworkImage(_ctrl.selectedUserVideo.value.snippet!.thumbnails!.high!.url!),
+                ),
+
+              ):Container(),
+              CustomButton(
+                label: "Crear Collab",
+                onTap: () {_ctrl.createCollab(); },
               )
             ],
+              )
+
           ),
-        )));
+        ));
   }
 }

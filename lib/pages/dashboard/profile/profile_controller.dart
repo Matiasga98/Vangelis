@@ -4,7 +4,8 @@ import 'package:flutter_svg/avd.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:vangelis/pages/dashboard/profile/favorite/favorite_page.dart';
-import 'package:vangelis/pages/dashboard/profile/video/video_page.dart';
+
+import 'package:vangelis/services/google_service.dart';
 import 'package:vangelis/util/constants.dart';
 
 import 'package:googleapis/youtube/v3.dart';
@@ -22,14 +23,6 @@ import '../../../services/user_service.dart';
 class ProfileController extends GetxController {
   late Musician musician;
 
-  final GoogleSignIn _googleSignIn = GoogleSignIn(
-    scopes: <String>[
-      'email',
-      'https://www.googleapis.com/auth/youtube.readonly',
-    ],
-  );
-
-  GoogleSignInAccount? _currentUser;
 
   RxString description = "texto".obs;
   final descriptionController = TextEditingController();
@@ -42,17 +35,13 @@ class ProfileController extends GetxController {
   RxBool isCurrentUser = true.obs;
   RxBool isFavorited = false.obs;
   UserService userService = Get.find();
+  GoogleService googleService = Get.find();
   RxList<SearchResult> userVideos = <SearchResult>[].obs;
+  RxList<SearchResult> selectedUserVideos = <SearchResult>[].obs;
 
   @override
   void onReady() {
-    _googleSignIn.onCurrentUserChanged.listen((GoogleSignInAccount? account) {
-      _currentUser = account;
-    });
-    if (_currentUser != null) {
-      _handleGetChannels();
-    }
-    _googleSignIn.signInSilently();
+    googleService.silentSignIn();
     getProfileInfo();
     super.onReady();
   }
@@ -110,130 +99,113 @@ class ProfileController extends GetxController {
   }
 
   Future<void> handleSignIn() async {
+    await googleService.handleSignIn();
+  }
+  Future<SearchListResponse> _handleGetChannels() async {
+    return await googleService.handleGetChannels();
+  }
+
+  late YoutubePlayerController _videoController;
+
+
+
+  Future<void> openVideos() async {
     try {
-      await _googleSignIn.signIn();
-      _handleGetChannels();
-    } catch (error) {
-      var e = error;
-    }
-  }
-
-  Future<void> _handleGetChannels() async {
-    var httpClient = (await _googleSignIn.authenticatedClient())!;
-    var youTubeApi = YouTubeApi(httpClient);
-
-    var userChannel = await youTubeApi.channels.list(['id'], mine: true);
-    var userChannelId = userChannel.items?[0].id;
-
-    if (userChannelId != null) {
-      var userVideoss = await youTubeApi.search
-          .list(['snippet'], channelId: userChannelId, type: ["video"]);
-      if (userVideoss.items != null) {
-        userVideos.addAll(userVideoss.items!);
+      await handleSignIn();
+      SearchListResponse allUserVideos = await _handleGetChannels();
+      if (allUserVideos.items!.isNotEmpty) {
+        userVideos.value = allUserVideos.items!;
       }
+    } catch (error) {
+      var a = error;
     }
   }
 
-  YoutubePlayerController _videoController = YoutubePlayerController(
-    initialVideoId: 'iLnmTe5Q2Qw',
-    flags: YoutubePlayerFlags(
-      autoPlay: true,
-      mute: false,
-      hideControls: true,
-    ),
-  );
+  void addVideoToSelected(index) {
+    selectedUserVideos.add(userVideos[index]);
+    //todo llamada al back
+  }
 
-
-  void goToVideoPage(){
-    Get.to(() => VideoScreen());
+  Future<void> loadVideo(int index) async {
+    _videoController = YoutubePlayerController(
+      initialVideoId: selectedUserVideos[index].id!.videoId!,
+      flags: YoutubePlayerFlags(
+        autoPlay: true,
+        mute: false,
+        hideThumbnail: true,
+        hideControls: true,
+      ),
+    );
+    await Future.delayed(Duration(seconds: 1));
   }
 
   Widget openVideo(int index) {
-    _videoController.load(userVideos[index].id!.videoId!);
+    //_videoController.load(userVideos[index].id!.videoId!);
     RxDouble _sliderValue = 0.0.obs;
     RxBool isPlaying = true.obs;
     return AlertDialog(
         title: Text('video'),
-        content: Obx(() => Column(
-              children: [
-                YoutubePlayer(
-                  controller: _videoController,
-                  showVideoProgressIndicator: true,
-                  onReady: () {
-                    _videoController.addListener(listener);
-                    _videoController.load(userVideos[index].id!.videoId!);
-                  },
-                ),
-                Row(
-                  children: [
-                    IconButton(
-                        onPressed: () {
-                          if (isPlaying.value) {
-                            _videoController.pause();
-                            isPlaying.value = false;
-                          } else {
-                            _videoController.play();
-                            isPlaying.value = true;
-                          }
-                        },
-                        icon: Icon(
-                            isPlaying.value ? Icons.pause : Icons.play_arrow)),
-                    IconButton(
-                        onPressed: () {
+        content: Obx(() => Container(
+          height: 350.h,
+          child: Column(
 
-                          var miliseconds =
-                              ((_sliderValue.value) * 1000).truncate();
-                          _videoController.seekTo(Duration(
-                              milliseconds: miliseconds));
+            children: [
+              YoutubePlayer(
+                controller: _videoController,
+                showVideoProgressIndicator: true,
+                onReady: () {
+                  _videoController.addListener(listener);
+                  _videoController.load(userVideos[index].id!.videoId!);
+                },
+              ),
+              Row(
+                children: [
+                  IconButton(
+                      onPressed: () {
+                        if (isPlaying.value) {
+                          _videoController.pause();
+                          isPlaying.value = false;
+                        } else {
+                          _videoController.play();
                           isPlaying.value = true;
-                        },
-                        icon: Icon(Icons.refresh)),
-                    IconButton(
-                        onPressed: () {
-                          if (_sliderValue.value < 20.0) {
-                            _sliderValue.value += 0.1;
-                            String stringValue =
-                                _sliderValue.value.toStringAsFixed(2);
-                            _sliderValue.value = double.parse(stringValue);
-                          }
-                        },
-                        icon: Icon(Icons.add)),
-                    IconButton(
-                        onPressed: () {
-                          if (_sliderValue.value > 0) {
-                            _sliderValue.value -= 0.1;
-                            String stringValue =
-                                _sliderValue.value.toStringAsFixed(2);
-                            _sliderValue.value = double.parse(stringValue);
-                          }
-                        },
-                        icon: Icon(Icons.remove))
-                  ],
-                ),
-                Row(
-                  children: [
-                    Container(
-                      width: 80.w,
-                      child: Text(_sliderValue.toString()),
-                    ),
-                    Expanded(
-                        child: Slider(
-                      value: _sliderValue.value,
-                      min: 0.0,
-                      max: 20.0,
-                      divisions: 200,
-                      activeColor: Colors.green,
-                      inactiveColor: Colors.orange,
-                      label: 'Set start value',
-                      onChanged: (double newValue) {
-                        String stringValue = newValue.toStringAsFixed(2);
-                        _sliderValue.value = double.parse(stringValue);
+                        }
                       },
-                    )),
-                  ],
-                ),
-              ],
-            )));
+                      icon: Icon(
+                          isPlaying.value ? Icons.pause : Icons.play_arrow)),
+                  IconButton(
+                      onPressed: () {
+                        var miliseconds =
+                        ((_sliderValue.value) * 1000).truncate();
+                        _videoController
+                            .seekTo(Duration(milliseconds: miliseconds));
+                        isPlaying.value = true;
+                      },
+                      icon: Icon(Icons.refresh)),
+                  IconButton(
+                      onPressed: () {
+                        if (_sliderValue.value < 20.0) {
+                          _sliderValue.value += 0.1;
+                          String stringValue =
+                          _sliderValue.value.toStringAsFixed(2);
+                          _sliderValue.value = double.parse(stringValue);
+                        }
+                      },
+                      icon: Icon(Icons.add)),
+                  IconButton(
+                      onPressed: () {
+                        if (_sliderValue.value > 0) {
+                          _sliderValue.value -= 0.1;
+                          String stringValue =
+                          _sliderValue.value.toStringAsFixed(2);
+                          _sliderValue.value = double.parse(stringValue);
+                        }
+                      },
+                      icon: Icon(Icons.remove))
+                ],
+              ),
+            ],
+          ),
+        )));
   }
 
   late PlayerState _playerState;
