@@ -165,8 +165,7 @@ class UserService extends BaseApiService {
   @override
   Future<User?> setUserAvatar(File file) async {
     try{
-
-      var response = await patchWithFile("http://10.0.2.2:8080/"+_baseUserUrl+"/avatars",file);
+      var response = await patchWithFile(_baseUserUrl+"/avatars",file);
       if(BaseApiService.isSuccessfulStreamedResponse(response)){
         final respStr = await response.stream.bytesToString();
         var userJson = json.decode(respStr);

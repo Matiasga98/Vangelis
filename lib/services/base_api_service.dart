@@ -7,7 +7,6 @@ import 'package:flutter/foundation.dart';
 
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
-import 'package:path_provider/path_provider.dart';
 
 import '../config/config.dart';
 import '../entity/user.dart';
@@ -80,10 +79,10 @@ abstract class BaseApiService extends GetxService {
   Future<http.StreamedResponse> patchWithFile(String url, File file) async {
     await _refreshTokenIfNeeded();
     var user = User();
-    var request = new http.MultipartRequest(
-        "PATCH", Uri.parse(url));
+    var request = http.MultipartRequest(
+        "PATCH", _getParsedUri(url));
     request.files.add(await http.MultipartFile.fromPath('file', file.path,
-        contentType: new MediaType('image', 'jpg')));
+        contentType: MediaType('image', 'jpg')));
     request.headers['Authorization'] =
     '${user.token.target!.tokenType} ${User().token.target!.token}';
 
