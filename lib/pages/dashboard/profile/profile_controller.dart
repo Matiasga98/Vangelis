@@ -41,7 +41,7 @@ class ProfileController extends GetxController {
 
   @override
   void onReady() {
-    googleService.silentSignIn();
+    //googleService.silentSignIn();
     getProfileInfo();
     super.onReady();
   }

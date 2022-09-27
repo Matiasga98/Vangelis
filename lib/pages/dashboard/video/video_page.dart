@@ -6,16 +6,27 @@ import 'package:flutter_youtube_downloader/flutter_youtube_downloader.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:faker/faker.dart';
+import 'package:vangelis/helpers/custom_button.dart';
 import 'package:vangelis/util/constants.dart';
 import 'package:video_player/video_player.dart';
 import 'video_controller.dart';
 
 class VideoScreen extends StatefulWidget {
+
+  String requestVideoId;
+  String responseVideoId;
+  VideoScreen(this.requestVideoId, this.responseVideoId);
+
   @override
-  State<VideoScreen> createState() => _VideoScreenState();
+  State<VideoScreen> createState() => _VideoScreenState(requestVideoId,responseVideoId);
 }
 
 class _VideoScreenState extends State<VideoScreen> {
+
+  String requestVideoId;
+  String responseVideoId;
+  _VideoScreenState(this.requestVideoId, this.responseVideoId);
+
   final _ctrl = Get.put(VideoController());
   Faker faker = Faker();
 
@@ -26,8 +37,8 @@ class _VideoScreenState extends State<VideoScreen> {
   RxBool loading = true.obs;
   RxBool isPlaying = false.obs;
 
-  String? youTube_link = "https://www.youtube.com/watch?v=dQw4w9WgXcQ";
-  String? youTube_link2 = "https://www.youtube.com/watch?v=omKruLoPi6A";
+  String? youTube_link = "https://www.youtube.com/watch?v=";
+  String? youTube_link2 = "https://www.youtube.com/watch?v=";
   String? _extractedLink = 'Loading...';
   String? _extractedLink2 = 'Loading...';
 
@@ -35,6 +46,8 @@ class _VideoScreenState extends State<VideoScreen> {
 
   @override
   void initState() {
+    youTube_link = (youTube_link! + requestVideoId);
+    youTube_link2 = (youTube_link2! + responseVideoId);
     super.initState();
     extractYoutubeLink();
     var a = "fsadfa";
@@ -175,6 +188,10 @@ class _VideoScreenState extends State<VideoScreen> {
                       )),
                 ],
               ),
+              CustomButton(
+                label: "Elegir video respuesta",
+                onTap: () => Get.back()),
+
             ],
           )
         ),

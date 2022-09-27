@@ -262,7 +262,8 @@ class CollabController extends GetxController {
               showVideoList(),
               CustomButton(
                 label: "Elegir video respuesta",
-                onTap: () => Get.to(VideoScreen()),
+                onTap: () => Get.to(VideoScreen(filteredCollabs[index].videoId,
+                selectedVideo.id!.videoId!)),
               )
             ],
           ),
