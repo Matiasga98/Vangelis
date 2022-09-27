@@ -14,6 +14,9 @@ import '../entity/user.dart';
 import '../pages/dashboard/dashboard_controller.dart';
 import '../util/enums.dart';
 import 'auth_service.dart';
+import 'package:http_parser/http_parser.dart';
+
+
 
 abstract class BaseApiService extends GetxService {
   final Configuration configuration = Get.find();
@@ -71,6 +74,20 @@ abstract class BaseApiService extends GetxService {
         .timeout(Duration(seconds: configuration.getRequestTimeout()))
         .onError(
             (error, stackTrace) => Future.value(http.Response("Error", 500)));
+  }
+
+  @protected
+  Future<http.StreamedResponse> patchWithFile(String url, File file) async {
+    await _refreshTokenIfNeeded();
+    var user = User();
+    var request = new http.MultipartRequest(
+        "PATCH", Uri.parse(url));
+    request.files.add(await http.MultipartFile.fromPath('file', file.path,
+        contentType: new MediaType('image', 'jpg')));
+    request.headers['Authorization'] =
+    '${user.token.target!.tokenType} ${User().token.target!.token}';
+
+    return request.send();
   }
 
   @protected
@@ -237,7 +254,7 @@ abstract class BaseApiService extends GetxService {
 
   @protected
   Future<File> downloadExternalFile(
-      String url, File file, MediaType type, int learningActivityId) async {
+      String url, File file, MediaFileType type, int learningActivityId) async {
     final DashboardController dashboardController = Get.find();
     dio.Dio downloader = dio.Dio();
     final index = 0;
@@ -246,8 +263,8 @@ abstract class BaseApiService extends GetxService {
       file.path,
       onReceiveProgress: (rcv, total) {
         if (index != -1) {
-          if (type == MediaType.video) {
-          } else if (type == MediaType.audio) {}
+          if (type == MediaFileType.video) {
+          } else if (type == MediaFileType.audio) {}
         }
       },
       deleteOnError: true,
@@ -316,6 +333,10 @@ abstract class BaseApiService extends GetxService {
   }
 
   static bool isSuccessful(http.Response response) {
+    return response.statusCode >= 200 && response.statusCode < 300;
+  }
+
+  static bool isSuccessfulStreamedResponse(http.StreamedResponse response) {
     return response.statusCode >= 200 && response.statusCode < 300;
   }
 

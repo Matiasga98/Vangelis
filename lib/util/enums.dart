@@ -103,7 +103,7 @@ enum MessageType {
   warning
 }
 
-enum MediaType {
+enum MediaFileType {
   video,
   audio,
   lectureHandout

@@ -1,15 +1,20 @@
 import 'dart:convert';
+import 'dart:io';
+import 'package:get/get.dart';
 import 'package:objectbox/objectbox.dart';
+import '../config/config.dart';
 import '../entity/jwt.dart';
 import '../entity/user.dart';
 import '../model/musician.dart';
 import 'base_api_service.dart';
 import 'package:http/http.dart' as http;
+import 'package:http_parser/http_parser.dart';
+
 
 class UserService extends BaseApiService {
   final _getUserUrl = 'users/me';
   final _baseUserUrl = 'users';
-
+  final Configuration _configuration = Get.find();
 
   @override
   Future<User?> getUser(String username, [Jwt? token]) async {
@@ -149,6 +154,23 @@ class UserService extends BaseApiService {
       }
       else{
         //log algo salio mal
+      }
+    }
+    catch(e){
+      var a = e;
+    }
+
+  }
+
+  @override
+  Future<User?> setUserAvatar(File file) async {
+    try{
+
+      var response = await patchWithFile("http://10.0.2.2:8080/"+_baseUserUrl+"/avatars",file);
+      if(BaseApiService.isSuccessfulStreamedResponse(response)){
+        final respStr = await response.stream.bytesToString();
+        var userJson = json.decode(respStr);
+        return User.fromJson(userJson);
       }
     }
     catch(e){

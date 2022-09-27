@@ -1,7 +1,11 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:vangelis/pages/dashboard/profile/favorite/favorite_page.dart';
 import 'package:vangelis/services/genre_service.dart';
 
@@ -50,6 +54,8 @@ class ProfileController extends GetxController {
   List<Genre> allPossibleGenres = <Genre>[];
   Genre genreToAdd = Genre(icon: null, name: '', id: 0);
 
+  File? tempProfilePicture;
+
   @override
   void onReady() {
     _googleSignIn.onCurrentUserChanged.listen((GoogleSignInAccount? account) {
@@ -97,11 +103,12 @@ class ProfileController extends GetxController {
   }
 
   void filterPossibleInstruments() {
-    filteredPossibleInstruments = allPossibleInstruments.where((ins) => !instruments.any((ins2) => ins.id == ins2.id)).toList();
-    if(filteredPossibleInstruments.isNotEmpty){
+    filteredPossibleInstruments = allPossibleInstruments
+        .where((ins) => !instruments.any((ins2) => ins.id == ins2.id))
+        .toList();
+    if (filteredPossibleInstruments.isNotEmpty) {
       instrumentToAdd = filteredPossibleInstruments.first;
-    }
-    else{
+    } else {
       instrumentToAdd = Instrument(icon: null, name: '', id: 0);
     }
   }
@@ -112,18 +119,23 @@ class ProfileController extends GetxController {
   }
 
   void filterPossibleGenres() {
-    filteredPossibleGenres = allPossibleGenres.where((gen) => !genres.any((gen2) => gen.id == gen2.id)).toList();
-    if(filteredPossibleGenres.isNotEmpty){
+    filteredPossibleGenres = allPossibleGenres
+        .where((gen) => !genres.any((gen2) => gen.id == gen2.id))
+        .toList();
+    if (filteredPossibleGenres.isNotEmpty) {
       genreToAdd = filteredPossibleGenres.first;
-    }
-    else{
+    } else {
       genreToAdd = Genre(icon: null, name: '', id: 0);
     }
   }
 
-  void updateProfilePicture() {
-    debugPrint("editar foto");
-    //todo: llamar al back para editarla
+  Future<void> updateProfilePicture() async {
+    if(tempProfilePicture != null){
+      User? user = await userService.setUserAvatar(tempProfilePicture!);
+      if (user != null) {
+        profilePicture.value = user.imageFromUserBase64String();
+      }
+    }
   }
 
   void onCancelEditDescription() {
@@ -143,7 +155,9 @@ class ProfileController extends GetxController {
 
   Future<void> addInstrumentToFavorites() async {
     List<Instrument> newInstruments = List.from(instruments);
-    newInstruments.addIf(!instruments.any((ins) => ins.id == instrumentToAdd.id), instrumentToAdd);
+    newInstruments.addIf(
+        !instruments.any((ins) => ins.id == instrumentToAdd.id),
+        instrumentToAdd);
     User? user = await userService
         .addInstrumentsToFavourites(newInstruments.map((i) => i.id).toList());
     if (user != null) {
@@ -166,8 +180,7 @@ class ProfileController extends GetxController {
   Future<void> removeGenre(int index) async {
     int newGenreId = genres[index].id;
     var newGenres = genres.where((i) => i.id != newGenreId);
-    var genresIds =
-    newGenres.map((genre) => genre.id).toList();
+    var genresIds = newGenres.map((genre) => genre.id).toList();
     User? user = await userService.addGenresToFavourites(genresIds);
     if (user != null) {
       genres.value = user.favoriteGenres;
@@ -192,6 +205,18 @@ class ProfileController extends GetxController {
     userService.addFavorites(User().favoriteUsers);
     isFavorited.value = false;
     //UserService.addToFavorites(musician.id)
+  }
+
+  Future pickImage(ImageSource imageSource) async {
+    try {
+      final image = await ImagePicker().pickImage(source: imageSource);
+      if (image == null) return;
+      final imageTemp = File(image.path);
+      tempProfilePicture = imageTemp;
+      //setState(() => this.image = imageTemp);
+    } on PlatformException catch (e) {
+      print('Failed to pick image: $e');
+    }
   }
 
   void optionsButtonClicked(Object? value) {
