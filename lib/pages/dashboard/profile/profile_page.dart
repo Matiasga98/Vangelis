@@ -421,8 +421,8 @@ class _ProfilePageState extends State<ProfilePage>
                             },
                             itemCount: 8,
                           ),
-                          const Center(
-                            child: Text("You don't have any videos"),
+                          Center(
+                            child:
                           GridView.builder(
                             scrollDirection: Axis.vertical,
                             gridDelegate:
@@ -531,14 +531,14 @@ class _ProfilePageState extends State<ProfilePage>
                               }
                             },
                             itemCount: _ctrl.selectedUserVideos.length + 1,
-                          ),
-                          Center(
-                            child: Text("You don't have any tagged"),
-                          ),
-                          Center(
-                            child: Text("You don't have any tagged"),
-                          ),
-                        ],
+                          )),
+                            Center(
+                              child: Text("You don't have any tagged"),
+                            ),
+                            Center(
+                              child: Text("You don't have any tagged"),
+                            ),
+                          ],
                       ),
                     ),
                     CircleAvatar(

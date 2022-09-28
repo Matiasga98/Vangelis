@@ -225,7 +225,7 @@ class ProfileController extends GetxController {
     await googleService.handleSignIn();
   }
   Future<SearchListResponse> _handleGetChannels() async {
-    return await googleService.handleGetChannels();
+    return await googleService.handleGetChannelsMock();
   }
 
   late YoutubePlayerController _videoController;
