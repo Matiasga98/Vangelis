@@ -271,11 +271,14 @@ class CollabController extends GetxController {
   }
 
   SearchResult selectedVideo = SearchResult();
+
   RxList<SearchResult> userVideos = <SearchResult>[].obs;
 
   Widget showVideoList() {
     googleService.handleSignIn();
     SearchListResponse videos;
+    RxInt selectedIndex = (-1).obs;
+    Rx<SearchResult> videoSelected = selectedVideo.obs;
     googleService.handleGetChannels().then((value) => {
       userVideos.value = value.items!
     });
@@ -291,13 +294,13 @@ class CollabController extends GetxController {
                 Obx(() =>
                 GestureDetector(
                   onTap: () =>
-                  selectedVideo = userVideos[index],
+                  selectedIndex.value = index,
                   child: Padding(
                       padding: const EdgeInsets.all(60.0),
                       child: Container(
                         decoration: BoxDecoration(
                           color: Colors.black,
-                          border: selectedVideo == userVideos[index]?Border.all(width: 4.0,color: Colors.lightBlue):Border.all(color: Colors.black),
+                          border: selectedIndex.value == index?Border.all(width: 4.0,color: Colors.lightBlue):Border.all(color: Colors.black),
                           borderRadius: BorderRadius.circular(20.0),
                           image: DecorationImage(
                             image: NetworkImage(userVideos[index].snippet!.thumbnails!.high!.url!),
