@@ -279,9 +279,11 @@ class CollabController extends GetxController {
     SearchListResponse videos;
     RxInt selectedIndex = (-1).obs;
     Rx<SearchResult> videoSelected = selectedVideo.obs;
-    googleService.handleGetChannels().then((value) => {
-      userVideos.value = value.items!
-    });
+    if(userVideos.isEmpty) {
+      googleService
+          .handleGetChannels()
+          .then((value) => {userVideos.value = value.items!});
+    }
     return
       Container(
         width: 300.w,
