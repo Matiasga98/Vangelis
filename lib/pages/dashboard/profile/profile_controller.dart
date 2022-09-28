@@ -144,7 +144,6 @@ class ProfileController extends GetxController {
     User().favoriteUsers.add(musician.id);
     userService.addFavorites(User().favoriteUsers);
     isFavorited.value = true;
-    //UserService.addToFavorites(musician.id)
   }
 
   Future<void> addInstrumentToFavorites() async {
@@ -198,20 +197,7 @@ class ProfileController extends GetxController {
     User().favoriteUsers.remove(musician.id);
     userService.addFavorites(User().favoriteUsers);
     isFavorited.value = false;
-    //UserService.addToFavorites(musician.id)
   }
-/*
-  Future pickImage(ImageSource imageSource) async {
-    try {
-      final image = await ImagePicker().pickImage(source: imageSource);
-      if (image == null) return;
-      final imageTemp = File(image.path);
-      tempProfilePicture = imageTemp;
-      //setState(() => this.image = imageTemp);
-    } on PlatformException catch (e) {
-      print('Failed to pick image: $e');
-    }
-  }*/
 
   void optionsButtonClicked(Object? value) {
     switch (value) {

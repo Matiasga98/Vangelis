@@ -1,10 +1,8 @@
 import 'dart:io';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:vangelis/helpers/custom_text.dart';
 import 'package:vangelis/pages/dashboard/profile/profile_controller.dart';
@@ -38,19 +36,7 @@ class _ProfilePageState extends State<ProfilePage>
     "https://i.pinimg.com/736x/c4/03/c6/c403c63b8e1882b6f10c82f601180e2d.jpg",
   ];
 
-  File? tempProfilePicture;
-  Future pickImage(ImageSource imageSource) async {
-    try {
-      final image = await ImagePicker().pickImage(source: imageSource);
-      if (image == null) return;
-      final imageTemp = File(image.path);
-      tempProfilePicture = imageTemp;
-      //setState(() => this.image = imageTemp);
-    } on PlatformException catch (e) {
-      //print('Failed to pick image: $e');
-    }
-  }
-  //final ProfileController profileController = Get.put(ProfileController());
+  File? previewProfilePicture;
 
   @override
   void initState() {
@@ -152,7 +138,7 @@ class _ProfilePageState extends State<ProfilePage>
                         ),
                         _ctrl.isCurrentUser.value
                             ? GenerateEditProfilePictureIcon()
-                            : const SizedBox()
+                            : const SizedBox(),
                       ],
                     ),
                     const SizedBox(height: 20.0),
@@ -422,8 +408,7 @@ class _ProfilePageState extends State<ProfilePage>
                             itemCount: 8,
                           ),
                           Center(
-                            child:
-                          GridView.builder(
+                              child: GridView.builder(
                             scrollDirection: Axis.vertical,
                             gridDelegate:
                                 SliverGridDelegateWithFixedCrossAxisCount(
@@ -434,16 +419,14 @@ class _ProfilePageState extends State<ProfilePage>
                                   padding: const EdgeInsets.all(8.0),
                                   child: GestureDetector(
                                     onTap: () {
-                                      _ctrl.loadVideo(index).then((value) =>
-                                          showDialog(
-                                            context: context,
-                                            builder: (context) {
-
-                                              return _ctrl.openVideo(index);
-                                            },
-                                          )
-                                      );
-
+                                      _ctrl
+                                          .loadVideo(index)
+                                          .then((value) => showDialog(
+                                                context: context,
+                                                builder: (context) {
+                                                  return _ctrl.openVideo(index);
+                                                },
+                                              ));
                                     },
                                     child: Container(
                                       decoration: BoxDecoration(
@@ -509,10 +492,7 @@ class _ProfilePageState extends State<ProfilePage>
                                                                                   padding: const EdgeInsets.only(left: 100.0, right: 100.0, top: 1.0, bottom: 1.0),
                                                                                 ),
                                                                               )));
-                                                                    })
-                                                        )
-                                                    )
-                                                );
+                                                                    }))));
                                               }));
                                     },
                                     child: Container(
@@ -532,13 +512,13 @@ class _ProfilePageState extends State<ProfilePage>
                             },
                             itemCount: _ctrl.selectedUserVideos.length + 1,
                           )),
-                            Center(
-                              child: Text("You don't have any tagged"),
-                            ),
-                            Center(
-                              child: Text("You don't have any tagged"),
-                            ),
-                          ],
+                          Center(
+                            child: Text("You don't have any tagged"),
+                          ),
+                          Center(
+                            child: Text("You don't have any tagged"),
+                          ),
+                        ],
                       ),
                     ),
                     CircleAvatar(
@@ -831,17 +811,15 @@ class _ProfilePageState extends State<ProfilePage>
     //File? tempProfilePicture = _ctrl.tempProfilePicture;
 
     return Positioned(
-      top: -0,
-      right: -0,
-      child: OutlinedButton(
-        onPressed: () {
-          showDialog(
-            context: context,
-            builder: (context) {
-              return Container(
-                  width: 110.w,
-                  height: 50.h,
-                  child: AlertDialog(
+        top: -0,
+        right: -0,
+        child: OutlinedButton(
+          onPressed: () {
+            showDialog(
+              context: context,
+              builder: (context) {
+                return StatefulBuilder(builder: (context, setState) {
+                  return AlertDialog(
                     title: const Text('Actualizar foto'),
                     content: Column(
                       mainAxisSize: MainAxisSize.min,
@@ -851,7 +829,18 @@ class _ProfilePageState extends State<ProfilePage>
                           children: [
                             IconButton(
                               onPressed: () async {
-                                pickImage(ImageSource.gallery);
+                                try {
+                                  final image = await ImagePicker()
+                                      .pickImage(source: ImageSource.gallery);
+                                  if (image == null) return;
+                                  final imageTemp = File(image.path);
+                                  setState(() => {
+                                        previewProfilePicture = imageTemp,
+                                        _ctrl.tempProfilePicture = imageTemp
+                                      });
+                                } on PlatformException catch (e) {
+                                  //print('Failed to pick image: $e');
+                                }
                               },
                               icon: const Icon(
                                 Icons.collections,
@@ -860,7 +849,18 @@ class _ProfilePageState extends State<ProfilePage>
                             ),
                             IconButton(
                               onPressed: () async {
-                                //_ctrl.pickImage(ImageSource.camera);
+                                try {
+                                  final image = await ImagePicker()
+                                      .pickImage(source: ImageSource.camera);
+                                  if (image == null) return;
+                                  final imageTemp = File(image.path);
+                                  setState(() => {
+                                        previewProfilePicture = imageTemp,
+                                        _ctrl.tempProfilePicture = imageTemp
+                                      });
+                                } on PlatformException catch (e) {
+                                  //print('Failed to pick image: $e');
+                                }
                               },
                               icon: const Icon(
                                 Icons.photo_camera,
@@ -869,10 +869,10 @@ class _ProfilePageState extends State<ProfilePage>
                             )
                           ],
                         ),
-                        tempProfilePicture != null
+                        previewProfilePicture != null
                             ? CircleAvatar(
                                 backgroundImage:
-                                    Image.file(tempProfilePicture!).image,
+                                    Image.file(previewProfilePicture!).image,
                                 radius: 70.0,
                               )
                             : const CircleAvatar(
@@ -892,33 +892,22 @@ class _ProfilePageState extends State<ProfilePage>
                           okButtonText: "Aceptar",
                           cancelButtonText: "Cancelar"),
                     ],
-                  ));
-            },
-          );
-        },
-        style: OutlinedButton.styleFrom(
-            side: const BorderSide(
-              color: Colors.black12,
-            ),
-            primary: Colors.blue,
-            backgroundColor: Colors.white,
-            shape: const CircleBorder(),
-            fixedSize: const Size(10.0, 20.0)),
-        child: const Icon(
-          Icons.edit,
-        ),
-      ),
-    );
+                  );
+                });
+              },
+            );
+          },
+          style: OutlinedButton.styleFrom(
+              side: const BorderSide(
+                color: Colors.black12,
+              ),
+              primary: Colors.blue,
+              backgroundColor: Colors.white,
+              shape: const CircleBorder(),
+              fixedSize: const Size(10.0, 20.0)),
+          child: const Icon(
+            Icons.edit,
+          ),
+        ));
   }
-/*
-  Future pickImage(File? imageTMP, ImageSource source) async {
-    try {
-      final image = await ImagePicker().pickImage(source: source);
-      if (image == null) return;
-      final imageTemp = File(image.path);
-      setState(() => imageTMP = imageTemp);
-    } on PlatformException catch (e) {
-      //print('Failed to pick image: $e');
-    }
-  }*/
 }
