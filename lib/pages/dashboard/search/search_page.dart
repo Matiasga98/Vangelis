@@ -47,13 +47,17 @@ class _SearchScreenState extends State<SearchScreen> {
                         alignLabelWithHint: true,
                         fillColor: const Color(0xffDCEBEA),
                         hintStyle: TextStyle(fontSize: 15, color: greenDark),
-                        prefixIcon: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 16),
-                          child: SvgPicture.asset(
-                            "images/search.svg",
-                            color: greenDark,
-                          ),
-                        ),
+                        prefixIcon: SizedBox(
+                          child: Row(
+                          children: [IconButton(
+                            onPressed: () {
+                              _ctrl.closeContext();
+                            },
+                          icon: Icon(Icons.search_rounded, size: 25),
+                           color: greenDark
+                          )],
+                           ),
+                         ),
                         suffixIcon: SizedBox(
                           width: 165.w,
                           child: Row(
@@ -480,7 +484,7 @@ class _SearchScreenState extends State<SearchScreen> {
                               ]),
                         ),
                         prefixIconConstraints:
-                            const BoxConstraints(maxHeight: 17, maxWidth: 50),
+                            const BoxConstraints(maxWidth: 50),
                         isDense: true,
                         contentPadding: const EdgeInsets.symmetric(
                             vertical: 0, horizontal: 0),

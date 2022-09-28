@@ -423,17 +423,125 @@ class _ProfilePageState extends State<ProfilePage>
                           ),
                           const Center(
                             child: Text("You don't have any videos"),
+                          GridView.builder(
+                            scrollDirection: Axis.vertical,
+                            gridDelegate:
+                                SliverGridDelegateWithFixedCrossAxisCount(
+                                    mainAxisExtent: 250.0, crossAxisCount: 3),
+                            itemBuilder: (context, index) {
+                              if (index < _ctrl.selectedUserVideos.length) {
+                                return Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      _ctrl.loadVideo(index).then((value) =>
+                                          showDialog(
+                                            context: context,
+                                            builder: (context) {
+
+                                              return _ctrl.openVideo(index);
+                                            },
+                                          )
+                                      );
+
+                                    },
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        color: Colors.black,
+                                        borderRadius:
+                                            BorderRadius.circular(20.0),
+                                        image: DecorationImage(
+                                          image: NetworkImage(_ctrl
+                                              .selectedUserVideos[index]
+                                              .snippet!
+                                              .thumbnails!
+                                              .high!
+                                              .url!),
+                                          fit: BoxFit.cover,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              } else if (_ctrl.isCurrentUser.value) {
+                                return Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      _ctrl
+                                          .openVideos()
+                                          .then((value) => showDialog(
+                                              context: context,
+                                              builder: (context) {
+                                                return AlertDialog(
+                                                    title: Text(
+                                                        'Select a video to add to profile'),
+                                                    content: Obx(() =>
+                                                        Container(
+                                                            height: 500.h,
+                                                            width: 500.w,
+                                                            child: ListView
+                                                                .builder(
+                                                                    scrollDirection:
+                                                                        Axis
+                                                                            .horizontal,
+                                                                    itemCount: _ctrl
+                                                                        .userVideos
+                                                                        .length,
+                                                                    itemBuilder:
+                                                                        (context,
+                                                                            index) {
+                                                                      return GestureDetector(
+                                                                          onTap: () =>
+                                                                              _ctrl.addVideoToSelected(index),
+                                                                          child: Padding(
+                                                                              padding: const EdgeInsets.all(60.0),
+                                                                              child: Container(
+                                                                                decoration: BoxDecoration(
+                                                                                  color: Colors.black,
+                                                                                  borderRadius: BorderRadius.circular(20.0),
+                                                                                  image: DecorationImage(
+                                                                                    image: NetworkImage(_ctrl.userVideos[index].snippet!.thumbnails!.high!.url!),
+                                                                                    fit: BoxFit.cover,
+                                                                                  ),
+                                                                                ),
+                                                                                child: Padding(
+                                                                                  padding: const EdgeInsets.only(left: 100.0, right: 100.0, top: 1.0, bottom: 1.0),
+                                                                                ),
+                                                                              )));
+                                                                    })
+                                                        )
+                                                    )
+                                                );
+                                              }));
+                                    },
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        border: Border.all(color: Colors.black),
+                                        borderRadius:
+                                            BorderRadius.circular(20.0),
+                                      ),
+                                      child: Icon(Icons.add),
+                                    ),
+                                  ),
+                                );
+                              } else {
+                                return Container();
+                              }
+                            },
+                            itemCount: _ctrl.selectedUserVideos.length + 1,
                           ),
-                          const Center(
+                          Center(
                             child: Text("You don't have any tagged"),
                           ),
-                          const Center(
+                          Center(
                             child: Text("You don't have any tagged"),
                           ),
                         ],
                       ),
                     ),
-                    const CircleAvatar(
+                    CircleAvatar(
                       backgroundImage: NetworkImage(
                           "https://free2music.com/images/singer/2019/02/10/troye-sivan_2.jpg"),
                       radius: 70.0,

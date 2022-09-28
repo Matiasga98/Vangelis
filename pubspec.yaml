@@ -49,6 +49,9 @@ dependencies:
   googleapis: ^9.2.0
   extension_google_sign_in_as_googleapis_auth: ^2.0.7
   image_picker: ^0.8.5+3
+  youtube_player_flutter: ^8.1.0
+  video_player: ^2.4.7
+  flutter_youtube_downloader: ^0.0.5
 
 dev_dependencies:
   flutter_test:
