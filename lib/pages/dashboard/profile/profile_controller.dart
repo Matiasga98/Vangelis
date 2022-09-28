@@ -206,7 +206,7 @@ class ProfileController extends GetxController {
     isFavorited.value = false;
     //UserService.addToFavorites(musician.id)
   }
-
+/*
   Future pickImage(ImageSource imageSource) async {
     try {
       final image = await ImagePicker().pickImage(source: imageSource);
@@ -217,7 +217,7 @@ class ProfileController extends GetxController {
     } on PlatformException catch (e) {
       print('Failed to pick image: $e');
     }
-  }
+  }*/
 
   void optionsButtonClicked(Object? value) {
     switch (value) {
