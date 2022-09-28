@@ -281,7 +281,7 @@ class CollabController extends GetxController {
     Rx<SearchResult> videoSelected = selectedVideo.obs;
     if(userVideos.isEmpty) {
       googleService
-          .handleGetChannels()
+          .handleGetChannelsMock()
           .then((value) => {userVideos.value = value.items!});
     }
     return
@@ -295,8 +295,10 @@ class CollabController extends GetxController {
               return
                 Obx(() =>
                 GestureDetector(
-                  onTap: () =>
-                  selectedIndex.value = index,
+                  onTap: () =>{
+                    selectedIndex.value = index,
+                    selectedVideo = userVideos[index]
+                  },
                   child: Padding(
                       padding: const EdgeInsets.all(60.0),
                       child: Container(
