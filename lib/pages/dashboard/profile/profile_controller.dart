@@ -30,7 +30,11 @@ class ProfileController extends GetxController {
 
 
   RxString description = "texto".obs;
+  RxString phoneNumber = "texto".obs;
+  RxString email = "texto".obs;
   final descriptionController = TextEditingController();
+  final phoneNumberController = TextEditingController();
+  final emailController = TextEditingController();
   RxList<Instrument> instruments = <Instrument>[].obs;
   RxList<Genre> genres = <Genre>[].obs;
   Rx<Image> profilePicture =
@@ -65,6 +69,8 @@ class ProfileController extends GetxController {
     getInstruments();
     getGenres();
     descriptionController.text = musician.bio ?? "";
+    phoneNumberController.text = musician.phoneNumber;
+    emailController.text = musician.email;
     super.onReady();
   }
 
@@ -79,6 +85,8 @@ class ProfileController extends GetxController {
     profilePicture.value = musician.imageFromUserBase64String();
     username.value = musician.userName;
     description.value = musician.bio ?? "";
+    phoneNumber.value = musician.phoneNumber;
+    email.value = musician.email;
     isFavorited.value = musicianIsFavorite();
     greetingMessage = "Hola ${musician.userName}. ¡Vi tu perfil en Vangelis y me gustaria conocerte!";
     await Future.delayed(Duration(milliseconds: 1000), () async {
@@ -91,6 +99,22 @@ class ProfileController extends GetxController {
     if (user != null) {
       musician.bio = user.bio;
       description.value = user.bio;
+    }
+  }
+
+  Future<User?> updatePhoneNumber() async {
+    User? user = await userService.updatePhoneNumber(phoneNumberController.text);
+    if (user != null) {
+      musician.phoneNumber = user.phoneNumber;
+      phoneNumber.value = user.phoneNumber;
+    }
+  }
+
+  Future<User?> updateEmail() async {
+    User? user = await userService.updateEmail(emailController.text);
+    if (user != null) {
+      musician.email = user.email;
+      email.value = user.email;
     }
   }
 
@@ -137,6 +161,14 @@ class ProfileController extends GetxController {
 
   void onCancelEditDescription() {
     descriptionController.text = description.value;
+  }
+
+  void onCancelEditPhoneNumber() {
+    phoneNumberController.text = phoneNumber.value;
+  }
+
+  void onCancelEditEmail() {
+    emailController.text = email.value;
   }
 
   bool musicianIsFavorite() {

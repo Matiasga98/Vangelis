@@ -14,6 +14,7 @@ import '../../../model/Instrument.dart';
 import '../../../model/musician.dart';
 import '../../../services/theme_service.dart';
 
+
 class ProfilePage extends StatefulWidget {
   Musician musician;
 
@@ -172,7 +173,9 @@ class _ProfilePageState extends State<ProfilePage>
                       children: [
                         OutlinedButton(
                           onPressed: () {
-                            _launchUrl(whatsappUrlBase+_ctrl.musician.phoneNumber+"&text="+_ctrl.greetingMessage!);
+                            !_ctrl.isCurrentUser.value
+                            ?_launchUrl(whatsappUrlBase+_ctrl.musician.phoneNumber+"&text="+_ctrl.greetingMessage!):
+                            EditPhoneNumberModal();
                           },
                           style: OutlinedButton.styleFrom(
                               side: const BorderSide(
@@ -189,7 +192,9 @@ class _ProfilePageState extends State<ProfilePage>
                         SizedBox(width: 15.w),
                         OutlinedButton(
                           onPressed: () {
-                            _launchUrl(mailUrlBase+_ctrl.musician.email+"?subject=¡Busco músico!&body="+_ctrl.greetingMessage!);
+                            !_ctrl.isCurrentUser.value
+                                ?_launchUrl(mailUrlBase+_ctrl.musician.email+"?subject=¡Busco músico!&body="+_ctrl.greetingMessage!):
+                            EditEmailModal();
                           },
                           style: OutlinedButton.styleFrom(
                               side: const BorderSide(
@@ -916,6 +921,87 @@ class _ProfilePageState extends State<ProfilePage>
             Icons.edit,
           ),
         ));
+  }
+
+  Future<dynamic> EditPhoneNumberModal() {
+    return showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text(
+              'Editar número'),
+          content: TextFormField(
+              controller:
+              _ctrl.phoneNumberController,
+              inputFormatters: [
+              ]),
+          actions: [
+            DialogButtons(
+                onCancel: () => {
+                  Navigator.pop(
+                      context, false),
+                  _ctrl
+                      .onCancelEditPhoneNumber()
+                },
+                onOk: () => {
+                  if (_ctrl
+                      .phoneNumberController
+                      .text !=
+                      "")
+                    {
+                      _ctrl
+                          .updatePhoneNumber(),
+                      Navigator.pop(
+                          context, true)
+                    }
+                },
+                okButtonText: "Aceptar",
+                cancelButtonText: "Cancelar"),
+          ],
+        );
+      },
+    );
+  }
+
+  Future<dynamic> EditEmailModal() {
+    return showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text(
+              'Editar email'),
+          content: TextFormField(
+              controller:
+              _ctrl.emailController,
+              inputFormatters: [
+
+              ]),
+          actions: [
+            DialogButtons(
+                onCancel: () => {
+                  Navigator.pop(
+                      context, false),
+                  _ctrl
+                      .onCancelEditEmail()
+                },
+                onOk: () => {
+                  if (_ctrl
+                      .emailController
+                      .text !=
+                      "")
+                    {
+                      _ctrl
+                          .updateEmail(),
+                      Navigator.pop(
+                          context, true)
+                    }
+                },
+                okButtonText: "Aceptar",
+                cancelButtonText: "Cancelar"),
+          ],
+        );
+      },
+    );
   }
 
   Future<void> _launchUrl(String url) async {

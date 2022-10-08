@@ -162,6 +162,50 @@ class UserService extends BaseApiService {
 
   }
 
+@override
+  Future<User?> updatePhoneNumber(String newPhone) async {
+    try{
+      var body = {
+        "phone" : newPhone
+      };
+      var response = await patch(_baseUserUrl+"/phonenumber",newPhone);
+      if(BaseApiService.isSuccessful(response)){
+        //log algo salio bien
+        var userJson = json.decode(utf8.decode(response.bodyBytes));
+        return User.fromJson(userJson);
+      }
+      else{
+        //log algo salio mal
+      }
+    }
+    catch(e){
+      var a = e;
+    }
+
+  }
+
+  @override
+  Future<User?> updateEmail(String newEmail) async {
+    try{
+      var body = {
+        "email" : newEmail
+      };
+      var response = await patch(_baseUserUrl+"/email",newEmail);
+      if(BaseApiService.isSuccessful(response)){
+        //log algo salio bien
+        var userJson = json.decode(utf8.decode(response.bodyBytes));
+        return User.fromJson(userJson);
+      }
+      else{
+        //log algo salio mal
+      }
+    }
+    catch(e){
+      var a = e;
+    }
+
+  }
+
   @override
   Future<User?> setUserAvatar(File file) async {
     try{
