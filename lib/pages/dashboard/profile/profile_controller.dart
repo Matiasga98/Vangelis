@@ -56,6 +56,8 @@ class ProfileController extends GetxController {
 
   File? tempProfilePicture;
 
+  String? greetingMessage;
+
   @override
   void onReady() {
     //googleService.silentSignIn();
@@ -78,6 +80,7 @@ class ProfileController extends GetxController {
     username.value = musician.userName;
     description.value = musician.bio ?? "";
     isFavorited.value = musicianIsFavorite();
+    greetingMessage = "Hola ${musician.userName}. ¡Vi tu perfil en Vangelis y me gustaria conocerte!";
     await Future.delayed(Duration(milliseconds: 1000), () async {
       isLoading.value = false;
     });

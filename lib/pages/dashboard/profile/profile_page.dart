@@ -4,10 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:vangelis/helpers/custom_text.dart';
 import 'package:vangelis/pages/dashboard/profile/profile_controller.dart';
 import 'package:vangelis/util/constants.dart';
-
 import '../../../helpers/dialog_buttons.dart';
 import '../../../model/Genre.dart';
 import '../../../model/Instrument.dart';
@@ -29,7 +29,7 @@ class _ProfilePageState extends State<ProfilePage>
     "https://i.pinimg.com/originals/aa/eb/7f/aaeb7f3e5120d0a68f1b814a1af69539.png",
     "https://cdn.fnmnl.tv/wp-content/uploads/2020/09/04145716/Stussy-FA20-Lookbook-D1-Mens-12.jpg",
     "https://www.propermag.com/wp-content/uploads/2020/03/0x0-19.9.20_18908-683x1024.jpg",
-    "https://www.thefashionisto.com/wp-content/uploads/2013/07/w012-800x1200.jpg",
+    "https://www.propermag.com/wp-content/uploads/2020/03/0x0-19.9.20_18908-683x1024.jpg",
     "https://manofmany.com/wp-content/uploads/2016/09/14374499_338627393149784_1311139926468722688_n.jpg",
     "https://image-cdn.hypb.st/https%3A%2F%2Fhypebeast.com%2Fimage%2F2020%2F04%2Faries-fall-winter-2020-lookbook-first-look-14.jpg?q=75&w=800&cbr=1&fit=max",
     "https://i.pinimg.com/originals/95/0f/4d/950f4df946e0a373e47df37fb07ea1f9.jpg",
@@ -53,6 +53,9 @@ class _ProfilePageState extends State<ProfilePage>
   Musician musician;
 
   _ProfilePageState(this.musician);
+
+  String whatsappUrlBase = "whatsapp://send?phone=";
+  String mailUrlBase = "mailto:";
 
   @override
   Widget build(BuildContext context) {
@@ -168,24 +171,9 @@ class _ProfilePageState extends State<ProfilePage>
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         OutlinedButton(
-                          onPressed: () {},
-                          style: OutlinedButton.styleFrom(
-                              side: const BorderSide(
-                                color: Colors.transparent,
-                              ),
-                              primary: Colors.blue,
-                              backgroundColor: Colors.white,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(100.0),
-                              ),
-                              fixedSize: const Size(50.0, 60.0)),
-                          child: const Icon(
-                            Icons.telegram_rounded,
-                          ),
-                        ),
-                        SizedBox(width: 15.w),
-                        OutlinedButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            _launchUrl(whatsappUrlBase+_ctrl.musician.phoneNumber+"&text="+_ctrl.greetingMessage!);
+                          },
                           style: OutlinedButton.styleFrom(
                               side: const BorderSide(
                                 color: Colors.transparent,
@@ -197,6 +185,25 @@ class _ProfilePageState extends State<ProfilePage>
                               ),
                               fixedSize: const Size(50.0, 60.0)),
                           child: const Icon(Icons.whatsapp_rounded),
+                        ),
+                        SizedBox(width: 15.w),
+                        OutlinedButton(
+                          onPressed: () {
+                            _launchUrl(mailUrlBase+_ctrl.musician.email+"?subject=¡Busco músico!&body="+_ctrl.greetingMessage!);
+                          },
+                          style: OutlinedButton.styleFrom(
+                              side: const BorderSide(
+                                color: Colors.transparent,
+                              ),
+                              primary: Colors.blue,
+                              backgroundColor: Colors.white,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(100.0),
+                              ),
+                              fixedSize: const Size(50.0, 60.0)),
+                          child: const Icon(
+                            Icons.mail_rounded,
+                          ),
                         ),
                         SizedBox(width: 15.w),
                         OutlinedButton(
@@ -405,7 +412,7 @@ class _ProfilePageState extends State<ProfilePage>
                                 ),
                               );
                             },
-                            itemCount: 8,
+                            itemCount: listImage.length,
                           ),
                           Center(
                               child: GridView.builder(
@@ -910,4 +917,12 @@ class _ProfilePageState extends State<ProfilePage>
           ),
         ));
   }
+
+  Future<void> _launchUrl(String url) async {
+    final Uri finalUrl = Uri.parse(url);
+    if (!await launchUrl(finalUrl)) {
+      throw 'Could not launch $finalUrl';
+    }
+  }
+
 }

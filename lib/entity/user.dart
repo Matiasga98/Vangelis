@@ -27,6 +27,7 @@ class User with UpdatableEntity {
 
   var userName = '';
   var email = '';
+  var phoneNumber = '';
   var token = ToOne<Jwt>();
   var defaultLocale = 'es_ar';
 
@@ -49,6 +50,7 @@ class User with UpdatableEntity {
       _singleton.userAvatar = json["userAvatar"] ?? _singleton.userAvatar;
       _singleton.userName = json['username'] ?? _singleton.userName;
       _singleton.email = json['email'] ?? _singleton.email;
+      _singleton.phoneNumber = json['phoneNumber'] ?? _singleton.phoneNumber;
       _singleton.instruments =json['instruments']!=null? [
         for (var instrument in json['instruments'])
           Instrument.fromJson(instrument)
@@ -70,7 +72,7 @@ class User with UpdatableEntity {
   }
 
   Musician musicianFromUser(){
-    return Musician(id, userAvatar, bio, favoriteGenres, instruments, userName, email);
+    return Musician(id, userAvatar, bio, favoriteGenres, instruments, userName, email, phoneNumber);
   }
 
   Image imageFromUserBase64String() {
@@ -85,6 +87,7 @@ class User with UpdatableEntity {
     //_singleton.partyId = 0;
     _singleton.userName = '';
     _singleton.email = '';
+    _singleton.phoneNumber = '';
     _singleton.defaultLocale = Platform.localeName;
     _singleton.isDark = Get.isDarkMode;
     _singleton.objectBoxId = 0;
@@ -98,6 +101,7 @@ class User with UpdatableEntity {
   userAvatar = json["userAvatar"] ?? _singleton.userAvatar,
   userName = json['username'] ?? _singleton.userName,
   email = json['email'] ?? _singleton.email,
+  phoneNumber = json['phoneNumber'] ?? _singleton.phoneNumber,
   instruments =json['instruments']!=null? [
   for (var instrument in json['instruments'])
   Instrument.fromJson(instrument)
@@ -117,6 +121,7 @@ class User with UpdatableEntity {
         'id' : _singleton.id,
         'username': _singleton.userName,
         'email': _singleton.email,
+        'phoneNumber': _singleton.phoneNumber,
         'defaultLocale': _singleton.defaultLocale,
         'isDark': _singleton.isDark,
         'environment': _singleton.environment,

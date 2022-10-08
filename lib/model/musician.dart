@@ -14,6 +14,7 @@ class Musician {
   List<Instrument> instruments = [];
   var userName = '';
   var email = '';
+  var phoneNumber = '';
 
   Musician.fromJson(Map<String, dynamic> json)
       : id = json['id'],
@@ -32,12 +33,14 @@ class Musician {
                   Genre.fromJson(favoriteGenre)
               ]
             : [],
-        email = json['email'];
+        email = json['email'],
+        phoneNumber = json['phoneNumber'];
 
   Map<String, dynamic> toJson() => {
         'id': id,
         'username': userName,
         'email': email,
+        'phoneNumber': phoneNumber,
         'bio': bio,
         'userAvatar': userAvatar,
         'instruments': instruments,
@@ -49,5 +52,5 @@ class Musician {
   }
 
   Musician(this.id, this.userAvatar, this.bio, this.favoriteGenres,
-      this.instruments, this.userName, this.email);
+      this.instruments, this.userName, this.email, this.phoneNumber);
 }
