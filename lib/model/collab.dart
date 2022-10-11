@@ -16,6 +16,8 @@ class Collab{
   List<Instrument> instruments;
 
 
+
+
   Collab(this.id, this.videoId, this.title, this.description, this.genres,
       this.instruments);
 

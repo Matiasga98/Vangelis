@@ -6,8 +6,10 @@ import 'package:googleapis/youtube/v3.dart';
 import 'package:vangelis/entity/user.dart';
 import 'package:vangelis/model/Genre.dart';
 import 'package:vangelis/model/Instrument.dart';
+import 'package:vangelis/model/collab.dart';
 import 'package:vangelis/model/musician.dart';
 import 'package:vangelis/pages/dashboard/collab/collab_page.dart';
+import 'package:vangelis/services/collab_service.dart';
 import 'package:vangelis/services/genre_service.dart';
 import 'package:vangelis/services/google_service.dart';
 import 'package:vangelis/services/instrument_service.dart';
@@ -26,10 +28,6 @@ class CreateCollabController extends GetxController {
   Rx<SearchResult> selectedUserVideo = SearchResult().obs;
   RxBool videoSelected = false.obs;
 
-
-
-
-
   List<String> selectedInstruments = [];
   List<String> selectedGenres = [];
 
@@ -39,10 +37,9 @@ class CreateCollabController extends GetxController {
 
   List filteredMusicians = [];
 
+  CollabService collabService = Get.find();
 
   void closeContext() {
-
-
     searchState.value = false;
 
   }
@@ -90,7 +87,7 @@ class CreateCollabController extends GetxController {
   Future<void> openVideos() async {
     try {
       await googleService.handleSignIn();
-      SearchListResponse allUserVideos = await googleService.handleGetChannels();
+      SearchListResponse allUserVideos = await googleService.handleGetChannelsMock();
       if (allUserVideos.items!.isNotEmpty) {
         userVideos.value = allUserVideos.items!;
       }
@@ -105,8 +102,16 @@ class CreateCollabController extends GetxController {
     //todo llamada al back
   }
 
-  void createCollab(){
+  Future<bool> createCollab() async {
     //todo: crear clase collab, crear la instancia y llamar al back
+    var video = selectedUserVideo.value;
+    var genresSelected = wholeGenres.where((e) => selectedGenres.contains(e.name)).toList();
+    var instrumentsSelected = wholeInstruments.where((e) => selectedInstruments.contains(e.name)).toList();
+
+    Collab collab = Collab(0, video.id!.videoId!, titleController.text, descriptionController.text,
+        genresSelected, instrumentsSelected);
+
+    return await collabService.createCollab(collab);
   }
 
 }

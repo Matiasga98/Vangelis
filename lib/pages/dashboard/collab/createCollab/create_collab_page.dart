@@ -15,6 +15,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:faker/faker.dart';
 import 'package:vangelis/services/theme_service.dart';
 import 'package:vangelis/util/constants.dart';
+import 'package:vangelis/util/enums.dart';
 
 
 import 'create_collab_controller.dart';
@@ -262,7 +263,17 @@ class _CreateCollabScreenState extends State<CreateCollabScreen> {
               ):Container(),
               CustomButton(
                 label: "Crear Collab",
-                onTap: () {_ctrl.createCollab(); },
+                onTap: () {
+                  _ctrl.createCollab().then((value) {
+                    if (value){
+                      Get.back();
+                      showMsg(message: "Collab creado exitosamente",type: MessageType.success);
+                    }
+                    else{
+                      showMsg(message: "error creando collab",type: MessageType.error);
+                    }
+                  });
+                  },
               )
             ],
               )

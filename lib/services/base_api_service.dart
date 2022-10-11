@@ -70,7 +70,6 @@ abstract class BaseApiService extends GetxService {
     return http
         .post(_getParsedUri(url),
             headers: getCompleteHeaders(), body: json.encode(body))
-        .timeout(Duration(seconds: configuration.getRequestTimeout()))
         .onError(
             (error, stackTrace) => Future.value(http.Response("Error", 500)));
   }
