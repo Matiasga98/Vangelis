@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:vangelis/model/Genre.dart';
 import 'package:vangelis/model/collab.dart';
+import 'package:vangelis/model/collab_response.dart';
 import 'base_api_service.dart';
 import 'package:http/http.dart' as http;
 
@@ -53,6 +54,27 @@ class CollabService extends BaseApiService {
     };
     try{
       var response = await post(_baseCollabUrl,data);
+      if (BaseApiService.isSuccessful(response)) {
+        return true;
+      }
+    }
+    catch(e){
+      var a = e;
+    }
+    return false;
+  }
+
+  @override
+  Future<bool> createCollabResponse(CollabResponse collabResponse, int collabId) async {
+    var data = {
+      'mediaUrl': collabResponse.videoId,
+      'startTime': collabResponse.startTime,
+      'instruments': collabResponse.instruments.map((e) => e.id).toList(),
+      'genres': collabResponse.genres.map((e) => e.id).toList(),
+      'platform': 'YT'
+    };
+    try{
+      var response = await post('$_baseCollabUrl/$collabId',data);
       if (BaseApiService.isSuccessful(response)) {
         return true;
       }

@@ -37,7 +37,7 @@ class CreateCollabController extends GetxController {
 
   List filteredMusicians = [];
 
-  CollabService collabService = Get.find();
+
 
   void closeContext() {
     searchState.value = false;
@@ -50,6 +50,7 @@ class CreateCollabController extends GetxController {
   InstrumentService instrumentService = Get.find();
   GenreService genreService = Get.find();
   UserService userService = Get.find();
+  CollabService collabService = Get.find();
 
   @override
   Future<void> onReady() async {
