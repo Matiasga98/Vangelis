@@ -7,25 +7,23 @@ import 'Genre.dart';
 import 'Instrument.dart';
 
 
-class Collab{
+class CollabResponse{
   int id;
   String videoId;
-  String title;
-  String description;
+  double startTime;
+
   List<Genre> genres;
   List<Instrument> instruments;
 
 
 
 
-  Collab(this.id, this.videoId, this.title, this.description, this.genres,
-      this.instruments);
+  CollabResponse(this.id, this.videoId,this.genres, this.instruments,this.startTime);
 
-  Collab.fromJson(Map<String, dynamic> json)
+  CollabResponse.fromJson(Map<String, dynamic> json)
       : id = json['id'],
         videoId = json['videoId'],
-        description = json['description'],
-        title = json['title'],
+        startTime = json['startTime'],
         instruments = json['instruments'] != null
             ? [
           for (var instrument in json['instruments'])
