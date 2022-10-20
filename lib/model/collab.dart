@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:typed_data';
 import 'package:flutter/widgets.dart';
+import 'package:vangelis/model/musician.dart';
 import 'package:vangelis/util/constants.dart';
 
 import 'Genre.dart';
@@ -12,6 +13,7 @@ class Collab{
   String videoId;
   String title;
   String description;
+  Musician musician;
   List<Genre> genres;
   List<Instrument> instruments;
 
@@ -19,13 +21,14 @@ class Collab{
 
 
   Collab(this.id, this.videoId, this.title, this.description, this.genres,
-      this.instruments);
+      this.instruments, this.musician);
 
   Collab.fromJson(Map<String, dynamic> json)
       : id = json['id'],
-        videoId = json['videoId'],
+        videoId = json['media']["mediaUrl"],
         description = json['description'],
         title = json['title'],
+        musician = Musician.fromJson(json['user']),
         instruments = json['instruments'] != null
             ? [
           for (var instrument in json['instruments'])

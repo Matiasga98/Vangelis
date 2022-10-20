@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:faker/faker.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -60,8 +62,8 @@ class CollabCard extends StatelessWidget {
                 Center(
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(15),
-                    child: Image.asset(
-                      finalImage,
+                    child: Image.memory(
+                      base64Decode(finalImage),
                       width: 75,
                       height: 75,
                       fit: BoxFit.cover,

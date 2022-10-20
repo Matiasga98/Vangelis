@@ -3,124 +3,48 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:googleapis/youtube/v3.dart';
+import 'package:vangelis/helpers/card_widget.dart';
 import 'package:vangelis/helpers/custom_button.dart';
+import 'package:vangelis/model/Genre.dart';
+import 'package:vangelis/model/Instrument.dart';
 import 'package:vangelis/model/collab.dart';
-import 'package:vangelis/pages/dashboard/collab/collabFeed/collabFeed_page.dart';
-import 'package:vangelis/pages/dashboard/collab/collabSearch/collabSearch_page.dart';
-import 'package:vangelis/pages/dashboard/collab/collabUser/collabUser_page.dart';
+import 'package:vangelis/pages/dashboard/collab/card_widget.dart';
 import 'package:vangelis/pages/dashboard/collab/collab_page.dart';
 import 'package:vangelis/pages/dashboard/video/video_page.dart';
+import 'package:vangelis/services/collab_service.dart';
+import 'package:vangelis/services/genre_service.dart';
 import 'package:vangelis/services/google_service.dart';
+import 'package:vangelis/services/instrument_service.dart';
+import 'package:vangelis/services/user_service.dart';
 import 'package:vangelis/util/constants.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
-import '../../../entity/user.dart';
-import '../../../helpers/card_widget.dart';
-import '../../../model/Genre.dart';
-import '../../../model/Instrument.dart';
-import '../../../model/musician.dart';
-import '../../../services/genre_service.dart';
-import '../../../services/instrument_service.dart';
-import '../../../services/theme_service.dart';
-import '../../../services/user_service.dart';
-import 'card_widget.dart';
+import '../../../../entity/user.dart';
 
-class CollabController extends GetxController {
+class CollabUserController extends GetxController {
   GoogleService googleService = Get.find();
   var textFilterController = TextEditingController();
-  RxBool searchState = false.obs;
+
+  RxBool loading = true.obs;
   final Rx<int> currentButtonIndex = 1.obs;
   RxList<Widget> bodies = <Widget>[].obs;
+  CollabService collabService = Get.find();
 
-  double distance = 5;
-  List<String> maximumDistance = [
-    "1km-",
-    "5km-",
-    "10km-",
-    "15km-",
-    "20km-",
-    "20km+"
-  ];
-  int selectedDistance = 1;
 
-  double age = 15;
-  List<String> ageRange = [
-    "15+",
-    "18+",
-    "20+",
-    "25+",
-    "30+",
-    "35+",
-    "40+",
-    "45+",
-    "50+",
-    "60+",
-    "65+"
-  ];
-  int selectedAge = 0;
-  String selectedGender = "Masculino";
 
-  List<CollabCard> collabs = [
-    CollabCard(open: true, finalImage: "images/Hernan.png", name: "Hernan Ezequiel Rodriguez Cary",
-        description: "Bandoneonista", address: "Munro", instruments: ["Bandoneon"],
-        genres: ["Rock","Folclore","Chamame"], collabInstrument: "Bateria"),
-    CollabCard(open: true, finalImage: "images/Indio Diego.png", name: "Diego Daniel Gagliardi", description: "Baterista",
-        address: "Ituzaingo", instruments: ["Bateria"], genres: ["Rock","Metal","Pop"], collabInstrument: "Piano"),
-    CollabCard(open: true, finalImage: "images/Mantecolati.png", name: "Matias Gamal Laye Berardi",
-        description: "Pianista", address: "Villa del Parque", instruments: ["Piano"],
-        genres: ["Rock","Metal","Jazz"], collabInstrument: "Bandoneon")
-  ];
+
+  List<CollabCard> collabs = [];
   List<CollabCard> filteredCollabCards = [];
   List<Collab> filteredCollabs = [];
   List<String> selectedInstruments = [];
   List<String> selectedGenres = [];
 
-  List<Genre> wholeGenres = [];
-
-  List<Instrument> wholeInstruments= [];
 
   List filteredMusicians = [];
 
   List<MusicianCard> musicians = [];
 
-  void closeContext() {
 
-    textFilterController.clear();
-
-    searchState.value = false;
-
-  }
-
-  RxList<String> instruments = [
-    "Bajo",
-    "Saxo",
-    "Clarinete",
-    "Guitarra",
-    "Bateria",
-    "Bandoneon",
-    "Vocalista",
-    "Teremin",
-    "Flauta de Embolo",
-    "Acordeon",
-  ].obs;
-  RxList<String> musicalGenres = [
-    "Rock",
-    "Jazz",
-    "Metal",
-    "Cumbia",
-    "Reggae",
-    "Blues",
-    "Tango",
-    "Trap",
-    "Pop",
-    "Folclore",
-    "Chamame",
-    "Cuarteto",
-    "Rap",
-    "Hip Hop",
-    "Kpop",
-    "Eurobeat",
-  ].obs;
 
   InstrumentService instrumentService = Get.find();
   GenreService genreService = Get.find();
@@ -128,49 +52,22 @@ class CollabController extends GetxController {
 
   @override
   Future<void> onReady() async {
-    if(User().environment !="MOBILE"){
-      wholeInstruments = await instrumentService.getAllInstruments();
-      instruments.value = wholeInstruments.map((e) => e.name).toList();
-      wholeGenres = await genreService.getAllGenres();
-      musicalGenres.value = wholeGenres.map((e) => e.name).toList();
-
-      //collabs = algo back
-      //todo: llamar al back, levantar las collabs posta
+    if (filteredCollabs.isEmpty) {
+    filteredCollabs = await collabService.searchCollabs([], [],true);
+    filteredCollabCards = filteredCollabs.map((e) =>
+        CollabCard(open: true, finalImage: e.musician.userAvatar, name: e.musician.userName,
+            description: e.description, address: "CABA",instruments: e.instruments.map((i) => i.name).toList(),
+            genres: e.genres.map((g) => g.name).toList(), collabInstrument: "instrumento"))
+        .toList();
     }
-    else{
-    }
-    bodies.add(CollabSearchScreen());
-    bodies.add(CollabFeedScreen());
-    bodies.add(CollabUserScreen());
+    loading.value = false;
     super.onReady();
-  }
-
-  Future<void> openContext() async {
-
-    if(User().environment != "MOBILE"){
-      filteredMusicians = [];
-      List<Instrument> filteredInstruments = wholeInstruments.where((element)
-      => selectedInstruments.contains(element.name)).toList();
-      List<Genre> filteredGenres = wholeGenres.where((element)
-      => selectedGenres.contains(element.name)).toList();
-      //todo: hacer llamada de busqueda al back
-      filteredCollabCards = collabs.where((collab) =>
-      collab.name.contains(textFilterController.text)
-          && _filterGenreList(collab) && _filterInstrumentList(collab)
-      ).toList();
-    }
-    else{
-
-      filteredCollabCards = collabs.where((collab) =>
-      collab.name.contains(textFilterController.text)
-          && _filterGenreList(collab) && _filterInstrumentList(collab)
-      ).toList();
-
-    }
-
-    searchState.value = true;
 
   }
+
+
+
+
   bool _filterGenreList(CollabCard collab){
     return selectedGenres.length<=0? true :
     collab.genres.any((genre) => selectedGenres.contains(genre));

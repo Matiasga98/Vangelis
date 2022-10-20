@@ -8,26 +8,30 @@ import 'package:http/http.dart' as http;
 class CollabService extends BaseApiService {
   final _baseCollabUrl = 'collabs';
 
+
   @override
   Future<List<Collab>> searchCollabs(
-      List<int> genres, List<int> instruments) async {
+      List<int> genres, List<int> instruments, bool bringMyCollabs) async {
 
     try {
       String instrumentString = "";
       for (int i in instruments) {
         instrumentString = instrumentString + i.toString() + ",";
       }
+      instrumentString = instrumentString.substring(0,instrumentString.length-1);
       String genreString = "";
       for(int g in genres){
         genreString = genreString + g.toString() +",";
       }
+      genreString = genreString.substring(0,genreString.length-1);
       String a = instruments.isEmpty?"":"&instruments=$instrumentString";
       String b = genres.isEmpty?"":"&genres=$genreString";
+      String c = "&bringMyCollabs=$bringMyCollabs";
 
-      final uri = Uri.parse("${configuration.getApiUrl()}$_baseCollabUrl?$a$b"
+      final uri = Uri.parse("$_baseCollabUrl/search?$a$b$c"
       );
       var response =
-      await http.get(uri, headers: {"Content-Type": "application/json"});
+      await get(uri.toString());
       if (BaseApiService.isSuccessful(response)) {
         var decoded = json.decode(utf8.decode(response.bodyBytes));
         List<Collab> collabs = [];

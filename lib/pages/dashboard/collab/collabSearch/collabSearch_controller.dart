@@ -3,29 +3,25 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:googleapis/youtube/v3.dart';
+import 'package:vangelis/helpers/card_widget.dart';
 import 'package:vangelis/helpers/custom_button.dart';
+import 'package:vangelis/model/Genre.dart';
+import 'package:vangelis/model/Instrument.dart';
 import 'package:vangelis/model/collab.dart';
-import 'package:vangelis/pages/dashboard/collab/collabFeed/collabFeed_page.dart';
-import 'package:vangelis/pages/dashboard/collab/collabSearch/collabSearch_page.dart';
-import 'package:vangelis/pages/dashboard/collab/collabUser/collabUser_page.dart';
+import 'package:vangelis/model/musician.dart';
+import 'package:vangelis/pages/dashboard/collab/card_widget.dart';
 import 'package:vangelis/pages/dashboard/collab/collab_page.dart';
 import 'package:vangelis/pages/dashboard/video/video_page.dart';
+import 'package:vangelis/services/genre_service.dart';
 import 'package:vangelis/services/google_service.dart';
+import 'package:vangelis/services/instrument_service.dart';
+import 'package:vangelis/services/user_service.dart';
 import 'package:vangelis/util/constants.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
-import '../../../entity/user.dart';
-import '../../../helpers/card_widget.dart';
-import '../../../model/Genre.dart';
-import '../../../model/Instrument.dart';
-import '../../../model/musician.dart';
-import '../../../services/genre_service.dart';
-import '../../../services/instrument_service.dart';
-import '../../../services/theme_service.dart';
-import '../../../services/user_service.dart';
-import 'card_widget.dart';
+import '../../../../entity/user.dart';
 
-class CollabController extends GetxController {
+class CollabSearchController extends GetxController {
   GoogleService googleService = Get.find();
   var textFilterController = TextEditingController();
   RxBool searchState = false.obs;
@@ -139,9 +135,9 @@ class CollabController extends GetxController {
     }
     else{
     }
-    bodies.add(CollabSearchScreen());
-    bodies.add(CollabFeedScreen());
-    bodies.add(CollabUserScreen());
+    //bodies.add(SearchScreen());
+    //bodies.add(CollabScreen());
+    //bodies.add(ProfilePage(User().musicianFromUser()));
     super.onReady();
   }
 
@@ -160,15 +156,18 @@ class CollabController extends GetxController {
       ).toList();
     }
     else{
-
+      /*filteredCollabs = [Collab(2,'dQw4w9WgXcQ', 'g','a', [],[],Musician()),
+        Collab(3,'dQw4w9WgXcQ', 'g','a', [],[]),
+        Collab(4,'dQw4w9WgXcQ', 'g','a', [],[])];*/
+      filteredCollabs = [];
       filteredCollabCards = collabs.where((collab) =>
       collab.name.contains(textFilterController.text)
           && _filterGenreList(collab) && _filterInstrumentList(collab)
       ).toList();
 
     }
+    filteredCollabs = [];
 
-    searchState.value = true;
 
   }
   bool _filterGenreList(CollabCard collab){
