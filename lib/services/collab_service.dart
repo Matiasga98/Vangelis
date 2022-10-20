@@ -18,12 +18,10 @@ class CollabService extends BaseApiService {
       for (int i in instruments) {
         instrumentString = instrumentString + i.toString() + ",";
       }
-      instrumentString = instrumentString.substring(0,instrumentString.length-1);
       String genreString = "";
       for(int g in genres){
         genreString = genreString + g.toString() +",";
       }
-      genreString = genreString.substring(0,genreString.length-1);
       String a = instruments.isEmpty?"":"&instruments=$instrumentString";
       String b = genres.isEmpty?"":"&genres=$genreString";
       String c = "&bringMyCollabs=$bringMyCollabs";
