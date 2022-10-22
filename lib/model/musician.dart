@@ -10,6 +10,7 @@ class Musician {
   var id;
   var userAvatar;
   var bio;
+  List<String> userPhotos = [];
   List<Genre> favoriteGenres = [];
   List<Instrument> instruments = [];
   var userName = '';
@@ -21,6 +22,9 @@ class Musician {
         userName = json['username'],
         bio = json['bio'],
         userAvatar = json['userAvatar'],
+        userPhotos = json["photos"]!=null?
+          json["photos"].cast<String>()
+          :[],
         instruments = json['instruments'] != null
             ? [
                 for (var instrument in json['instruments'])
@@ -43,6 +47,7 @@ class Musician {
         'phoneNumber': phoneNumber,
         'bio': bio,
         'userAvatar': userAvatar,
+        'userPhotos': userPhotos,
         'instruments': instruments,
         'favoriteGenres': favoriteGenres
       };
@@ -51,6 +56,14 @@ class Musician {
     return Image.memory(base64Decode(userAvatar));
   }
 
+  List<Image> photosFromUserBase64String() {
+    List<Image> photosImages = <Image>[];
+    userPhotos.forEach((photo) {
+      photosImages.add(Image.memory(base64Decode(photo)));
+    });
+    return photosImages;
+  }
+
   Musician(this.id, this.userAvatar, this.bio, this.favoriteGenres,
-      this.instruments, this.userName, this.email, this.phoneNumber);
+      this.instruments, this.userName, this.email, this.phoneNumber, this.userPhotos);
 }

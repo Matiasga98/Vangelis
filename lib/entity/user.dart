@@ -21,6 +21,7 @@ class User with UpdatableEntity {
   var id;
   var userAvatar;
   var bio;
+  List<String> userPhotos =[];
   List<Genre> favoriteGenres =[];
   List<Instrument> instruments=[];
   List<int> favoriteUsers=[];
@@ -64,6 +65,10 @@ class User with UpdatableEntity {
         :[];
           _singleton.favoriteUsers;
 
+      _singleton.userPhotos = json["photos"]!=null?
+      json["photos"].cast<String>()
+          :[];
+
       _singleton.isDark = Get.isDarkMode;
     }
     _singleton.token =
@@ -72,11 +77,19 @@ class User with UpdatableEntity {
   }
 
   Musician musicianFromUser(){
-    return Musician(id, userAvatar, bio, favoriteGenres, instruments, userName, email, phoneNumber);
+    return Musician(id, userAvatar, bio, favoriteGenres, instruments, userName, email, phoneNumber, userPhotos);
   }
 
   Image imageFromUserBase64String() {
     return Image.memory(base64Decode(userAvatar));
+  }
+
+  List<Image> photosFromUserBase64String() {
+    List<Image> photosImages = <Image>[];
+    userPhotos.forEach((photo) {
+      photosImages.add(Image.memory(base64Decode(photo)));
+    });
+    return photosImages;
   }
 
   User._internal();
@@ -110,7 +123,8 @@ class User with UpdatableEntity {
   for (var favoriteGenre in json['favoriteGenres'])
   Genre.fromJson(favoriteGenre)
   ]:[],
-  favoriteUsers = json["favorite_users"].cast<int>()?? _singleton.favoriteUsers;
+  favoriteUsers = json["favorite_users"].cast<int>()?? _singleton.favoriteUsers,
+  userPhotos = json["photos"].cast<String>()?? _singleton.userPhotos;
 
 
 

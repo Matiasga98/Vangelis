@@ -14,7 +14,6 @@ import '../../../model/Instrument.dart';
 import '../../../model/musician.dart';
 import '../../../services/theme_service.dart';
 
-
 class ProfilePage extends StatefulWidget {
   Musician musician;
 
@@ -37,7 +36,7 @@ class _ProfilePageState extends State<ProfilePage>
     "https://i.pinimg.com/736x/c4/03/c6/c403c63b8e1882b6f10c82f601180e2d.jpg",
   ];
 
-  File? previewProfilePicture;
+  File? previewPicture;
 
   @override
   void initState() {
@@ -174,8 +173,11 @@ class _ProfilePageState extends State<ProfilePage>
                         OutlinedButton(
                           onPressed: () {
                             !_ctrl.isCurrentUser.value
-                            ?_launchUrl(whatsappUrlBase+_ctrl.musician.phoneNumber+"&text="+_ctrl.greetingMessage!):
-                            EditPhoneNumberModal();
+                                ? _launchUrl(whatsappUrlBase +
+                                    _ctrl.musician.phoneNumber +
+                                    "&text=" +
+                                    _ctrl.greetingMessage!)
+                                : EditPhoneNumberModal();
                           },
                           style: OutlinedButton.styleFrom(
                               side: const BorderSide(
@@ -193,8 +195,11 @@ class _ProfilePageState extends State<ProfilePage>
                         OutlinedButton(
                           onPressed: () {
                             !_ctrl.isCurrentUser.value
-                                ?_launchUrl(mailUrlBase+_ctrl.musician.email+"?subject=¡Busco músico!&body="+_ctrl.greetingMessage!):
-                            EditEmailModal();
+                                ? _launchUrl(mailUrlBase +
+                                    _ctrl.musician.email +
+                                    "?subject=¡Busco músico!&body=" +
+                                    _ctrl.greetingMessage!)
+                                : EditEmailModal();
                           },
                           style: OutlinedButton.styleFrom(
                               side: const BorderSide(
@@ -350,28 +355,6 @@ class _ProfilePageState extends State<ProfilePage>
                             ],
                           ),
                         ),
-                        SizedBox(width: 50.w),
-                        PopupMenuButton(
-                          onSelected: (value) {
-                            // your logic
-                          },
-                          itemBuilder: (BuildContext bc) {
-                            return const [
-                              PopupMenuItem(
-                                value: '/hello',
-                                child: Text("Hello"),
-                              ),
-                              PopupMenuItem(
-                                value: '/about',
-                                child: Text("About"),
-                              ),
-                              PopupMenuItem(
-                                value: '/contact',
-                                child: Text("Contact"),
-                              )
-                            ];
-                          },
-                        ),
                       ],
                     ),
                     const SizedBox(height: 10.0),
@@ -389,35 +372,53 @@ class _ProfilePageState extends State<ProfilePage>
                                     mainAxisExtent: 250.0, crossAxisCount: 3),
                             itemBuilder: (context, index) {
                               return Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    color: Colors.black,
-                                    borderRadius: BorderRadius.circular(20.0),
-                                    image: DecorationImage(
-                                      image: NetworkImage(listImage[index]),
-                                      fit: BoxFit.cover,
-                                    ),
-                                  ),
-                                  child: Padding(
-                                    padding: const EdgeInsets.only(
-                                        left: 37.0,
-                                        right: 37.0,
-                                        top: 185.0,
-                                        bottom: 15.0),
-                                    child: Container(
-                                      alignment: Alignment.center,
-                                      decoration: BoxDecoration(
-                                          color: Colors.white,
-                                          borderRadius:
-                                              BorderRadius.circular(15.0)),
-                                      child: const Text("1.234k"),
-                                    ),
-                                  ),
-                                ),
-                              );
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: index < _ctrl.userPhotos.length
+                                      ? Container(
+                                          decoration: BoxDecoration(
+                                            color: Colors.black,
+                                            borderRadius:
+                                                BorderRadius.circular(20.0),
+                                            image: DecorationImage(
+                                              image: _ctrl.userPhotos[index].image,
+                                              fit: BoxFit.cover,
+                                            ),
+                                          ),
+                                          child: Padding(
+                                            padding: const EdgeInsets.only(
+                                                left: 37.0,
+                                                right: 37.0,
+                                                top: 185.0,
+                                                bottom: 15.0),
+                                          ),
+                                        )
+                                      : Container(
+                                          decoration: BoxDecoration(
+                                            color: Colors.white,
+                                            border:
+                                                Border.all(color: Colors.black),
+                                            borderRadius:
+                                                BorderRadius.circular(20.0),
+                                          ),
+                                          child: OutlinedButton(
+                                            onPressed: () {
+                                              UploadPhotoDialog(false);
+                                            },
+                                            style: OutlinedButton.styleFrom(
+                                                side: const BorderSide(
+                                                  color: Colors.black12,
+                                                ),
+                                                primary: Colors.blue,
+                                                backgroundColor: Colors.white,
+                                                shape: const CircleBorder(),
+                                                fixedSize:
+                                                    const Size(10.0, 20.0)),
+                                            child: const Icon(
+                                              Icons.add,
+                                            ),
+                                          )));
                             },
-                            itemCount: listImage.length,
+                            itemCount: _ctrl.userPhotos.length + 1,
                           ),
                           Center(
                               child: GridView.builder(
@@ -532,17 +533,7 @@ class _ProfilePageState extends State<ProfilePage>
                           ),
                         ],
                       ),
-                    ),
-                    CircleAvatar(
-                      backgroundImage: NetworkImage(
-                          "https://free2music.com/images/singer/2019/02/10/troye-sivan_2.jpg"),
-                      radius: 70.0,
-                    ),
-                    const CircleAvatar(
-                      backgroundImage: NetworkImage(
-                          "https://free2music.com/images/singer/2019/02/10/troye-sivan_2.jpg"),
-                      radius: 70.0,
-                    ),
+                    )
                   ],
                 ),
               ),
@@ -827,87 +818,7 @@ class _ProfilePageState extends State<ProfilePage>
         right: -0,
         child: OutlinedButton(
           onPressed: () {
-            showDialog(
-              context: context,
-              builder: (context) {
-                return StatefulBuilder(builder: (context, setState) {
-                  return AlertDialog(
-                    title: const Text('Actualizar foto'),
-                    content: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            IconButton(
-                              onPressed: () async {
-                                try {
-                                  final image = await ImagePicker()
-                                      .pickImage(source: ImageSource.gallery);
-                                  if (image == null) return;
-                                  final imageTemp = File(image.path);
-                                  setState(() => {
-                                        previewProfilePicture = imageTemp,
-                                        _ctrl.tempProfilePicture = imageTemp
-                                      });
-                                } on PlatformException catch (e) {
-                                  //print('Failed to pick image: $e');
-                                }
-                              },
-                              icon: const Icon(
-                                Icons.collections,
-                                size: 30.0,
-                              ),
-                            ),
-                            IconButton(
-                              onPressed: () async {
-                                try {
-                                  final image = await ImagePicker()
-                                      .pickImage(source: ImageSource.camera);
-                                  if (image == null) return;
-                                  final imageTemp = File(image.path);
-                                  setState(() => {
-                                        previewProfilePicture = imageTemp,
-                                        _ctrl.tempProfilePicture = imageTemp
-                                      });
-                                } on PlatformException catch (e) {
-                                  //print('Failed to pick image: $e');
-                                }
-                              },
-                              icon: const Icon(
-                                Icons.photo_camera,
-                                size: 30.0,
-                              ),
-                            )
-                          ],
-                        ),
-                        previewProfilePicture != null
-                            ? CircleAvatar(
-                                backgroundImage:
-                                    Image.file(previewProfilePicture!).image,
-                                radius: 70.0,
-                              )
-                            : const CircleAvatar(
-                                radius: 70.0,
-                              ),
-                      ],
-                    ),
-                    actions: [
-                      DialogButtons(
-                          onCancel: () => {
-                                Navigator.pop(context, false),
-                              },
-                          onOk: () => {
-                                _ctrl.updateProfilePicture(),
-                                Navigator.pop(context, true)
-                              },
-                          okButtonText: "Aceptar",
-                          cancelButtonText: "Cancelar"),
-                    ],
-                  );
-                });
-              },
-            );
+            UploadPhotoDialog(true);
           },
           style: OutlinedButton.styleFrom(
               side: const BorderSide(
@@ -923,38 +834,112 @@ class _ProfilePageState extends State<ProfilePage>
         ));
   }
 
+  Future<dynamic> UploadPhotoDialog(bool isProfilePicture) {
+    return showDialog(
+      context: context,
+      builder: (context) {
+        return StatefulBuilder(builder: (context, setState) {
+          return AlertDialog(
+            title: const Text('Subir foto'),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    IconButton(
+                      onPressed: () async {
+                        try {
+                          final image = await ImagePicker()
+                              .pickImage(source: ImageSource.gallery);
+                          if (image == null) return;
+                          final imageTemp = File(image.path);
+                          setState(() => {
+                                previewPicture = imageTemp,
+                                _ctrl.tempPicture = imageTemp
+                              });
+                        } on PlatformException catch (e) {
+                          //print('Failed to pick image: $e');
+                        }
+                      },
+                      icon: const Icon(
+                        Icons.collections,
+                        size: 30.0,
+                      ),
+                    ),
+                    IconButton(
+                      onPressed: () async {
+                        try {
+                          final image = await ImagePicker()
+                              .pickImage(source: ImageSource.camera);
+                          if (image == null) return;
+                          final imageTemp = File(image.path);
+                          setState(() => {
+                                previewPicture = imageTemp,
+                                _ctrl.tempPicture = imageTemp
+                              });
+                        } on PlatformException catch (e) {
+                          //print('Failed to pick image: $e');
+                        }
+                      },
+                      icon: const Icon(
+                        Icons.photo_camera,
+                        size: 30.0,
+                      ),
+                    )
+                  ],
+                ),
+                previewPicture != null
+                    ? CircleAvatar(
+                        backgroundImage: Image.file(previewPicture!).image,
+                        radius: 70.0,
+                      )
+                    : const CircleAvatar(
+                        radius: 70.0,
+                      ),
+              ],
+            ),
+            actions: [
+              DialogButtons(
+                  onCancel: () => {
+                        Navigator.pop(context, false),
+                      },
+                  onOk: () => {
+                        isProfilePicture
+                            ? _ctrl.updateProfilePicture()
+                            : _ctrl.uploadPhoto(),
+                        Navigator.pop(context, true)
+                      },
+                  okButtonText: "Aceptar",
+                  cancelButtonText: "Cancelar"),
+            ],
+          );
+        });
+      },
+    );
+  }
+
   Future<dynamic> EditPhoneNumberModal() {
     return showDialog(
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: const Text(
-              'Editar número'),
+          title: const Text('Editar número'),
           content: TextFormField(
-              controller:
-              _ctrl.phoneNumberController,
-              inputFormatters: [
-              ]),
+              controller: _ctrl.phoneNumberController, inputFormatters: []),
           actions: [
             DialogButtons(
                 onCancel: () => {
-                  Navigator.pop(
-                      context, false),
-                  _ctrl
-                      .onCancelEditPhoneNumber()
-                },
+                      Navigator.pop(context, false),
+                      _ctrl.onCancelEditPhoneNumber()
+                    },
                 onOk: () => {
-                  if (_ctrl
-                      .phoneNumberController
-                      .text !=
-                      "")
-                    {
-                      _ctrl
-                          .updatePhoneNumber(),
-                      Navigator.pop(
-                          context, true)
-                    }
-                },
+                      if (_ctrl.phoneNumberController.text != "")
+                        {
+                          _ctrl.updatePhoneNumber(),
+                          Navigator.pop(context, true)
+                        }
+                    },
                 okButtonText: "Aceptar",
                 cancelButtonText: "Cancelar"),
           ],
@@ -968,34 +953,17 @@ class _ProfilePageState extends State<ProfilePage>
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: const Text(
-              'Editar email'),
+          title: const Text('Editar email'),
           content: TextFormField(
-              controller:
-              _ctrl.emailController,
-              inputFormatters: [
-
-              ]),
+              controller: _ctrl.emailController, inputFormatters: []),
           actions: [
             DialogButtons(
-                onCancel: () => {
-                  Navigator.pop(
-                      context, false),
-                  _ctrl
-                      .onCancelEditEmail()
-                },
+                onCancel: () =>
+                    {Navigator.pop(context, false), _ctrl.onCancelEditEmail()},
                 onOk: () => {
-                  if (_ctrl
-                      .emailController
-                      .text !=
-                      "")
-                    {
-                      _ctrl
-                          .updateEmail(),
-                      Navigator.pop(
-                          context, true)
-                    }
-                },
+                      if (_ctrl.emailController.text != "")
+                        {_ctrl.updateEmail(), Navigator.pop(context, true)}
+                    },
                 okButtonText: "Aceptar",
                 cancelButtonText: "Cancelar"),
           ],
@@ -1010,5 +978,4 @@ class _ProfilePageState extends State<ProfilePage>
       throw 'Could not launch $finalUrl';
     }
   }
-
 }
