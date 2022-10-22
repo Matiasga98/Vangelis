@@ -22,9 +22,12 @@ class Musician {
         userName = json['username'],
         bio = json['bio'],
         userAvatar = json['userAvatar'],
-        userPhotos = json["photos"]!=null?
-          json["photos"].cast<String>()
-          :[],
+        userPhotos = json["photos"] != null
+            ? [
+                for (var photo in json['photos'])
+                  photo['image']
+              ]
+            : [],
         instruments = json['instruments'] != null
             ? [
                 for (var instrument in json['instruments'])
@@ -58,12 +61,20 @@ class Musician {
 
   List<Image> photosFromUserBase64String() {
     List<Image> photosImages = <Image>[];
-    userPhotos.forEach((photo) {
+    for (var photo in userPhotos) {
       photosImages.add(Image.memory(base64Decode(photo)));
-    });
+    }
     return photosImages;
   }
 
-  Musician(this.id, this.userAvatar, this.bio, this.favoriteGenres,
-      this.instruments, this.userName, this.email, this.phoneNumber, this.userPhotos);
+  Musician(
+      this.id,
+      this.userAvatar,
+      this.bio,
+      this.favoriteGenres,
+      this.instruments,
+      this.userName,
+      this.email,
+      this.phoneNumber,
+      this.userPhotos);
 }
