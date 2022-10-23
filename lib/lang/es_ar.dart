@@ -145,8 +145,6 @@ const Map<String, String> esAR = {
       "El video que estás intentando de mirar no se encuentra disponible",
   warningLectureAudioUnavailable:
       "El audio que estas intentando escuchar no se encuentra disponible",
-  defaultQuote:
-      'En tu vida solo podés hacer un número limitado de cosas ... hazlas genial. ',
   creator: 'Creador',
   doubleTapTopreview: "Toca dos veces para obtener una vista previa",
   assesmentStatusDes: "Esta tarea debe completarse en barbri.com",
