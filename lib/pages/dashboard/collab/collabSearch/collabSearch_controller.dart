@@ -12,6 +12,7 @@ import 'package:vangelis/model/musician.dart';
 import 'package:vangelis/pages/dashboard/collab/card_widget.dart';
 import 'package:vangelis/pages/dashboard/collab/collab_page.dart';
 import 'package:vangelis/pages/dashboard/video/video_page.dart';
+import 'package:vangelis/services/collab_service.dart';
 import 'package:vangelis/services/genre_service.dart';
 import 'package:vangelis/services/google_service.dart';
 import 'package:vangelis/services/instrument_service.dart';
@@ -121,6 +122,7 @@ class CollabSearchController extends GetxController {
   InstrumentService instrumentService = Get.find();
   GenreService genreService = Get.find();
   UserService userService = Get.find();
+  CollabService collabService = Get.find();
 
   @override
   Future<void> onReady() async {
@@ -130,50 +132,42 @@ class CollabSearchController extends GetxController {
       wholeGenres = await genreService.getAllGenres();
       musicalGenres.value = wholeGenres.map((e) => e.name).toList();
 
-      //collabs = algo back
-      //todo: llamar al back, levantar las collabs posta
     }
     else{
     }
-    //bodies.add(SearchScreen());
-    //bodies.add(CollabScreen());
-    //bodies.add(ProfilePage(User().musicianFromUser()));
+
     super.onReady();
   }
 
   Future<void> openContext() async {
 
-    if(User().environment != "MOBILE"){
       filteredMusicians = [];
       List<Instrument> filteredInstruments = wholeInstruments.where((element)
       => selectedInstruments.contains(element.name)).toList();
       List<Genre> filteredGenres = wholeGenres.where((element)
       => selectedGenres.contains(element.name)).toList();
-      //todo: hacer llamada de busqueda al back
-      filteredCollabCards = collabs.where((collab) =>
-      collab.name.contains(textFilterController.text)
-          && _filterGenreList(collab) && _filterInstrumentList(collab)
-      ).toList();
-    }
-    else{
-      /*filteredCollabs = [Collab(2,'dQw4w9WgXcQ', 'g','a', [],[],Musician()),
-        Collab(3,'dQw4w9WgXcQ', 'g','a', [],[]),
-        Collab(4,'dQw4w9WgXcQ', 'g','a', [],[])];*/
-      filteredCollabs = [];
-      filteredCollabCards = collabs.where((collab) =>
-      collab.name.contains(textFilterController.text)
-          && _filterGenreList(collab) && _filterInstrumentList(collab)
-      ).toList();
 
-    }
-    filteredCollabs = [];
+      List<int> genresIds = filteredGenres.map((g) => g.id).toList();
+      List<int> instrumentsIds = filteredInstruments.map((i) => i.id).toList();
+      filteredCollabs = await collabService.searchCollabs(genresIds, instrumentsIds,false);
 
-
+      filteredCollabCards = filteredCollabs.map((e) =>
+          CollabCard(open: true, finalImage: e.musician.userAvatar, name: e.musician.userName,
+              description: e.description, address: "CABA",instruments: e.instruments.map((i) => i.name).toList(),
+              genres: e.genres.map((g) => g.name).toList(), collabInstrument: "instrumento"))
+          .toList();
+      searchState.value = true;
   }
+
+  void returnToSearch(){
+    searchState.value = false;
+  }
+
   bool _filterGenreList(CollabCard collab){
     return selectedGenres.length<=0? true :
     collab.genres.any((genre) => selectedGenres.contains(genre));
   }
+
   bool _filterInstrumentList(CollabCard collab){
     return selectedInstruments.length<=0? true :
     collab.instruments.any((instrument) => selectedInstruments.contains(instrument));
@@ -287,7 +281,7 @@ class CollabSearchController extends GetxController {
     }
     return
       Container(
-        width: 300.w,
+        width: 500.w,
         height: 300.h,
         child: ListView.builder(
             scrollDirection: Axis.horizontal,
@@ -300,22 +294,23 @@ class CollabSearchController extends GetxController {
                     selectedIndex.value = index,
                     selectedVideo = userVideos[index]
                   },
-                  child: Padding(
-                      padding: const EdgeInsets.all(60.0),
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: Colors.black,
-                          border: selectedIndex.value == index?Border.all(width: 4.0,color: Colors.lightBlue):Border.all(color: Colors.black),
-                          borderRadius: BorderRadius.circular(20.0),
-                          image: DecorationImage(
-                            image: NetworkImage(userVideos[index].snippet!.thumbnails!.high!.url!),
-                            fit: BoxFit.cover,
+                  child:
+                      Container(
+                        padding:  EdgeInsets.all(10.0),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            border: selectedIndex.value == index?Border.all(width: 4.0,color: Colors.lightBlue):Border.all(color: Colors.black),
+                          ),
+
+                          child:  Image.network(
+                            userVideos[index].snippet!.thumbnails!.high!.url!,
                           ),
                         ),
-                        child: Padding(
-                          padding: const EdgeInsets.only(left: 50.0, right: 50.0, top: 1.0, bottom: 1.0),
-                        ),
-                      ))));
+                      )
+                  )
+
+                  );
             }),
       );
 
