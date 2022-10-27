@@ -140,7 +140,6 @@ const Map<String, String> enUS = {
   warningLectureUnavailable: "The lecture you are trying to watch is unavailable",
   warningLectureAudioUnavailable:
       "The audio for the lecture you are trying to hear is unavailable",
-  defaultQuote: 'In your life you only get to do so many things ... make it great. ',
   creator: "Creator",
   doubleTapTopreview: "Double tap to preview",
   assesmentStatusAlert: "Assessment Status Alert",

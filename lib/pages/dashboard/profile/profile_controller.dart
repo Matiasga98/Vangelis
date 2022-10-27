@@ -46,6 +46,7 @@ class ProfileController extends GetxController {
   UserService userService = Get.find();
   GoogleService googleService = Get.find();
   RxList<SearchResult> userVideos = <SearchResult>[].obs;
+  RxList<Image> userPhotos = <Image>[].obs;
   RxList<SearchResult> selectedUserVideos = <SearchResult>[].obs;
   InstrumentService instrumentService = Get.find();
   GenreService genreService = Get.find();
@@ -58,7 +59,7 @@ class ProfileController extends GetxController {
   List<Genre> allPossibleGenres = <Genre>[];
   Genre genreToAdd = Genre(icon: null, name: '', id: 0);
 
-  File? tempProfilePicture;
+  File? tempPicture;
 
   String? greetingMessage;
 
@@ -83,6 +84,7 @@ class ProfileController extends GetxController {
     instruments.value = musician.instruments;
     genres.value = musician.favoriteGenres;
     profilePicture.value = musician.imageFromUserBase64String();
+    userPhotos.value = musician.photosFromUserBase64String();
     username.value = musician.userName;
     description.value = musician.bio ?? "";
     phoneNumber.value = musician.phoneNumber;
@@ -151,10 +153,19 @@ class ProfileController extends GetxController {
   }
 
   Future<void> updateProfilePicture() async {
-    if(tempProfilePicture != null){
-      User? user = await userService.setUserAvatar(tempProfilePicture!);
+    if(tempPicture != null){
+      User? user = await userService.setUserAvatar(tempPicture!);
       if (user != null) {
         profilePicture.value = user.imageFromUserBase64String();
+      }
+    }
+  }
+
+  Future<void> uploadPhoto() async {
+    if(tempPicture != null){
+      User? user = await userService.uploadPhoto(tempPicture!);
+      if (user != null) {
+        userPhotos.value = user.photosFromUserBase64String();
       }
     }
   }

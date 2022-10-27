@@ -194,8 +194,6 @@ const filterSubDropdown = "subDropdown";
 const errorLoadingLecture = 'errorLoadingLecture';
 const warningLectureUnavailable = 'warningLectureUnavailable';
 const warningLectureAudioUnavailable = 'warningLectureAudioUnavailable';
-const defaultQuote = 'defaultQuote';
-
 const supportTechnicalAssistance = 'supportTechnicalAssistance';
 const supportOtherInformation = 'supportOtherInformation';
 const supportUkContactInfo = 'supportUkContactInfo';

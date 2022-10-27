@@ -223,6 +223,22 @@ class UserService extends BaseApiService {
   }
 
   @override
+  Future<User?> uploadPhoto(File file) async {
+    try{
+      var response = await patchWithFile(_baseUserUrl+"/photo",file);
+      if(BaseApiService.isSuccessfulStreamedResponse(response)){
+        final respStr = await response.stream.bytesToString();
+        var userJson = json.decode(respStr);
+        return User.fromJson(userJson);
+      }
+    }
+    catch(e){
+      var a = e;
+    }
+
+  }
+
+  @override
   Future<List<Musician>> getFavorites(int id) async {
     var response =await get(_baseUserUrl+"/favorites/$id");
 
