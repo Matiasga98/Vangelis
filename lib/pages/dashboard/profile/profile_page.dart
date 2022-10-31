@@ -42,7 +42,7 @@ class _ProfilePageState extends State<ProfilePage>
   void initState() {
     // TODO: implement initState
     super.initState();
-    tabController = TabController(length: 4, vsync: this);
+    tabController = TabController(length: 3, vsync: this);
   }
 
   TabController? tabController;
@@ -350,7 +350,6 @@ class _ProfilePageState extends State<ProfilePage>
                             tabs: const [
                               Tab(text: "Fotos"),
                               Tab(text: "Videos"),
-                              Tab(text: "Audios"),
                               Tab(text: "Colaboraciones"),
                             ],
                           ),
@@ -365,172 +364,9 @@ class _ProfilePageState extends State<ProfilePage>
                         physics: const NeverScrollableScrollPhysics(),
                         controller: tabController,
                         children: [
-                          GridView.builder(
-                            scrollDirection: Axis.vertical,
-                            gridDelegate:
-                                const SliverGridDelegateWithFixedCrossAxisCount(
-                                    mainAxisExtent: 250.0, crossAxisCount: 3),
-                            itemBuilder: (context, index) {
-                              return Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: index < _ctrl.userPhotos.length
-                                      ? Container(
-                                          decoration: BoxDecoration(
-                                            color: Colors.black,
-                                            borderRadius:
-                                                BorderRadius.circular(20.0),
-                                            image: DecorationImage(
-                                              image: _ctrl.userPhotos[index].image,
-                                              fit: BoxFit.cover,
-                                            ),
-                                          ),
-                                          child: Padding(
-                                            padding: const EdgeInsets.only(
-                                                left: 37.0,
-                                                right: 37.0,
-                                                top: 185.0,
-                                                bottom: 15.0),
-                                          ),
-                                        )
-                                      : Container(
-                                          decoration: BoxDecoration(
-                                            color: Colors.white,
-                                            border:
-                                                Border.all(color: Colors.black),
-                                            borderRadius:
-                                                BorderRadius.circular(20.0),
-                                          ),
-                                          child: OutlinedButton(
-                                            onPressed: () {
-                                              UploadPhotoDialog(false);
-                                            },
-                                            style: OutlinedButton.styleFrom(
-                                                side: const BorderSide(
-                                                  color: Colors.black12,
-                                                ),
-                                                primary: Colors.blue,
-                                                backgroundColor: Colors.white,
-                                                shape: const CircleBorder(),
-                                                fixedSize:
-                                                    const Size(10.0, 20.0)),
-                                            child: const Icon(
-                                              Icons.add,
-                                            ),
-                                          )));
-                            },
-                            itemCount: _ctrl.userPhotos.length + 1,
-                          ),
-                          Center(
-                              child: GridView.builder(
-                            scrollDirection: Axis.vertical,
-                            gridDelegate:
-                                SliverGridDelegateWithFixedCrossAxisCount(
-                                    mainAxisExtent: 250.0, crossAxisCount: 3),
-                            itemBuilder: (context, index) {
-                              if (index < _ctrl.selectedUserVideos.length) {
-                                return Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: GestureDetector(
-                                    onTap: () {
-                                      _ctrl
-                                          .loadVideo(index)
-                                          .then((value) => showDialog(
-                                                context: context,
-                                                builder: (context) {
-                                                  return _ctrl.openVideo(index);
-                                                },
-                                              ));
-                                    },
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                        color: Colors.black,
-                                        borderRadius:
-                                            BorderRadius.circular(20.0),
-                                        image: DecorationImage(
-                                          image: NetworkImage(_ctrl
-                                              .selectedUserVideos[index]
-                                              .snippet!
-                                              .thumbnails!
-                                              .high!
-                                              .url!),
-                                          fit: BoxFit.cover,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                );
-                              } else if (_ctrl.isCurrentUser.value) {
-                                return Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: GestureDetector(
-                                    onTap: () {
-                                      _ctrl
-                                          .openVideos()
-                                          .then((value) => showDialog(
-                                              context: context,
-                                              builder: (context) {
-                                                return AlertDialog(
-                                                    title: Text(
-                                                        'Select a video to add to profile'),
-                                                    content: Obx(() =>
-                                                        Container(
-                                                            height: 500.h,
-                                                            width: 500.w,
-                                                            child: ListView
-                                                                .builder(
-                                                                    scrollDirection:
-                                                                        Axis
-                                                                            .horizontal,
-                                                                    itemCount: _ctrl
-                                                                        .userVideos
-                                                                        .length,
-                                                                    itemBuilder:
-                                                                        (context,
-                                                                            index) {
-                                                                      return GestureDetector(
-                                                                          onTap: () =>
-                                                                              _ctrl.addVideoToSelected(index),
-                                                                          child: Padding(
-                                                                              padding: const EdgeInsets.all(60.0),
-                                                                              child: Container(
-                                                                                decoration: BoxDecoration(
-                                                                                  color: Colors.black,
-                                                                                  borderRadius: BorderRadius.circular(20.0),
-                                                                                  image: DecorationImage(
-                                                                                    image: NetworkImage(_ctrl.userVideos[index].snippet!.thumbnails!.high!.url!),
-                                                                                    fit: BoxFit.cover,
-                                                                                  ),
-                                                                                ),
-                                                                                child: Padding(
-                                                                                  padding: const EdgeInsets.only(left: 100.0, right: 100.0, top: 1.0, bottom: 1.0),
-                                                                                ),
-                                                                              )));
-                                                                    }))));
-                                              }));
-                                    },
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                        color: Colors.white,
-                                        border: Border.all(color: Colors.black),
-                                        borderRadius:
-                                            BorderRadius.circular(20.0),
-                                      ),
-                                      child: Icon(Icons.add),
-                                    ),
-                                  ),
-                                );
-                              } else {
-                                return Container();
-                              }
-                            },
-                            itemCount: _ctrl.selectedUserVideos.length + 1,
-                          )),
-                          Center(
-                            child: Text("You don't have any tagged"),
-                          ),
-                          Center(
-                            child: Text("You don't have any tagged"),
-                          ),
+                          ViewPhotos(),
+                          ViewVideos(),
+                          ViewCollabs(),
                         ],
                       ),
                     )
@@ -539,6 +375,192 @@ class _ProfilePageState extends State<ProfilePage>
               ),
             ), // This trailing comma makes auto-formatting nicer for build methods.
           ));
+  }
+
+  Widget ViewCollabs() {
+    return GridView.builder(
+      scrollDirection: Axis.vertical,
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          mainAxisExtent: 250.0, crossAxisCount: 3),
+      itemBuilder: (context, index) {
+        return Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Container(
+              decoration: BoxDecoration(
+                color: Colors.black,
+                borderRadius: BorderRadius.circular(20.0),
+                image: DecorationImage(
+                  image: _ctrl.userPhotos[index].image,
+                  fit: BoxFit.cover,
+                ),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.only(
+                    left: 37.0, right: 37.0, top: 185.0, bottom: 15.0),
+              ),
+            )
+        );
+      },
+      itemCount: _ctrl.userPhotos.length,
+    );
+  }
+
+  Widget ViewVideos() {
+    return Center(
+        child: GridView.builder(
+          scrollDirection: Axis.vertical,
+          gridDelegate:
+          SliverGridDelegateWithFixedCrossAxisCount(
+              mainAxisExtent: 250.0, crossAxisCount: 3),
+          itemBuilder: (context, index) {
+            if (index < _ctrl.selectedUserVideos.length) {
+              return Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: GestureDetector(
+                  onTap: () {
+                    _ctrl
+                        .loadVideo(index)
+                        .then((value) => showDialog(
+                      context: context,
+                      builder: (context) {
+                        return _ctrl.openVideo(index);
+                      },
+                    ));
+                  },
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.black,
+                      borderRadius:
+                      BorderRadius.circular(20.0),
+                      image: DecorationImage(
+                        image: NetworkImage(_ctrl
+                            .selectedUserVideos[index]
+                            .snippet!
+                            .thumbnails!
+                            .high!
+                            .url!),
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  ),
+                ),
+              );
+            } else if (_ctrl.isCurrentUser.value) {
+              return Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: GestureDetector(
+                  onTap: () {
+                    _ctrl
+                        .openVideos()
+                        .then((value) => showDialog(
+                        context: context,
+                        builder: (context) {
+                          return AlertDialog(
+                              title: Text(
+                                  'Select a video to add to profile'),
+                              content: Obx(() =>
+                                  Container(
+                                      height: 500.h,
+                                      width: 500.w,
+                                      child: ListView
+                                          .builder(
+                                          scrollDirection:
+                                          Axis
+                                              .horizontal,
+                                          itemCount: _ctrl
+                                              .userVideos
+                                              .length,
+                                          itemBuilder:
+                                              (context,
+                                              index) {
+                                            return GestureDetector(
+                                                onTap: () =>
+                                                    _ctrl.addVideoToSelected(index),
+                                                child: Padding(
+                                                    padding: const EdgeInsets.all(60.0),
+                                                    child: Container(
+                                                      decoration: BoxDecoration(
+                                                        color: Colors.black,
+                                                        borderRadius: BorderRadius.circular(20.0),
+                                                        image: DecorationImage(
+                                                          image: NetworkImage(_ctrl.userVideos[index].snippet!.thumbnails!.high!.url!),
+                                                          fit: BoxFit.cover,
+                                                        ),
+                                                      ),
+                                                      child: Padding(
+                                                        padding: const EdgeInsets.only(left: 100.0, right: 100.0, top: 1.0, bottom: 1.0),
+                                                      ),
+                                                    )));
+                                          }))));
+                        }));
+                  },
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      border: Border.all(color: Colors.black),
+                      borderRadius:
+                      BorderRadius.circular(20.0),
+                    ),
+                    child: Icon(Icons.add),
+                  ),
+                ),
+              );
+            } else {
+              return Container();
+            }
+          },
+          itemCount: _ctrl.selectedUserVideos.length + 1,
+        ));
+  }
+
+  Widget ViewPhotos() {
+    return GridView.builder(
+      scrollDirection: Axis.vertical,
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          mainAxisExtent: 250.0, crossAxisCount: 3),
+      itemBuilder: (context, index) {
+        return Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: index < _ctrl.userPhotos.length
+                ? Container(
+                    decoration: BoxDecoration(
+                      color: Colors.black,
+                      borderRadius: BorderRadius.circular(20.0),
+                      image: DecorationImage(
+                        image: _ctrl.userPhotos[index].image,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.only(
+                          left: 37.0, right: 37.0, top: 185.0, bottom: 15.0),
+                    ),
+                  )
+                : Container(
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      border: Border.all(color: Colors.black),
+                      borderRadius: BorderRadius.circular(20.0),
+                    ),
+                    child: OutlinedButton(
+                      onPressed: () {
+                        UploadPhotoDialog(false);
+                      },
+                      style: OutlinedButton.styleFrom(
+                          side: const BorderSide(
+                            color: Colors.black12,
+                          ),
+                          primary: Colors.blue,
+                          backgroundColor: Colors.white,
+                          shape: const CircleBorder(),
+                          fixedSize: const Size(10.0, 20.0)),
+                      child: const Icon(
+                        Icons.add,
+                      ),
+                    )));
+      },
+      itemCount: _ctrl.userPhotos.length + 1,
+    );
   }
 
   Widget GenerateInstrumentsList() {

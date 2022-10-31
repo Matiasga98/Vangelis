@@ -3,6 +3,7 @@ import 'package:vangelis/repository/storage/user_storage.dart';
 import 'package:vangelis/repository/user_repository.dart';
 import 'package:vangelis/services/auth_service.dart';
 import 'package:vangelis/services/collab_service.dart';
+import 'package:vangelis/services/media_service.dart';
 import 'package:vangelis/services/connectivity_service.dart';
 import 'package:vangelis/services/genre_service.dart';
 import 'package:vangelis/services/google_service.dart';
@@ -28,6 +29,7 @@ class DependencyBindings extends Bindings {
     Get.put(GenreService());
     Get.put(GoogleService());
     Get.put(CollabService());
+    Get.put(MediaService());
 
 
 

@@ -2,11 +2,8 @@ import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_svg/avd.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:vangelis/pages/dashboard/profile/favorite/favorite_page.dart';
 
 import 'package:vangelis/services/google_service.dart';
@@ -14,19 +11,21 @@ import 'package:vangelis/util/constants.dart';
 import 'package:vangelis/services/genre_service.dart';
 
 import 'package:googleapis/youtube/v3.dart';
-import 'package:google_sign_in/google_sign_in.dart';
-import 'package:extension_google_sign_in_as_googleapis_auth/extension_google_sign_in_as_googleapis_auth.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 import '../../../entity/user.dart';
 import '../../../model/Genre.dart';
 import '../../../model/Instrument.dart';
+import '../../../model/collab.dart';
 import '../../../model/musician.dart';
+import '../../../services/collab_service.dart';
 import '../../../services/instrument_service.dart';
+import '../../../services/media_service.dart';
 import '../../../services/user_service.dart';
 
 class ProfileController extends GetxController {
   late Musician musician;
+  late List<Collab> collabs;
 
 
   RxString description = "texto".obs;
@@ -44,6 +43,8 @@ class ProfileController extends GetxController {
   RxBool isCurrentUser = true.obs;
   RxBool isFavorited = false.obs;
   UserService userService = Get.find();
+  CollabService collabService = Get.find();
+  MediaService mediaService = Get.find();
   GoogleService googleService = Get.find();
   RxList<SearchResult> userVideos = <SearchResult>[].obs;
   RxList<Image> userPhotos = <Image>[].obs;
@@ -69,6 +70,7 @@ class ProfileController extends GetxController {
     getProfileInfo();
     getInstruments();
     getGenres();
+    getCollabs();
     descriptionController.text = musician.bio ?? "";
     phoneNumberController.text = musician.phoneNumber;
     emailController.text = musician.email;
@@ -94,6 +96,13 @@ class ProfileController extends GetxController {
     await Future.delayed(Duration(milliseconds: 1000), () async {
       isLoading.value = false;
     });
+  }
+
+  Future<Collab?> getCollabs() async {
+    List<Collab> collabsList = await collabService.searchCollabs([], [], true);
+    if (collabsList != null && collabsList.isNotEmpty) {
+      collabs = collabsList;
+    }
   }
 
   Future<User?> updateDescription() async {
@@ -272,13 +281,13 @@ class ProfileController extends GetxController {
         userVideos.value = allUserVideos.items!;
       }
     } catch (error) {
-      var a = error;
     }
   }
 
-  void addVideoToSelected(index) {
+  Future<void> addVideoToSelected(index) async {
     selectedUserVideos.add(userVideos[index]);
-    //todo llamada al back
+
+    await mediaService.uploadVideos([userVideos[index].id!.videoId!]);
   }
 
   Future<void> loadVideo(int index) async {
