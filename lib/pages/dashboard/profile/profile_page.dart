@@ -433,12 +433,7 @@ class _ProfilePageState extends State<ProfilePage>
                       borderRadius:
                       BorderRadius.circular(20.0),
                       image: DecorationImage(
-                        image: NetworkImage(_ctrl
-                            .selectedUserVideos[index]
-                            .snippet!
-                            .thumbnails!
-                            .high!
-                            .url!),
+                        image: NetworkImage('https://img.youtube.com/vi/${_ctrl.selectedUserVideos[index]}/0.jpg'),
                         fit: BoxFit.cover,
                       ),
                     ),

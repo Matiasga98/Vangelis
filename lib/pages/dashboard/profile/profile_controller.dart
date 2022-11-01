@@ -48,7 +48,7 @@ class ProfileController extends GetxController {
   GoogleService googleService = Get.find();
   RxList<SearchResult> userVideos = <SearchResult>[].obs;
   RxList<Image> userPhotos = <Image>[].obs;
-  RxList<SearchResult> selectedUserVideos = <SearchResult>[].obs;
+  RxList<String> selectedUserVideos = <String>[].obs;
   InstrumentService instrumentService = Get.find();
   GenreService genreService = Get.find();
 
@@ -87,6 +87,7 @@ class ProfileController extends GetxController {
     genres.value = musician.favoriteGenres;
     profilePicture.value = musician.imageFromUserBase64String();
     userPhotos.value = musician.photosFromUserBase64String();
+    selectedUserVideos.value = musician.userVideos;
     username.value = musician.userName;
     description.value = musician.bio ?? "";
     phoneNumber.value = musician.phoneNumber;
@@ -285,14 +286,14 @@ class ProfileController extends GetxController {
   }
 
   Future<void> addVideoToSelected(index) async {
-    selectedUserVideos.add(userVideos[index]);
-
-    await mediaService.uploadVideos([userVideos[index].id!.videoId!]);
+    var urlVideo = userVideos[index].id!.videoId!;
+    selectedUserVideos.add(urlVideo);
+    await mediaService.uploadVideos([urlVideo]);
   }
 
   Future<void> loadVideo(int index) async {
     _videoController = YoutubePlayerController(
-      initialVideoId: selectedUserVideos[index].id!.videoId!,
+      initialVideoId: selectedUserVideos[index],
       flags: YoutubePlayerFlags(
         autoPlay: true,
         mute: false,
@@ -304,7 +305,6 @@ class ProfileController extends GetxController {
   }
 
   Widget openVideo(int index) {
-    //_videoController.load(userVideos[index].id!.videoId!);
     RxDouble _sliderValue = 0.0.obs;
     RxBool isPlaying = true.obs;
     return AlertDialog(

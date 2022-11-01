@@ -1,9 +1,7 @@
 import 'dart:convert';
-import 'package:vangelis/model/Genre.dart';
 import 'package:vangelis/model/collab.dart';
 import 'package:vangelis/model/collab_response.dart';
 import 'base_api_service.dart';
-import 'package:http/http.dart' as http;
 
 class CollabService extends BaseApiService {
   final _baseCollabUrl = 'collabs';

@@ -21,6 +21,7 @@ class User with UpdatableEntity {
   var userAvatar;
   var bio;
   List<String> userPhotos = [];
+  List<String> userVideos = [];
   List<Genre> favoriteGenres = [];
   List<Instrument> instruments = [];
   List<int> favoriteUsers = [];
@@ -50,6 +51,9 @@ class User with UpdatableEntity {
       _singleton.userName = json['username'] ?? _singleton.userName;
       _singleton.email = json['email'] ?? _singleton.email;
       _singleton.phoneNumber = json['phoneNumber'] ?? _singleton.phoneNumber;
+      _singleton.userVideos = json["videos"] != null
+          ? [for (var video in json['videos']) video['mediaUrl']]
+          : [];
       _singleton.instruments = json['instruments'] != null
           ? [
               for (var instrument in json['instruments'])
@@ -80,7 +84,7 @@ class User with UpdatableEntity {
 
   Musician musicianFromUser() {
     return Musician(id, userAvatar, bio, favoriteGenres, instruments, userName,
-        email, phoneNumber, userPhotos);
+        email, phoneNumber, userPhotos, userVideos);
   }
 
   Image imageFromUserBase64String() {
@@ -98,9 +102,6 @@ class User with UpdatableEntity {
   User._internal();
 
   void clearUserData() {
-    //_singleton.firstName = '';
-    //_singleton.lastName = '';
-    //_singleton.partyId = 0;
     _singleton.userName = '';
     _singleton.email = '';
     _singleton.phoneNumber = '';
@@ -108,8 +109,6 @@ class User with UpdatableEntity {
     _singleton.isDark = Get.isDarkMode;
     _singleton.objectBoxId = 0;
     _singleton.token = ToOne<Jwt>(target: Jwt.parameterized(''));
-
-    //ToOne<Jwt>(target: Jwt.parameterized('', '', '', 0, '', ''));
   }
 
   User.fromJson(Map<String, dynamic> json)
@@ -134,12 +133,12 @@ class User with UpdatableEntity {
             json["favorite_users"].cast<int>() ?? _singleton.favoriteUsers,
         userPhotos = json["photos"] != null
             ? [for (var photo in json['photos']) photo['image']]
+            : [],
+        userVideos = json["videos"] != null
+            ? [for (var video in json['videos']) video['mediaUrl']]
             : [];
 
   Map<String, dynamic> toJson() => {
-        //'firstName': _singleton.firstName,
-        //'lastName': _singleton.lastName,
-        //'partyId': _singleton.partyId,
         'id': _singleton.id,
         'username': _singleton.userName,
         'email': _singleton.email,

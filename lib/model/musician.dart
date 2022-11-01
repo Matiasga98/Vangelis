@@ -11,6 +11,7 @@ class Musician {
   var userAvatar;
   var bio;
   List<String> userPhotos = [];
+  List<String> userVideos = [];
   List<Genre> favoriteGenres = [];
   List<Instrument> instruments = [];
   var userName = '';
@@ -22,6 +23,9 @@ class Musician {
         userName = json['username'],
         bio = json['bio'],
         userAvatar = json['userAvatar'],
+        userVideos = json["videos"] != null
+            ? [for (var video in json['videos']) video['mediaUrl']]
+            : [],
         userPhotos = json["photos"] != null
             ? [
                 for (var photo in json['photos'])
@@ -52,7 +56,8 @@ class Musician {
         'userAvatar': userAvatar,
         'userPhotos': userPhotos,
         'instruments': instruments,
-        'favoriteGenres': favoriteGenres
+        'favoriteGenres': favoriteGenres,
+        'videos': userVideos
       };
 
   Image imageFromUserBase64String() {
@@ -76,5 +81,7 @@ class Musician {
       this.userName,
       this.email,
       this.phoneNumber,
-      this.userPhotos);
+      this.userPhotos,
+      this.userVideos
+      );
 }
