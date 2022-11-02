@@ -39,15 +39,15 @@ class DashboardPage extends StatelessWidget {
           items: <BottomNavigationBarItem>[
             BottomNavigationBarItem(
               icon: const Icon(Icons.search_rounded),
-              label: bottomNavBarSearch.tr,
+              label: "Buscar Usuarios",
             ),
             BottomNavigationBarItem(
               icon: const Icon(Icons.people_rounded),
-              label: bottomNavBarCollab.tr,
+              label: "Colaboraciones",
             ),
             BottomNavigationBarItem(
               icon: const Icon(Icons.account_box),
-              label: bottomNavBarProfile.tr,
+              label: "Perfil",
             ),
           ],
           selectedLabelStyle: const TextStyle(fontFamily: regularFont),

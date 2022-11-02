@@ -110,7 +110,7 @@ class CreateCollabController extends GetxController {
     var instrumentsSelected = wholeInstruments.where((e) => selectedInstruments.contains(e.name)).toList();
 
     Collab collab = Collab(0, video.id!.videoId!, titleController.text, descriptionController.text,
-        genresSelected, instrumentsSelected,User().musicianFromUser());
+        genresSelected, instrumentsSelected,User().musicianFromUser(),[]);
 
     return await collabService.createCollab(collab);
   }

@@ -165,7 +165,7 @@ class CollabFeedController extends GetxController {
               CustomButton(
                 label: "Elegir video respuesta",
                 onTap: () => Get.to(VideoScreen(filteredCollabs[index].videoId,
-                selectedVideo.id!.videoId!,filteredCollabs[index].id)),
+                selectedVideo.id!.videoId!,filteredCollabs[index].id,true)),
               )
             ],
           ),

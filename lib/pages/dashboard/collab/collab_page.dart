@@ -2,6 +2,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:vangelis/helpers/custom_text.dart';
+import 'package:vangelis/pages/dashboard/collab/collabFeed/collabFeed_page.dart';
+import 'package:vangelis/pages/dashboard/collab/collabSearch/collabSearch_page.dart';
+import 'package:vangelis/pages/dashboard/collab/collabUser/collabUser_page.dart';
 import 'package:vangelis/pages/dashboard/collab/createCollab/create_collab_page.dart';
 import 'package:vangelis/pages/dashboard/search/search_controller.dart';
 import 'package:flutter/cupertino.dart';
@@ -36,50 +40,39 @@ class _CollabScreenState extends State<CollabScreen> {
     Size size = MediaQuery.of(context).size;
     _ctrl.openContext();
 
-    return Obx(() => Scaffold(
-        backgroundColor: themeConfig!.whiteBlackColor,
-        body: SizedBox(
-          height: 1000.h,
-          child: Column(
-            children: [
-              SizedBox(
-                height: 100.h,
-                child: BottomNavigationBar(
-                  items: <BottomNavigationBarItem>[
-                    BottomNavigationBarItem(
-                      icon: const Icon(Icons.manage_search),
-                      label: "Buscar collabs",
+    return DefaultTabController(
+        length: 3,
+        child: Scaffold(
+          backgroundColor: themeConfig!.whiteBlackColor,
+          appBar: AppBar(
+            backgroundColor: greenLight,
+            flexibleSpace: Column(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                TabBar(
+                  indicatorColor: Colors.black,
+                  tabs: [
+                    Tab(
+                      text: 'Bucar Collabs',
                     ),
-                    BottomNavigationBarItem(
-                      icon: const Icon(Icons.contacts),
-                      label: "Feed",
+                    Tab(
+                      text: 'Feed',
                     ),
-                    BottomNavigationBarItem(
-                      icon: const Icon(Icons.account_circle_outlined),
-                      label: "Mis collabs",
+                    Tab(
+                      text: 'Mis Collabs',
                     ),
                   ],
-                  selectedLabelStyle: const TextStyle(fontFamily: regularFont),
-                  unselectedLabelStyle:
-                      const TextStyle(fontFamily: regularFont),
-                  selectedItemColor: themeConfig!.blueColor,
-                  backgroundColor: themeConfig!.whiteBlackColor,
-                  currentIndex: _ctrl.currentButtonIndex.value,
-                  onTap: (value) {
-                    _ctrl.currentButtonIndex.value = value;
-                  },
-                ),
-              ),
-              SizedBox(
-                height: 900.h,
-                child: _ctrl.bodies.isNotEmpty
-                    ? _ctrl.bodies[_ctrl.currentButtonIndex.value]
-                    : const Center(
-                        child: CircularProgressIndicator(),
-                      ),
-              )
+                )
+              ],
+            ),
+          ),
+          body: TabBarView(
+            children: [
+              CollabSearchScreen(),
+              CollabFeedScreen(),
+              CollabUserScreen(),
             ],
           ),
-        )));
+        ));
   }
 }
