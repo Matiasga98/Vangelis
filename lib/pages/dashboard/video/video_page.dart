@@ -6,7 +6,9 @@ import 'package:flutter_youtube_downloader/flutter_youtube_downloader.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:faker/faker.dart';
+import 'package:objectbox/internal.dart';
 import 'package:vangelis/helpers/custom_button.dart';
+import 'package:vangelis/helpers/dialog_buttons.dart';
 import 'package:vangelis/model/collab_response.dart';
 import 'package:vangelis/util/constants.dart';
 import 'package:vangelis/util/enums.dart';
@@ -20,11 +22,16 @@ class VideoScreen extends StatefulWidget {
   String requestVideoId;
   String responseVideoId;
   bool createView;
-  VideoScreen(this.requestVideoId, this.responseVideoId, this.originalCollabId, this.createView);
+  int? responseId;
+  double startTime;
+
+  VideoScreen(this.requestVideoId, this.responseVideoId, this.originalCollabId,
+      this.createView,
+      [this.responseId, this.startTime = 0.0]);
 
   @override
-  State<VideoScreen> createState() =>
-      _VideoScreenState(requestVideoId, responseVideoId, originalCollabId,createView);
+  State<VideoScreen> createState() => _VideoScreenState(requestVideoId,
+      responseVideoId, originalCollabId, createView, responseId);
 }
 
 class _VideoScreenState extends State<VideoScreen> {
@@ -32,8 +39,11 @@ class _VideoScreenState extends State<VideoScreen> {
   String requestVideoId;
   String responseVideoId;
   bool createView;
-  _VideoScreenState(
-      this.requestVideoId, this.responseVideoId, this.originalCollabId,this.createView);
+  int? responseId;
+  double startTime;
+  _VideoScreenState(this.requestVideoId, this.responseVideoId,
+      this.originalCollabId, this.createView,
+      [this.responseId, this.startTime = 0.0]);
 
   CollabService collabService = Get.find();
   final _ctrl = Get.put(VideoController());
@@ -95,7 +105,7 @@ class _VideoScreenState extends State<VideoScreen> {
 
   @override
   Widget build(BuildContext context) {
-    RxDouble _sliderValue = 0.0.obs;
+    RxDouble _sliderValue = startTime.obs;
     return MaterialApp(
         title: 'Video Demo',
         home: Scaffold(
@@ -149,87 +159,106 @@ class _VideoScreenState extends State<VideoScreen> {
                                     isPlaying.value = true;
                                   },
                                   icon: Icon(Icons.refresh)),
-                              createView?
-                              IconButton(
-                                  onPressed: () {
-                                    if (_sliderValue.value < 20.0) {
-                                      _sliderValue.value += 0.05;
-                                      String stringValue =
-                                          _sliderValue.value.toStringAsFixed(3);
-                                      _sliderValue.value =
-                                          double.parse(stringValue);
-                                    }
-                                  },
-                                  icon: Icon(Icons.add)):Container(),
-                              createView?
-                              IconButton(
-                                  onPressed: () {
-                                    if (_sliderValue.value > 0) {
-                                      _sliderValue.value -= 0.05;
-                                      String stringValue =
-                                          _sliderValue.value.toStringAsFixed(3);
-                                      _sliderValue.value =
-                                          double.parse(stringValue);
-                                    }
-                                  },
-                                  icon: Icon(Icons.remove)):Container()
+                              createView
+                                  ? IconButton(
+                                      onPressed: () {
+                                        if (_sliderValue.value < 20.0) {
+                                          _sliderValue.value += 0.05;
+                                          String stringValue = _sliderValue
+                                              .value
+                                              .toStringAsFixed(3);
+                                          _sliderValue.value =
+                                              double.parse(stringValue);
+                                        }
+                                      },
+                                      icon: Icon(Icons.add))
+                                  : Container(),
+                              createView
+                                  ? IconButton(
+                                      onPressed: () {
+                                        if (_sliderValue.value > 0) {
+                                          _sliderValue.value -= 0.05;
+                                          String stringValue = _sliderValue
+                                              .value
+                                              .toStringAsFixed(3);
+                                          _sliderValue.value =
+                                              double.parse(stringValue);
+                                        }
+                                      },
+                                      icon: Icon(Icons.remove))
+                                  : Container()
                             ],
                           ),
-                          createView?Row(
-                            children: [
-                              Container(
-                                width: 20.w,
-                              ),
-                              Container(
-                                width: 80.w,
-                                child: Text(_sliderValue.toString()),
-                              ),
-                              Expanded(
-                                  child: Slider(
-                                value: _sliderValue.value,
-                                min: 0.0,
-                                max: 20.0,
-                                divisions: 200,
-                                activeColor: Colors.green,
-                                inactiveColor: Colors.orange,
-                                label: 'Set start value',
-                                onChanged: (double newValue) {
-                                  String stringValue =
-                                      newValue.toStringAsFixed(2);
-                                  _sliderValue.value =
-                                      double.parse(stringValue);
-                                },
-                              )),
-                            ],
-                          ):Container(),
-                          createView?CustomButton(
-                              label: "Crear collab",
-                              onTap: () {
-                                var response = CollabResponse(
-                                    0,
-                                    responseVideoId,
-                                    [], //todo: agregar generos e instrumentos
-                                    [],
-                                    _sliderValue.value,
-                                    User().musicianFromUser()
-                                );
-                                collabService
-                                    .createCollabResponse(
-                                        response, originalCollabId)
-                                    .then((value) {
-                                  if (value) {
-                                    Get.back();
-                                    showMsg(
-                                        message:
-                                            "Respuesta creada exitosamente",
-                                        type: MessageType.success);
-                                  } else {
-                                    showMsg(
-                                        message: "error creando respuesta",
-                                        type: MessageType.error);
-                                  }
-                                });
-                              }):Container(),
+                          createView
+                              ? Row(
+                                  children: [
+                                    Container(
+                                      width: 20.w,
+                                    ),
+                                    Container(
+                                      width: 80.w,
+                                      child: Text(_sliderValue.toString()),
+                                    ),
+                                    Expanded(
+                                        child: Slider(
+                                      value: _sliderValue.value,
+                                      min: 0.0,
+                                      max: 20.0,
+                                      divisions: 200,
+                                      activeColor: Colors.green,
+                                      inactiveColor: Colors.orange,
+                                      label: 'Set start value',
+                                      onChanged: (double newValue) {
+                                        String stringValue =
+                                            newValue.toStringAsFixed(2);
+                                        _sliderValue.value =
+                                            double.parse(stringValue);
+                                      },
+                                    )),
+                                  ],
+                                )
+                              : Container(),
+                          createView
+                              ? CustomButton(
+                                  label: "Crear collab",
+                                  onTap: () {
+                                    var response = CollabResponse(
+                                        0,
+                                        responseVideoId,
+                                        [], //todo: agregar generos e instrumentos
+                                        [],
+                                        _sliderValue.value,
+                                        User().musicianFromUser(),
+                                        false);
+                                    collabService
+                                        .createCollabResponse(
+                                            response, originalCollabId)
+                                        .then((value) {
+                                      if (value) {
+                                        Get.back();
+                                        showMsg(
+                                            message:
+                                                "Respuesta creada exitosamente",
+                                            type: MessageType.success);
+                                      } else {
+                                        showMsg(
+                                            message: "error creando respuesta",
+                                            type: MessageType.error);
+                                      }
+                                    });
+                                  })
+                              : DialogButtons(
+                            alignment: MainAxisAlignment.spaceEvenly,
+                                  onOk: () => {
+                                        collabService
+                                            .chooseCollabResponseWinner(
+                                                originalCollabId, responseId!)
+                                      },
+                                  onCancel: () => {Get.back()},
+                                  okButtonText: "Elegir como ganadora",
+                                  cancelButtonText: "Volver atras"),
+
+
                         ],
                       )),
           ),

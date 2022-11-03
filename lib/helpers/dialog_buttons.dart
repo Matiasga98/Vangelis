@@ -9,12 +9,13 @@ import 'custom_text.dart';
 
 
 class DialogButtons extends StatelessWidget {
-  const DialogButtons({
+  DialogButtons({
     Key? key,
     required this.onOk,
     required this.onCancel,
     required this.okButtonText,
     required this.cancelButtonText,
+    this.alignment = MainAxisAlignment.end,
   }) : super(key: key);
 
 
@@ -22,11 +23,12 @@ class DialogButtons extends StatelessWidget {
   final void Function() onCancel;
   final String okButtonText;
   final String cancelButtonText;
+  MainAxisAlignment alignment;
   @override
   Widget build(BuildContext context) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
-      mainAxisAlignment: MainAxisAlignment.end,
+      mainAxisAlignment: alignment,
       children: [
         SecondaryButton(onPress: onCancel, buttonText: cancelButtonText),
 

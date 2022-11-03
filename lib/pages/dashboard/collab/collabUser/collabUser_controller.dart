@@ -119,8 +119,11 @@ class CollabUserController extends GetxController {
               itemBuilder: (context, index2) =>
                   GestureDetector(
                     onTap: () => {
+
                       Get.to(VideoScreen(filteredCollabs[index].videoId,
-                          filteredCollabs[index].responses[index2].videoId,filteredCollabs[index].id,false)),
+                          filteredCollabs[index].responses[index2].videoId,filteredCollabs[index].id,false,
+                          filteredCollabs[index].responses[index2].id, filteredCollabs[index].responses[index2].startTime
+                      )),
                     },
                     child: responseCards[index2],
                   )

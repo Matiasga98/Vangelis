@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:googleapis/sheets/v4.dart';
 import 'package:vangelis/model/collab.dart';
 import 'package:vangelis/model/collab_response.dart';
 import 'base_api_service.dart';
@@ -76,6 +77,24 @@ class CollabService extends BaseApiService {
     try{
       var response = await post('$_baseCollabUrl/$collabId',data);
       if (BaseApiService.isSuccessful(response)) {
+        return true;
+      }
+    }
+    catch(e){
+      var a = e;
+    }
+    return false;
+  }
+
+  @override
+  Future<bool> chooseCollabResponseWinner(int collabId, int responseId) async {
+    var data = {
+      'collabId' : collabId,
+      'responseId' : responseId
+    };
+    try{
+      var response = await post('$_baseCollabUrl/winner',data);
+      if( BaseApiService.isSuccessful(response)){
         return true;
       }
     }

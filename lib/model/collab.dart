@@ -17,15 +17,17 @@ class Collab {
   List<Genre> genres;
   List<Instrument> instruments;
   List<CollabResponse> responses;
+  bool isOpen;
 
   Collab(this.id, this.videoId, this.title, this.description, this.genres,
-      this.instruments, this.musician, this.responses);
+      this.instruments, this.musician, this.responses, this.isOpen);
 
   Collab.fromJson(Map<String, dynamic> json)
       : id = json['id'],
         videoId = json['media']["mediaUrl"],
         description = json['description'],
         title = json['title'],
+        isOpen = json['open'],
         musician = Musician.fromJson(json['user']),
         responses = json['responses'] != null
             ? [
