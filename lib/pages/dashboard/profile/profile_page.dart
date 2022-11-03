@@ -378,30 +378,22 @@ class _ProfilePageState extends State<ProfilePage>
   }
 
   Widget ViewCollabs() {
-    return GridView.builder(
-      scrollDirection: Axis.vertical,
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          mainAxisExtent: 250.0, crossAxisCount: 3),
-      itemBuilder: (context, index) {
-        return Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Container(
-              decoration: BoxDecoration(
-                color: Colors.black,
-                borderRadius: BorderRadius.circular(20.0),
-                image: DecorationImage(
-                  image: _ctrl.userPhotos[index].imageFromBase64String().image,
-                  fit: BoxFit.cover,
-                ),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.only(
-                    left: 37.0, right: 37.0, top: 185.0, bottom: 15.0),
-              ),
-            ));
-      },
-      itemCount: _ctrl.userPhotos.length,
-    );
+    //Todo: Reemplazar con collabs cuando esté la opción para cerrar colabo
+    return Center(
+        child: GridView.builder(
+          scrollDirection: Axis.vertical,
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              mainAxisExtent: 250.0, crossAxisCount: 3),
+          itemBuilder: (context, index) {
+            if (index < _ctrl.selectedUserVideos.length) {
+              return ShowVideoRectangle(index);
+            } else if (_ctrl.isCurrentUser.value) {
+              return AddVideoOption();
+            }
+            return Container();
+          },
+          itemCount: _ctrl.selectedUserVideos.length + 1,
+        ));
   }
 
   Widget ViewVideos() {
