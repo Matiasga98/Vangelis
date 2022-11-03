@@ -252,7 +252,7 @@ class _VideoScreenState extends State<VideoScreen> {
                                   onOk: () => {
                                         collabService
                                             .chooseCollabResponseWinner(
-                                                originalCollabId, responseId!)
+                                                originalCollabId, responseId!).then((value) => {Get.back()})
                                       },
                                   onCancel: () => {Get.back()},
                                   okButtonText: "Elegir como ganadora",
