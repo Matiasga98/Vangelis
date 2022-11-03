@@ -11,6 +11,7 @@ import '../config/config.dart';
 import '../mixins/updatable_entity.dart';
 import '../model/Genre.dart';
 import '../model/Instrument.dart';
+import '../model/MediaObject.dart';
 import 'jwt.dart';
 
 @Entity()
@@ -20,8 +21,8 @@ class User with UpdatableEntity {
   var id;
   var userAvatar;
   var bio;
-  List<String> userPhotos = [];
-  List<String> userVideos = [];
+  List<MediaObject> userPhotos = [];
+  List<MediaObject> userVideos = [];
   List<Genre> favoriteGenres = [];
   List<Instrument> instruments = [];
   List<int> favoriteUsers = [];
@@ -52,7 +53,10 @@ class User with UpdatableEntity {
       _singleton.email = json['email'] ?? _singleton.email;
       _singleton.phoneNumber = json['phoneNumber'] ?? _singleton.phoneNumber;
       _singleton.userVideos = json["videos"] != null
-          ? [for (var video in json['videos']) video['mediaUrl']]
+          ? [
+              for (var video in json['videos'])
+                MediaObject.videoFromJson(video)
+            ]
           : [];
       _singleton.instruments = json['instruments'] != null
           ? [
@@ -72,7 +76,10 @@ class User with UpdatableEntity {
       _singleton.favoriteUsers;
 
       _singleton.userPhotos = json["photos"] != null
-          ? [for (var photo in json['photos']) photo['image']]
+          ? [
+              for (var photo in json['photos'])
+                MediaObject.imageFromJson(photo)
+            ]
           : [];
 
       _singleton.isDark = Get.isDarkMode;
@@ -94,7 +101,7 @@ class User with UpdatableEntity {
   List<Image> photosFromUserBase64String() {
     List<Image> photosImages = <Image>[];
     for (var photo in userPhotos) {
-      photosImages.add(Image.memory(base64Decode(photo)));
+      photosImages.add(photo.imageFromBase64String());
     }
     return photosImages;
   }
@@ -132,10 +139,16 @@ class User with UpdatableEntity {
         favoriteUsers =
             json["favorite_users"].cast<int>() ?? _singleton.favoriteUsers,
         userPhotos = json["photos"] != null
-            ? [for (var photo in json['photos']) photo['image']]
+            ? [
+                for (var photo in json['photos'])
+                  MediaObject.imageFromJson(photo)
+              ]
             : [],
         userVideos = json["videos"] != null
-            ? [for (var video in json['videos']) video['mediaUrl']]
+            ? [
+                for (var video in json['videos'])
+                  MediaObject.videoFromJson(video)
+              ]
             : [];
 
   Map<String, dynamic> toJson() => {

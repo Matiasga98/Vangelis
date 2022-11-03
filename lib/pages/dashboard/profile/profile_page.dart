@@ -390,7 +390,7 @@ class _ProfilePageState extends State<ProfilePage>
                 color: Colors.black,
                 borderRadius: BorderRadius.circular(20.0),
                 image: DecorationImage(
-                  image: _ctrl.userPhotos[index].image,
+                  image: _ctrl.userPhotos[index].imageFromBase64String().image,
                   fit: BoxFit.cover,
                 ),
               ),
@@ -398,8 +398,7 @@ class _ProfilePageState extends State<ProfilePage>
                 padding: const EdgeInsets.only(
                     left: 37.0, right: 37.0, top: 185.0, bottom: 15.0),
               ),
-            )
-        );
+            ));
       },
       itemCount: _ctrl.userPhotos.length,
     );
@@ -408,154 +407,265 @@ class _ProfilePageState extends State<ProfilePage>
   Widget ViewVideos() {
     return Center(
         child: GridView.builder(
-          scrollDirection: Axis.vertical,
-          gridDelegate:
-          SliverGridDelegateWithFixedCrossAxisCount(
-              mainAxisExtent: 250.0, crossAxisCount: 3),
-          itemBuilder: (context, index) {
-            if (index < _ctrl.selectedUserVideos.length) {
-              return Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: GestureDetector(
-                  onTap: () {
-                    _ctrl
-                        .loadVideo(index)
-                        .then((value) => showDialog(
-                      context: context,
-                      builder: (context) {
-                        return _ctrl.openVideo(index);
-                      },
-                    ));
+      scrollDirection: Axis.vertical,
+      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          mainAxisExtent: 250.0, crossAxisCount: 3),
+      itemBuilder: (context, index) {
+        if (index < _ctrl.selectedUserVideos.length) {
+          return ShowVideoRectangle(index);
+        } else if (_ctrl.isCurrentUser.value) {
+          return AddVideoOption();
+        }
+        return Container();
+      },
+      itemCount: _ctrl.selectedUserVideos.length + 1,
+    ));
+  }
+
+  Widget ShowVideoRectangle(index) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: GestureDetector(
+        onTap: () {
+          _ctrl.loadVideo(index).then((value) => showDialog(
+                context: context,
+                builder: (context) {
+                  return _ctrl.openVideo(index);
+                },
+              ));
+        },
+        child: Stack(children: [
+          VideoThumbnail(index),
+          RemoveVideoOption(index),
+        ]),
+      ),
+    );
+  }
+
+  Widget RemoveVideoOption(int index) {
+    return _ctrl.isCurrentUser.value
+        ? Positioned(
+            top: -14,
+            right: -14,
+            child: IconButton(
+              onPressed: () {
+                showDialog(
+                  context: context,
+                  builder: (context) {
+                    return AlertDialog(
+                      title: const Text('Eliminar Video'),
+                      content: CustomText(
+                          "¿Está seguro de que desea eliminar este video?"),
+                      actions: [
+                        DialogButtons(
+                            onCancel: () => {
+                                  Navigator.pop(context, false),
+                                },
+                            onOk: () => {
+                                  _ctrl.removeVideo(
+                                      _ctrl.selectedUserVideos[index].id),
+                                  Navigator.pop(context, true)
+                                },
+                            okButtonText: "Aceptar",
+                            cancelButtonText: "Cancelar"),
+                      ],
+                    );
                   },
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: Colors.black,
-                      borderRadius:
-                      BorderRadius.circular(20.0),
-                      image: DecorationImage(
-                        image: NetworkImage('https://img.youtube.com/vi/${_ctrl.selectedUserVideos[index]}/0.jpg'),
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                  ),
-                ),
-              );
-            } else if (_ctrl.isCurrentUser.value) {
-              return Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: GestureDetector(
-                  onTap: () {
-                    _ctrl
-                        .openVideos()
-                        .then((value) => showDialog(
-                        context: context,
-                        builder: (context) {
-                          return AlertDialog(
-                              title: Text(
-                                  'Select a video to add to profile'),
-                              content: Obx(() =>
-                                  Container(
-                                      height: 500.h,
-                                      width: 500.w,
-                                      child: ListView
-                                          .builder(
-                                          scrollDirection:
-                                          Axis
-                                              .horizontal,
-                                          itemCount: _ctrl
-                                              .userVideos
-                                              .length,
-                                          itemBuilder:
-                                              (context,
-                                              index) {
-                                            return GestureDetector(
-                                                onTap: () =>
-                                                    _ctrl.addVideoToSelected(index),
-                                                child: Padding(
-                                                    padding: const EdgeInsets.all(60.0),
-                                                    child: Container(
-                                                      decoration: BoxDecoration(
-                                                        color: Colors.black,
-                                                        borderRadius: BorderRadius.circular(20.0),
-                                                        image: DecorationImage(
-                                                          image: NetworkImage(_ctrl.userVideos[index].snippet!.thumbnails!.high!.url!),
-                                                          fit: BoxFit.cover,
-                                                        ),
-                                                      ),
-                                                      child: Padding(
-                                                        padding: const EdgeInsets.only(left: 100.0, right: 100.0, top: 1.0, bottom: 1.0),
-                                                      ),
-                                                    )));
-                                          }))));
-                        }));
-                  },
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      border: Border.all(color: Colors.black),
-                      borderRadius:
-                      BorderRadius.circular(20.0),
-                    ),
-                    child: Icon(Icons.add),
-                  ),
-                ),
-              );
-            } else {
-              return Container();
-            }
-          },
-          itemCount: _ctrl.selectedUserVideos.length + 1,
-        ));
+                );
+              },
+              icon: const Icon(
+                Icons.cancel_rounded,
+                color: Colors.red,
+              ),
+            ),
+          )
+        : const SizedBox();
+  }
+
+  Widget VideoThumbnail(int index) {
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.black,
+        borderRadius: BorderRadius.circular(20.0),
+        image: DecorationImage(
+          image: NetworkImage(
+              'https://img.youtube.com/vi/${_ctrl.selectedUserVideos[index].media}/0.jpg'),
+          fit: BoxFit.cover,
+        ),
+      ),
+    );
+  }
+
+  Widget AddVideoOption() {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: GestureDetector(
+        onTap: () {
+          _ctrl.openVideos().then((value) => showDialog(
+              context: context,
+              builder: (context) {
+                return AlertDialog(
+                    title: Text('Select a video to add to profile'),
+                    content: Obx(() => Container(
+                        height: 500.h,
+                        width: 500.w,
+                        child: ListView.builder(
+                            scrollDirection: Axis.horizontal,
+                            itemCount: _ctrl.userVideos.length,
+                            itemBuilder: (context, index) {
+                              return GestureDetector(
+                                  onTap: () => _ctrl.addVideoToSelected(index),
+                                  child: Padding(
+                                      padding: const EdgeInsets.all(60.0),
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          color: Colors.black,
+                                          borderRadius:
+                                              BorderRadius.circular(20.0),
+                                          image: DecorationImage(
+                                            image: NetworkImage(_ctrl
+                                                .userVideos[index]
+                                                .snippet!
+                                                .thumbnails!
+                                                .high!
+                                                .url!),
+                                            fit: BoxFit.cover,
+                                          ),
+                                        ),
+                                        child: Padding(
+                                          padding: const EdgeInsets.only(
+                                              left: 100.0,
+                                              right: 100.0,
+                                              top: 1.0,
+                                              bottom: 1.0),
+                                        ),
+                                      )));
+                            }))));
+              }));
+        },
+        child: Container(
+          decoration: BoxDecoration(
+            color: Colors.white,
+            border: Border.all(color: Colors.black),
+            borderRadius: BorderRadius.circular(20.0),
+          ),
+          child: Icon(Icons.add),
+        ),
+      ),
+    );
   }
 
   Widget ViewPhotos() {
-    return GridView.builder(
+    return Center(
+      child: GridView.builder(
       scrollDirection: Axis.vertical,
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           mainAxisExtent: 250.0, crossAxisCount: 3),
       itemBuilder: (context, index) {
-        return Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: index < _ctrl.userPhotos.length
-                ? Container(
-                    decoration: BoxDecoration(
-                      color: Colors.black,
-                      borderRadius: BorderRadius.circular(20.0),
-                      image: DecorationImage(
-                        image: _ctrl.userPhotos[index].image,
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.only(
-                          left: 37.0, right: 37.0, top: 185.0, bottom: 15.0),
-                    ),
-                  )
-                : Container(
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      border: Border.all(color: Colors.black),
-                      borderRadius: BorderRadius.circular(20.0),
-                    ),
-                    child: OutlinedButton(
-                      onPressed: () {
-                        UploadPhotoDialog(false);
-                      },
-                      style: OutlinedButton.styleFrom(
-                          side: const BorderSide(
-                            color: Colors.black12,
-                          ),
-                          primary: Colors.blue,
-                          backgroundColor: Colors.white,
-                          shape: const CircleBorder(),
-                          fixedSize: const Size(10.0, 20.0)),
-                      child: const Icon(
-                        Icons.add,
-                      ),
-                    )));
+        if (index < _ctrl.userPhotos.length) {
+          return ShowPhotoRectangle(index);
+        } else if (_ctrl.isCurrentUser.value) {
+          return AddPhotoOption(index);
+        }
+        return Container();
       },
       itemCount: _ctrl.userPhotos.length + 1,
+    ));
+  }
+
+  Widget AddPhotoOption(index) {
+    return Padding(
+        padding: const EdgeInsets.all(8.0),
+    child:
+      Container(
+        decoration: BoxDecoration(
+          color: Colors.white,
+          border: Border.all(color: Colors.black),
+          borderRadius: BorderRadius.circular(20.0),
+        ),
+        child: OutlinedButton(
+          onPressed: () {
+            UploadPhotoDialog(false);
+          },
+          style: OutlinedButton.styleFrom(
+              side: const BorderSide(
+                color: Colors.black12,
+              ),
+              primary: Colors.blue,
+              backgroundColor: Colors.white,
+              shape: const CircleBorder(),
+              fixedSize: const Size(10.0, 20.0)),
+          child: const Icon(
+            Icons.add,
+          ),
+        )));
+  }
+
+  Widget ShowPhotoRectangle(index) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Stack(
+        fit: StackFit.expand,
+          children: [
+        PhotoThumbnail(index),
+        RemovePhotoOption(index),
+      ]),
     );
+  }
+
+  Widget RemovePhotoOption(int index) {
+    return _ctrl.isCurrentUser.value
+        ? Positioned(
+            top: -14,
+            right: -14,
+            child: IconButton(
+              onPressed: () {
+                showDialog(
+                  context: context,
+                  builder: (context) {
+                    return AlertDialog(
+                      title: const Text('Eliminar foto'),
+                      content: CustomText(
+                          "¿Está seguro de que desea eliminar esta foto?"),
+                      actions: [
+                        DialogButtons(
+                            onCancel: () => {
+                                  Navigator.pop(context, false),
+                                },
+                            onOk: () => {
+                                  _ctrl.removePhoto(_ctrl.userPhotos[index].id),
+                                  Navigator.pop(context, true)
+                                },
+                            okButtonText: "Aceptar",
+                            cancelButtonText: "Cancelar"),
+                      ],
+                    );
+                  },
+                );
+              },
+              icon: const Icon(
+                Icons.cancel_rounded,
+                color: Colors.red,
+              ),
+            ),
+          )
+        : const SizedBox();
+  }
+
+  Widget PhotoThumbnail(index) {
+    return Container(
+        decoration: BoxDecoration(
+          color: Colors.black,
+          borderRadius: BorderRadius.circular(20.0),
+          image: DecorationImage(
+            image: _ctrl.userPhotos[index].imageFromBase64String().image,
+            fit: BoxFit.cover,
+          ),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.only(
+              left: 37.0, right: 37.0, top: 185.0, bottom: 15.0),
+        ));
   }
 
   Widget GenerateInstrumentsList() {

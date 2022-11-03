@@ -233,9 +233,25 @@ class UserService extends BaseApiService {
       }
     }
     catch(e){
-      var a = e;
     }
+  }
 
+  @override
+  Future<User?> removePhoto(int id) async {
+    try{
+      var data = {
+        'bio': id,
+      };
+      var url = '$_baseUserUrl/removePhoto';
+      var response = await post(url, data);
+      if(BaseApiService.isSuccessful(response)){
+        var userJson = json.decode(utf8.decode(response.bodyBytes));
+        return User.fromJson(userJson);
+      }
+    }
+    catch(e){
+    }
+    return null;
   }
 
   @override

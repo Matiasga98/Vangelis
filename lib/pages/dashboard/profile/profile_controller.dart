@@ -16,6 +16,7 @@ import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 import '../../../entity/user.dart';
 import '../../../model/Genre.dart';
 import '../../../model/Instrument.dart';
+import '../../../model/MediaObject.dart';
 import '../../../model/collab.dart';
 import '../../../model/musician.dart';
 import '../../../services/collab_service.dart';
@@ -47,8 +48,8 @@ class ProfileController extends GetxController {
   MediaService mediaService = Get.find();
   GoogleService googleService = Get.find();
   RxList<SearchResult> userVideos = <SearchResult>[].obs;
-  RxList<Image> userPhotos = <Image>[].obs;
-  RxList<String> selectedUserVideos = <String>[].obs;
+  RxList<MediaObject> userPhotos = <MediaObject>[].obs;
+  RxList<MediaObject> selectedUserVideos = <MediaObject>[].obs;
   InstrumentService instrumentService = Get.find();
   GenreService genreService = Get.find();
 
@@ -86,7 +87,7 @@ class ProfileController extends GetxController {
     instruments.value = musician.instruments;
     genres.value = musician.favoriteGenres;
     profilePicture.value = musician.imageFromUserBase64String();
-    userPhotos.value = musician.photosFromUserBase64String();
+    userPhotos.value = musician.userPhotos;
     selectedUserVideos.value = musician.userVideos;
     username.value = musician.userName;
     description.value = musician.bio ?? "";
@@ -175,8 +176,15 @@ class ProfileController extends GetxController {
     if(tempPicture != null){
       User? user = await userService.uploadPhoto(tempPicture!);
       if (user != null) {
-        userPhotos.value = user.photosFromUserBase64String();
+        userPhotos.value = user.userPhotos;
       }
+    }
+  }
+
+  Future<void> removePhoto(id) async {
+    User? user = await userService.removePhoto(id);
+    if (user != null) {
+      userPhotos.value = user.userPhotos;
     }
   }
 
@@ -287,13 +295,22 @@ class ProfileController extends GetxController {
 
   Future<void> addVideoToSelected(index) async {
     var urlVideo = userVideos[index].id!.videoId!;
-    selectedUserVideos.add(urlVideo);
-    await mediaService.uploadVideos([urlVideo]);
+    User? user = await mediaService.uploadVideos([urlVideo]);
+    if (user != null) {
+      selectedUserVideos.value = user.userVideos;
+    }
+  }
+
+  Future<void> removeVideo(id) async {
+    User? user = await mediaService.removeVideo(id);
+    if (user != null) {
+      selectedUserVideos.value = user.userVideos;
+    }
   }
 
   Future<void> loadVideo(int index) async {
     _videoController = YoutubePlayerController(
-      initialVideoId: selectedUserVideos[index],
+      initialVideoId: selectedUserVideos[index].media,
       flags: YoutubePlayerFlags(
         autoPlay: true,
         mute: false,

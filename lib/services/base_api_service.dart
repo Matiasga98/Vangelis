@@ -153,11 +153,22 @@ abstract class BaseApiService extends GetxService {
   }
 
   @protected
-  Future<http.Response> delete(String url, Object body) async {
+  Future<http.Response> deleteWithBody(String url, Object body) async {
     await _refreshTokenIfNeeded();
     return http
         .delete(_getParsedUri(url),
             headers: getCompleteHeaders(), body: json.encode(body))
+        .timeout(Duration(seconds: configuration.getRequestTimeout()))
+        .onError(
+            (error, stackTrace) => Future.value(http.Response("Error", 500)));
+  }
+
+  @protected
+  Future<http.Response> delete(String url) async {
+    await _refreshTokenIfNeeded();
+    return http
+        .delete(_getParsedUri(url),
+        headers: getCompleteHeaders())
         .timeout(Duration(seconds: configuration.getRequestTimeout()))
         .onError(
             (error, stackTrace) => Future.value(http.Response("Error", 500)));
@@ -174,33 +185,6 @@ abstract class BaseApiService extends GetxService {
         .onError(
             (error, stackTrace) => Future.value(http.Response("Error", 500)));
   }
-
-  /*@protected
-  Future<File?> downloadFile(String url,
-      {int? learningActivityId, String? fileName, File? file}) async {
-    final DashboardController dashboardController = Get.find();
-    await _refreshTokenIfNeeded();
-    var index = 0;
-    if (learningActivityId != null) {
-      index = dashboardController.allLearningActivities
-          .indexWhere((activity) => activity.learningActivityId == learningActivityId);
-    }
-    final directory = await getApplicationDocumentsDirectory();
-    String path = '${directory.path}/downloads';
-    await FlutterDownloader.enqueue(
-      url: _getParsedUri(url).toString(),
-      fileName: file?.path.split("/").last,
-      savedDir: path,
-      showNotification: false,
-      headers: getCompleteHeaders(),
-      openFileFromNotification: false,
-      requiresStorageNotLow: false,
-    ).then((value) async {
-      dashboardController.allLearningActivities[index].pdfDownloadId.value = value!;
-    });
-
-    return file;
-  }*/
 
   Future<Uint8List> readPdf(String url,
       {int? learningActivityId, String? fileName, File? file}) async {
@@ -270,30 +254,6 @@ abstract class BaseApiService extends GetxService {
     return file;
   }
 
-  /*Future<File> mediaDownload(
-      String url, File file, MediaType type, int learningActivityId) async {
-    final DashboardController dashboardController = Get.find();
-    final index = dashboardController.allLearningActivities
-        .indexWhere((activity) => activity.learningActivityId == learningActivityId);
-
-    final directory = await getApplicationDocumentsDirectory();
-    String path = '${directory.path}/downloads';
-    FlutterDownloader.enqueue(
-      url: url,
-      fileName: file.path.split("/").last,
-      savedDir: path,
-      showNotification: false,
-      openFileFromNotification: false,
-      requiresStorageNotLow: false,
-    ).then((value) async {
-      if (type == MediaType.video) {
-        dashboardController.allLearningActivities[index].videoDownloadId.value = value!;
-      } else {
-        dashboardController.allLearningActivities[index].audioDownloadId.value = value!;
-      }
-    });
-    return file;
-  }*/
 
   @protected
   Map<String, String> getCompleteHeaders([Map<String, String>? headers]) {

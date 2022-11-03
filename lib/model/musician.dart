@@ -1,17 +1,16 @@
 import 'dart:convert';
-import 'dart:typed_data';
 import 'package:flutter/widgets.dart';
-import 'package:vangelis/util/constants.dart';
 
 import 'Genre.dart';
 import 'Instrument.dart';
+import 'MediaObject.dart';
 
 class Musician {
   var id;
   var userAvatar;
   var bio;
-  List<String> userPhotos = [];
-  List<String> userVideos = [];
+  List<MediaObject> userPhotos = [];
+  List<MediaObject> userVideos = [];
   List<Genre> favoriteGenres = [];
   List<Instrument> instruments = [];
   var userName = '';
@@ -24,12 +23,15 @@ class Musician {
         bio = json['bio'],
         userAvatar = json['userAvatar'],
         userVideos = json["videos"] != null
-            ? [for (var video in json['videos']) video['mediaUrl']]
+            ? [
+                for (var video in json['videos'])
+                  MediaObject.videoFromJson(video)
+              ]
             : [],
         userPhotos = json["photos"] != null
             ? [
                 for (var photo in json['photos'])
-                  photo['image']
+                  MediaObject.imageFromJson(photo)
               ]
             : [],
         instruments = json['instruments'] != null
@@ -67,7 +69,7 @@ class Musician {
   List<Image> photosFromUserBase64String() {
     List<Image> photosImages = <Image>[];
     for (var photo in userPhotos) {
-      photosImages.add(Image.memory(base64Decode(photo)));
+      photosImages.add(photo.imageFromBase64String());
     }
     return photosImages;
   }
