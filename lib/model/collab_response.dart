@@ -5,6 +5,7 @@ import 'package:vangelis/util/constants.dart';
 
 import 'Genre.dart';
 import 'Instrument.dart';
+import 'musician.dart';
 
 
 class CollabResponse{
@@ -14,16 +15,17 @@ class CollabResponse{
 
   List<Genre> genres;
   List<Instrument> instruments;
+  Musician musician;
 
 
 
-
-  CollabResponse(this.id, this.videoId,this.genres, this.instruments,this.startTime);
+  CollabResponse(this.id, this.videoId,this.genres, this.instruments,this.startTime, this.musician);
 
   CollabResponse.fromJson(Map<String, dynamic> json)
       : id = json['id'],
-        videoId = json['videoId'],
+        videoId = json['media']["mediaUrl"],
         startTime = json['startTime'],
+        musician = Musician.fromJson(json['user']),
         instruments = json['instruments'] != null
             ? [
           for (var instrument in json['instruments'])

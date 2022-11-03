@@ -200,77 +200,7 @@ class CollabController extends GetxController {
     selectedVideo = SearchResult();
   }
 
-  Widget openVideo(int index) {
-    RxDouble _sliderValue = 0.0.obs;
-    RxBool isPlaying = true.obs;
-    return AlertDialog(
-        title: Text('video'),
-        content: Obx(() => Container(
-          height: 800.h,
-          child: Column(
-            children: [
-              YoutubePlayer(
-                controller: _videoController,
-                showVideoProgressIndicator: true,
-                onReady: () {
-                  _videoController.addListener(listener);
-                },
-              ),
-              Row(
-                children: [
-                  IconButton(
-                      onPressed: () {
-                        if (isPlaying.value) {
-                          _videoController.pause();
-                          isPlaying.value = false;
-                        } else {
-                          _videoController.play();
-                          isPlaying.value = true;
-                        }
-                      },
-                      icon: Icon(
-                          isPlaying.value ? Icons.pause : Icons.play_arrow)),
-                  IconButton(
-                      onPressed: () {
-                        var miliseconds =
-                        ((_sliderValue.value) * 1000).truncate();
-                        _videoController
-                            .seekTo(Duration(milliseconds: miliseconds));
-                        isPlaying.value = true;
-                      },
-                      icon: Icon(Icons.refresh)),
-                  IconButton(
-                      onPressed: () {
-                        if (_sliderValue.value < 20.0) {
-                          _sliderValue.value += 0.1;
-                          String stringValue =
-                          _sliderValue.value.toStringAsFixed(2);
-                          _sliderValue.value = double.parse(stringValue);
-                        }
-                      },
-                      icon: Icon(Icons.add)),
-                  IconButton(
-                      onPressed: () {
-                        if (_sliderValue.value > 0) {
-                          _sliderValue.value -= 0.1;
-                          String stringValue =
-                          _sliderValue.value.toStringAsFixed(2);
-                          _sliderValue.value = double.parse(stringValue);
-                        }
-                      },
-                      icon: Icon(Icons.remove))
-                ],
-              ),
-              showVideoList(),
-              CustomButton(
-                label: "Elegir video respuesta",
-                onTap: () => Get.to(VideoScreen(filteredCollabs[index].videoId,
-                selectedVideo.id!.videoId!,filteredCollabs[index].id)),
-              )
-            ],
-          ),
-        )));
-  }
+
 
   SearchResult selectedVideo = SearchResult();
 

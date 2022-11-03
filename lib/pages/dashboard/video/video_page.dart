@@ -12,25 +12,28 @@ import 'package:vangelis/util/constants.dart';
 import 'package:vangelis/util/enums.dart';
 import 'package:video_player/video_player.dart';
 import 'package:vangelis/services/collab_service.dart';
+import '../../../entity/user.dart';
 import 'video_controller.dart';
 
 class VideoScreen extends StatefulWidget {
   int originalCollabId;
   String requestVideoId;
   String responseVideoId;
-  VideoScreen(this.requestVideoId, this.responseVideoId, this.originalCollabId);
+  bool createView;
+  VideoScreen(this.requestVideoId, this.responseVideoId, this.originalCollabId, this.createView);
 
   @override
   State<VideoScreen> createState() =>
-      _VideoScreenState(requestVideoId, responseVideoId, originalCollabId);
+      _VideoScreenState(requestVideoId, responseVideoId, originalCollabId,createView);
 }
 
 class _VideoScreenState extends State<VideoScreen> {
   int originalCollabId;
   String requestVideoId;
   String responseVideoId;
+  bool createView;
   _VideoScreenState(
-      this.requestVideoId, this.responseVideoId, this.originalCollabId);
+      this.requestVideoId, this.responseVideoId, this.originalCollabId,this.createView);
 
   CollabService collabService = Get.find();
   final _ctrl = Get.put(VideoController());
@@ -146,6 +149,7 @@ class _VideoScreenState extends State<VideoScreen> {
                                     isPlaying.value = true;
                                   },
                                   icon: Icon(Icons.refresh)),
+                              createView?
                               IconButton(
                                   onPressed: () {
                                     if (_sliderValue.value < 20.0) {
@@ -156,7 +160,8 @@ class _VideoScreenState extends State<VideoScreen> {
                                           double.parse(stringValue);
                                     }
                                   },
-                                  icon: Icon(Icons.add)),
+                                  icon: Icon(Icons.add)):Container(),
+                              createView?
                               IconButton(
                                   onPressed: () {
                                     if (_sliderValue.value > 0) {
@@ -167,10 +172,10 @@ class _VideoScreenState extends State<VideoScreen> {
                                           double.parse(stringValue);
                                     }
                                   },
-                                  icon: Icon(Icons.remove))
+                                  icon: Icon(Icons.remove)):Container()
                             ],
                           ),
-                          Row(
+                          createView?Row(
                             children: [
                               Container(
                                 width: 20.w,
@@ -196,8 +201,8 @@ class _VideoScreenState extends State<VideoScreen> {
                                 },
                               )),
                             ],
-                          ),
-                          CustomButton(
+                          ):Container(),
+                          createView?CustomButton(
                               label: "Crear collab",
                               onTap: () {
                                 var response = CollabResponse(
@@ -205,7 +210,9 @@ class _VideoScreenState extends State<VideoScreen> {
                                     responseVideoId,
                                     [], //todo: agregar generos e instrumentos
                                     [],
-                                    _sliderValue.value);
+                                    _sliderValue.value,
+                                    User().musicianFromUser()
+                                );
                                 collabService
                                     .createCollabResponse(
                                         response, originalCollabId)
@@ -222,7 +229,7 @@ class _VideoScreenState extends State<VideoScreen> {
                                         type: MessageType.error);
                                   }
                                 });
-                              }),
+                              }):Container(),
                         ],
                       )),
           ),

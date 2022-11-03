@@ -32,7 +32,6 @@ class _CollabSearchScreenState extends State<CollabSearchScreen> {
   Widget build(BuildContext context) {
     ThemeService().init(context);
     Size size = MediaQuery.of(context).size;
-    _ctrl.openContext();
 
     return Obx(() => Scaffold(
         backgroundColor: themeConfig!.whiteBlackColor,
@@ -41,22 +40,31 @@ class _CollabSearchScreenState extends State<CollabSearchScreen> {
           child: Column(
             children: [
               _ctrl.searchState.isTrue
-                  ? ListView.builder(
-                shrinkWrap: true,
-                primary: false,
-                itemCount: _ctrl.filteredCollabCards.length,
-                itemBuilder: (context, index) =>
-                GestureDetector(
-                  onTap: () => {
-                    _ctrl.loadVideo(index).then((value) =>
-                    showDialog(context: context, builder: (context){
-                      return _ctrl.openVideo(index);
-                    })).then((value) => _ctrl.unloadVideo())
-                  },
-                  child: _ctrl.filteredCollabCards[index],
-                )
+                  ?
+              Column(children: [
+                Container(alignment: Alignment.centerLeft,
+                  child:  IconButton(
+                      onPressed:() {_ctrl.returnToSearch();},
+                      icon: Icon(Icons.arrow_back)),
+                ),
+                ListView.builder(
+                    shrinkWrap: true,
+                    primary: false,
+                    itemCount: _ctrl.filteredCollabCards.length,
+                    itemBuilder: (context, index) =>
+                        GestureDetector(
+                          onTap: () => {
+                            _ctrl.loadVideo(index).then((value) =>
+                                showDialog(context: context, builder: (context){
+                                  return _ctrl.openVideo(index);
+                                })).then((value) => _ctrl.unloadVideo())
+                          },
+                          child: _ctrl.filteredCollabCards[index],
+                        )
 
-              )
+                )
+              ],)
+
                   : Column(
                 children: [
                   Container(

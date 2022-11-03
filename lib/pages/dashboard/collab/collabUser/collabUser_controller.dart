@@ -35,6 +35,7 @@ class CollabUserController extends GetxController {
 
   List<CollabCard> collabs = [];
   List<CollabCard> filteredCollabCards = [];
+  List<CollabCard> responseCards = [];
   List<Collab> filteredCollabs = [];
   List<String> selectedInstruments = [];
   List<String> selectedGenres = [];
@@ -59,6 +60,7 @@ class CollabUserController extends GetxController {
             description: e.description, address: "CABA",instruments: e.instruments.map((i) => i.name).toList(),
             genres: e.genres.map((g) => g.name).toList(), collabInstrument: "instrumento"))
         .toList();
+
     }
     loading.value = false;
     super.onReady();
@@ -90,10 +92,14 @@ class CollabUserController extends GetxController {
         hideControls: true,
       ),
     );
+    responseCards = filteredCollabs[index].responses.map((e) => CollabCard(open: true, finalImage: e.musician.userAvatar, name: e.musician.userName,
+        description: "descripcion", address: "CABA",instruments: e.instruments.map((i) => i.name).toList(),
+        genres: e.genres.map((g) => g.name).toList(), collabInstrument: "instrumento")).toList();
     await Future.delayed(Duration(seconds: 1));
   }
 
   void unloadVideo(){
+    responseCards = [];
     selectedVideo = SearchResult();
   }
 
@@ -101,72 +107,27 @@ class CollabUserController extends GetxController {
     RxDouble _sliderValue = 0.0.obs;
     RxBool isPlaying = true.obs;
     return AlertDialog(
-        title: Text('video'),
-        content: Obx(() => Container(
+        title: Text('Respuestas'),
+        content: Obx(() => SizedBox(
           height: 800.h,
-          child: Column(
-            children: [
-              YoutubePlayer(
-                controller: _videoController,
-                showVideoProgressIndicator: true,
-                onReady: () {
-                  _videoController.addListener(listener);
-                },
-              ),
-              Row(
-                children: [
-                  IconButton(
-                      onPressed: () {
-                        if (isPlaying.value) {
-                          _videoController.pause();
-                          isPlaying.value = false;
-                        } else {
-                          _videoController.play();
-                          isPlaying.value = true;
-                        }
-                      },
-                      icon: Icon(
-                          isPlaying.value ? Icons.pause : Icons.play_arrow)),
-                  IconButton(
-                      onPressed: () {
-                        var miliseconds =
-                        ((_sliderValue.value) * 1000).truncate();
-                        _videoController
-                            .seekTo(Duration(milliseconds: miliseconds));
-                        isPlaying.value = true;
-                      },
-                      icon: Icon(Icons.refresh)),
-                  IconButton(
-                      onPressed: () {
-                        if (_sliderValue.value < 20.0) {
-                          _sliderValue.value += 0.1;
-                          String stringValue =
-                          _sliderValue.value.toStringAsFixed(2);
-                          _sliderValue.value = double.parse(stringValue);
-                        }
-                      },
-                      icon: Icon(Icons.add)),
-                  IconButton(
-                      onPressed: () {
-                        if (_sliderValue.value > 0) {
-                          _sliderValue.value -= 0.1;
-                          String stringValue =
-                          _sliderValue.value.toStringAsFixed(2);
-                          _sliderValue.value = double.parse(stringValue);
-                        }
-                      },
-                      icon: Icon(Icons.remove))
-                ],
-              ),
-              showVideoList(),
-              CustomButton(
-                label: "Elegir video respuesta",
-                onTap: () => Get.to(VideoScreen(filteredCollabs[index].videoId,
-                selectedVideo.id!.videoId!,filteredCollabs[index].id)),
-              )
-            ],
+            width: double.maxFinite,
+          child: loading.value? Container():
+          ListView.builder(
+              shrinkWrap: false,
+              primary: false,
+              itemCount: responseCards.length,
+              itemBuilder: (context, index2) =>
+                  GestureDetector(
+                    onTap: () => {
+                      Get.to(VideoScreen(filteredCollabs[index].videoId,
+                          filteredCollabs[index].responses[index2].videoId,filteredCollabs[index].id,false)),
+                    },
+                    child: responseCards[index2],
+                  )
+
+          )
           ),
-        )));
+        ));
   }
 
   SearchResult selectedVideo = SearchResult();
