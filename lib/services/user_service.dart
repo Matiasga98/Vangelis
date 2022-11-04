@@ -56,10 +56,10 @@ class UserService extends BaseApiService {
       String a = instruments.isEmpty?"":"&instruments=$instrumentString";
       String b = genres.isEmpty?"":"&genres=$genreString";
 
-      final uri = Uri.parse("${configuration.getApiUrl()}$_baseUserUrl?username=$name$a$b"
+      final uri = Uri.parse("$_baseUserUrl?username=$name$a$b"
       );
       var response =
-          await http.get(uri, headers: {"Content-Type": "application/json"});
+          await get(uri.toString());
       if (BaseApiService.isSuccessful(response)) {
         var decoded = json.decode(utf8.decode(response.bodyBytes));
         List<Musician> musicians = [];
