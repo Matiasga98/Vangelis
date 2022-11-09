@@ -103,4 +103,23 @@ class CollabService extends BaseApiService {
     }
     return false;
   }
+
+  @override
+  Future<List<Collab>> getCollabsUserResponded() async{
+    try{
+      var response = await get('$_baseCollabUrl/responses');
+      if( BaseApiService.isSuccessful(response)){
+        var decoded = json.decode(utf8.decode(response.bodyBytes));
+        List<Collab> collabs = [];
+        for (var collab in decoded) {
+          collabs.add(Collab.fromJson(collab));
+        }
+        return collabs;
+      }
+    }
+    catch(e){
+      var a = e;
+    }
+    return [];
+  }
 }

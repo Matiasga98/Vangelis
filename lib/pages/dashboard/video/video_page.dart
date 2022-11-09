@@ -9,6 +9,7 @@ import 'package:faker/faker.dart';
 import 'package:objectbox/internal.dart';
 import 'package:vangelis/helpers/custom_button.dart';
 import 'package:vangelis/helpers/dialog_buttons.dart';
+import 'package:vangelis/helpers/secondary_button.dart';
 import 'package:vangelis/model/collab_response.dart';
 import 'package:vangelis/util/constants.dart';
 import 'package:vangelis/util/enums.dart';
@@ -22,16 +23,17 @@ class VideoScreen extends StatefulWidget {
   String requestVideoId;
   String responseVideoId;
   bool createView;
+  bool checkMyResponseView;
   int? responseId;
   double startTime;
 
   VideoScreen(this.requestVideoId, this.responseVideoId, this.originalCollabId,
       this.createView,
-      [this.responseId, this.startTime = 0.0]);
+      [this.responseId, this.startTime = 0.0, this.checkMyResponseView = false]);
 
   @override
   State<VideoScreen> createState() => _VideoScreenState(requestVideoId,
-      responseVideoId, originalCollabId, createView, responseId);
+      responseVideoId, originalCollabId, createView, responseId,startTime,checkMyResponseView);
 }
 
 class _VideoScreenState extends State<VideoScreen> {
@@ -39,11 +41,13 @@ class _VideoScreenState extends State<VideoScreen> {
   String requestVideoId;
   String responseVideoId;
   bool createView;
+  bool checkMyResponseView;
   int? responseId;
   double startTime;
   _VideoScreenState(this.requestVideoId, this.responseVideoId,
       this.originalCollabId, this.createView,
-      [this.responseId, this.startTime = 0.0]);
+      [this.responseId, this.startTime = 0.0
+  , this.checkMyResponseView = false]);
 
   CollabService collabService = Get.find();
   final _ctrl = Get.put(VideoController());
@@ -247,6 +251,8 @@ class _VideoScreenState extends State<VideoScreen> {
                                       }
                                     });
                                   })
+                              : checkMyResponseView?
+                          SecondaryButton(onPress: () => {Get.back()}, buttonText: "Volver atras")
                               : DialogButtons(
                             alignment: MainAxisAlignment.spaceEvenly,
                                   onOk: () => {

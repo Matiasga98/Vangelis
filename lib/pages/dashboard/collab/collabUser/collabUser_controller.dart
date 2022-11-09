@@ -37,6 +37,10 @@ class CollabUserController extends GetxController {
   List<CollabCard> filteredCollabCards = [];
   List<CollabCard> responseCards = [];
   List<Collab> filteredCollabs = [];
+
+  List<CollabCard> collabsRespondedCards = [];
+  List<Collab> collabsResponded = [];
+
   List<String> selectedInstruments = [];
   List<String> selectedGenres = [];
 
@@ -60,7 +64,12 @@ class CollabUserController extends GetxController {
             description: e.description, address: "CABA",instruments: e.instruments.map((i) => i.name).toList(),
             genres: e.genres.map((g) => g.name).toList(), collabInstrument: "instrumento"))
         .toList();
-
+    collabsResponded = await collabService.getCollabsUserResponded();
+    collabsRespondedCards = collabsResponded.map((e) =>
+        CollabCard(open: true, finalImage: e.musician.userAvatar, name: e.musician.userName,
+            description: e.description, address: "CABA",instruments: e.instruments.map((i) => i.name).toList(),
+            genres: e.genres.map((g) => g.name).toList(), collabInstrument: "instrumento"))
+        .toList();
     }
     loading.value = false;
     super.onReady();
@@ -191,6 +200,10 @@ class CollabUserController extends GetxController {
       _playerState = _videoController.value.playerState;
       _videoMetaData = _videoController.metadata;
     }
+  }
+
+  int getResponseIndexOfUser(int collabIndex){
+    return collabsResponded[collabIndex].responses.indexWhere((element) => element.musician.id == User().id);
   }
 
 }
