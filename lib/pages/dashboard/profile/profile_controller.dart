@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:vangelis/model/collab_response.dart';
 import 'package:vangelis/pages/dashboard/profile/favorite/favorite_page.dart';
 
 import 'package:vangelis/services/google_service.dart';
@@ -26,7 +27,7 @@ import '../../../services/user_service.dart';
 
 class ProfileController extends GetxController {
   late Musician musician;
-  late List<Collab> collabs;
+  Map<CollabResponse, Collab> collabs = {};
 
 
   RxString description = "texto".obs;
@@ -100,10 +101,18 @@ class ProfileController extends GetxController {
     });
   }
 
-  Future<Collab?> getCollabs() async {
-    List<Collab> collabsList = await collabService.searchCollabs([], [], true);
+  Future<void> getCollabs() async {
+    List<Collab> collabsList = await collabService.searchMyClosedCollabs();
     if (collabsList != null && collabsList.isNotEmpty) {
-      collabs = collabsList;
+      collabsList.forEach((collab) {
+        if(!collab.isOpen){
+          collab.responses.forEach((response) {
+            if(response.isWinner){
+              collabs[response] = collab;
+            }
+          });
+        }
+      });
     }
   }
 

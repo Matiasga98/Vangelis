@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'package:googleapis/sheets/v4.dart';
 import 'package:vangelis/model/collab.dart';
 import 'package:vangelis/model/collab_response.dart';
 import 'base_api_service.dart';
@@ -7,6 +6,26 @@ import 'base_api_service.dart';
 class CollabService extends BaseApiService {
   final _baseCollabUrl = 'collabs';
 
+  @override
+  Future<List<Collab>> searchMyClosedCollabs() async {
+
+    try {
+
+      final uri = Uri.parse("$_baseCollabUrl/myclosedcollabs");
+      var response = await get(uri.toString());
+      if (BaseApiService.isSuccessful(response)) {
+        var decoded = json.decode(utf8.decode(response.bodyBytes));
+        List<Collab> collabs = [];
+        for (var collab in decoded) {
+          collabs.add(Collab.fromJson(collab));
+        }
+        return collabs;
+      }
+    } catch (e) {
+      var a = e;
+    }
+    return [];
+  }
 
   @override
   Future<List<Collab>> searchCollabs(

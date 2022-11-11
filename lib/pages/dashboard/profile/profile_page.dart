@@ -13,6 +13,7 @@ import '../../../model/Genre.dart';
 import '../../../model/Instrument.dart';
 import '../../../model/musician.dart';
 import '../../../services/theme_service.dart';
+import '../video/video_page.dart';
 
 class ProfilePage extends StatefulWidget {
   Musician musician;
@@ -378,7 +379,37 @@ class _ProfilePageState extends State<ProfilePage>
   }
 
   Widget ViewCollabs() {
-    //Todo: Reemplazar con collabs cuando esté la opción para cerrar colabo
+    return Center(
+        child: GridView.builder(
+          scrollDirection: Axis.vertical,
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              mainAxisExtent: 250.0, crossAxisCount: 3),
+          itemBuilder: (context, index) {
+            return ShowCollabRectangle(index);
+          },
+          itemCount: _ctrl.collabs.length,
+        ));
+  }
+
+  Widget ShowCollabRectangle(index) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: GestureDetector(
+        onTap: () => Get.to(VideoScreen(_ctrl.collabs.values.elementAt(index).videoId,
+            _ctrl.collabs.keys.elementAt(index).videoId,
+            _ctrl.collabs.values.elementAt(index).id,
+            false,
+            _ctrl.collabs.keys.elementAt(index).id,
+            _ctrl.collabs.keys.elementAt(index).startTime
+            ,true)),
+        child: Stack(children: [
+          CollabThumbnail(index),
+        ]),
+      ),
+    );
+  }
+
+  Widget ViewVideos() {
     return Center(
         child: GridView.builder(
           scrollDirection: Axis.vertical,
@@ -394,24 +425,6 @@ class _ProfilePageState extends State<ProfilePage>
           },
           itemCount: _ctrl.selectedUserVideos.length + 1,
         ));
-  }
-
-  Widget ViewVideos() {
-    return Center(
-        child: GridView.builder(
-      scrollDirection: Axis.vertical,
-      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          mainAxisExtent: 250.0, crossAxisCount: 3),
-      itemBuilder: (context, index) {
-        if (index < _ctrl.selectedUserVideos.length) {
-          return ShowVideoRectangle(index);
-        } else if (_ctrl.isCurrentUser.value) {
-          return AddVideoOption();
-        }
-        return Container();
-      },
-      itemCount: _ctrl.selectedUserVideos.length + 1,
-    ));
   }
 
   Widget ShowVideoRectangle(index) {
@@ -472,6 +485,20 @@ class _ProfilePageState extends State<ProfilePage>
             ),
           )
         : const SizedBox();
+  }
+
+  Widget CollabThumbnail(int index) {
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.black,
+        borderRadius: BorderRadius.circular(20.0),
+        image: DecorationImage(
+          image: NetworkImage(
+              'https://img.youtube.com/vi/${_ctrl.collabs.values.elementAt(index).videoId}/0.jpg'),
+          fit: BoxFit.cover,
+        ),
+      ),
+    );
   }
 
   Widget VideoThumbnail(int index) {
