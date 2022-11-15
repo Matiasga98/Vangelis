@@ -152,7 +152,7 @@ class CollabSearchController extends GetxController {
       filteredCollabs = await collabService.searchCollabs(genresIds, instrumentsIds,false);
 
       filteredCollabCards = filteredCollabs.map((e) =>
-          CollabCard(open: true, finalImage: e.musician.userAvatar, name: e.musician.userName,
+          CollabCard(open: e.isOpen, finalImage: e.musician.userAvatar, name: e.musician.userName,
               description: e.description, address: "CABA",instruments: e.instruments.map((i) => i.name).toList(),
               genres: e.genres.map((g) => g.name).toList(), collabInstrument: "instrumento"))
           .toList();

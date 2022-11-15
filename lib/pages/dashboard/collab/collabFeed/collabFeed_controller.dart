@@ -60,7 +60,7 @@ class CollabFeedController extends GetxController {
       List<int> instrumentsIds = User().instruments.map((i) => i.id).toList();
       filteredCollabs = await collabService.searchCollabs(genresIds, instrumentsIds,false);
       filteredCollabCards = filteredCollabs.map((e) =>
-          CollabCard(open: true, finalImage: e.musician.userAvatar, name: e.musician.userName,
+          CollabCard(open: e.isOpen, finalImage: e.musician.userAvatar, name: e.musician.userName,
               description: e.description, address: "CABA",instruments: e.instruments.map((i) => i.name).toList(),
               genres: e.genres.map((g) => g.name).toList(), collabInstrument: "instrumento"))
           .toList();
@@ -188,7 +188,7 @@ class CollabFeedController extends GetxController {
     }
     return
       Container(
-        width: 300.w,
+        width: 500.w,
         height: 300.h,
         child: ListView.builder(
             scrollDirection: Axis.horizontal,
@@ -196,27 +196,28 @@ class CollabFeedController extends GetxController {
             itemBuilder:(context,index) {
               return
                 Obx(() =>
-                GestureDetector(
-                  onTap: () =>{
-                    selectedIndex.value = index,
-                    selectedVideo = userVideos[index]
-                  },
-                  child: Padding(
-                      padding: const EdgeInsets.all(60.0),
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: Colors.black,
-                          border: selectedIndex.value == index?Border.all(width: 4.0,color: Colors.lightBlue):Border.all(color: Colors.black),
-                          borderRadius: BorderRadius.circular(20.0),
-                          image: DecorationImage(
-                            image: NetworkImage(userVideos[index].snippet!.thumbnails!.high!.url!),
-                            fit: BoxFit.cover,
+                    GestureDetector(
+                        onTap: () =>{
+                          selectedIndex.value = index,
+                          selectedVideo = userVideos[index]
+                        },
+                        child:
+                        Container(
+                          padding:  EdgeInsets.all(10.0),
+                          child: Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              border: selectedIndex.value == index?Border.all(width: 4.0,color: Colors.lightBlue):Border.all(color: Colors.black),
+                            ),
+
+                            child:  Image.network(
+                              userVideos[index].snippet!.thumbnails!.high!.url!,
+                            ),
                           ),
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.only(left: 50.0, right: 50.0, top: 1.0, bottom: 1.0),
-                        ),
-                      ))));
+                        )
+                    )
+
+                );
             }),
       );
 

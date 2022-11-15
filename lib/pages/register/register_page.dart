@@ -87,7 +87,7 @@ class RegisterPage extends StatelessWidget {
     final fields = <Widget>[];
     fields.addAll([
       CustomText(
-        loginIn,
+        "Iniciar Sesión",
         fontSize: 40.h,
         fontFamily: regularFont,
         fontWeight: FontWeight.w400,
@@ -100,16 +100,16 @@ class RegisterPage extends StatelessWidget {
         CustomTextField(
           keyValue: "username",
           fontSize: 26.h,
-          hint: usernameHint,
-          label: usernameLabel,
+          hint: "Usuario",
+          label: "Usuario",
           textEditingController: _ctrl.usernameController,
         ),
         SizedBox(height: 30.h),
         CustomTextField(
           fontSize: 26.h,
           keyValue: "password",
-          hint: passwordHint,
-          label: passwordLabel,
+          hint: "Contraseña",
+          label: "Contraseña",
           textEditingController: _ctrl.passwordController,
           isPassword: true,
           action: TextInputAction.done,
@@ -118,8 +118,8 @@ class RegisterPage extends StatelessWidget {
         CustomTextField(
           fontSize: 26.h,
           keyValue: "email",
-          hint: emailHint,
-          label: emailLabel,
+          hint: "Email",
+          label: "Email",
           textEditingController: _ctrl.emailController,
           action: TextInputAction.done,
         ),
@@ -133,7 +133,7 @@ class RegisterPage extends StatelessWidget {
     fields.addAll([
       CustomButton(
         keyValue: "registerButton",
-        label: buttonRegister,
+        label: "Registrarse",
         fontSize: 20,
         onTap: () async {
           var res = await _ctrl.register();
@@ -146,7 +146,7 @@ class RegisterPage extends StatelessWidget {
             );
           }
           else{
-            showMsg(message: "error while registering", type: MessageType.error);
+            showMsg(message: "error al registrarse", type: MessageType.error);
           }
         },
       ),

@@ -34,11 +34,6 @@ class _CollabFeedScreenState extends State<CollabFeedScreen> {
 
 
     return Obx(() => Scaffold(
-        floatingActionButton: FloatingActionButton(
-          child: Icon(Icons.add),
-          backgroundColor: Colors.blue,
-          onPressed: () => {Get.to(() => CreateCollabScreen())},
-        ),
         backgroundColor: themeConfig!.whiteBlackColor,
         body:
         SingleChildScrollView(

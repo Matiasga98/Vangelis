@@ -82,7 +82,7 @@ class CollabCard extends StatelessWidget {
                   children: [
                     Center(
                      child: Text(
-                      open? "Disponible" : collabName,
+                      "Estado",
                       style: TextStyle(
                           fontSize: 12,
                           color: Colors.black,
@@ -94,10 +94,10 @@ class CollabCard extends StatelessWidget {
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(15),
                         child: Image.asset(
-                          open? "images/Disponible.jpg" : collabImage,
+                          open? "images/Abierto.jpg" : "images/Cerrado.jpg",
                           width: 75,
                           height: 75,
-                          fit: BoxFit.cover,
+                          fit: BoxFit.fitWidth,
                         )
                       )
                     )
@@ -111,7 +111,7 @@ class CollabCard extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   Text(
-                    name,
+                    "Esta buscando:",
                     style: TextStyle(fontSize: 12, color: Colors.black),
                   ),
                   Flexible(
@@ -119,7 +119,7 @@ class CollabCard extends StatelessWidget {
                     child: FittedBox(
                       fit: BoxFit.scaleDown,
                       child: Text(
-                        "Busca: " + collabInstrument,
+                        getInstrumentNames(),
                         style: TextStyle(
                             fontSize: 12,
                             color: Colors.black,
@@ -133,12 +133,12 @@ class CollabCard extends StatelessWidget {
                     child: FittedBox(
                       fit: BoxFit.scaleDown,
                       child: Text(
-                        address,
-                        style: const TextStyle(
-                            fontSize: 10,
-                            color: Color(0xff91919F),
-                            fontWeight: FontWeight.normal),
-                        maxLines: 1,
+                        getGenreNames(),
+                        style: TextStyle(
+                            fontSize: 12,
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold),
+                        maxLines: 2,
                       ),
                     ),
                   ),
@@ -147,5 +147,25 @@ class CollabCard extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  String getInstrumentNames(){
+    String names = " ";
+    instruments.forEach((element) {
+      names = names +element +", ";
+    });
+    names = names.length>1? names.substring(0,names.length-2):names;
+
+    return names;
+  }
+
+  String getGenreNames(){
+    String names = " ";
+    genres.forEach((element) {
+      names = names +element +", ";
+    });
+    names = names.length>1? names.substring(0,names.length-2):names;
+
+    return names;
   }
 }

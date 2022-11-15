@@ -252,7 +252,7 @@ class _VideoScreenState extends State<VideoScreen> {
                                     });
                                   })
                               : checkMyResponseView?
-                          SecondaryButton(onPress: () => {Get.back()}, buttonText: "Volver atras")
+                          SecondaryButton(onPress: () => {Get.back()}, buttonText: "Volver atrás")
                               : DialogButtons(
                             alignment: MainAxisAlignment.spaceEvenly,
                                   onOk: () => {
@@ -262,7 +262,7 @@ class _VideoScreenState extends State<VideoScreen> {
                                       },
                                   onCancel: () => {Get.back()},
                                   okButtonText: "Elegir como ganadora",
-                                  cancelButtonText: "Volver atras"),
+                                  cancelButtonText: "Volver atrás"),
 
 
                         ],

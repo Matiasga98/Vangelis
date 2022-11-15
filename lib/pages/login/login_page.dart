@@ -85,7 +85,7 @@ class LoginPage extends StatelessWidget {
       GestureDetector(
         onTap: () => _ctrl.secretMatiLogin(),
           child: CustomText(
-        loginIn,
+        "Iniciar Sesión",
         fontSize: 40.h,
         fontFamily: regularFont,
         fontWeight: FontWeight.w400,
@@ -98,16 +98,16 @@ class LoginPage extends StatelessWidget {
         CustomTextField(
           keyValue: "username",
           fontSize: 26.h,
-          hint: usernameHint,
-          label: usernameLabel,
+          hint: "Usuario",
+          label: "Usuario",
           textEditingController: _ctrl.usernameController,
         ),
         SizedBox(height: 30.h),
         CustomTextField(
           fontSize: 26.h,
           keyValue: "password",
-          hint: passwordHint,
-          label: passwordLabel,
+          hint: "Contraseña",
+          label: "Contraseña",
           textEditingController: _ctrl.passwordController,
           isPassword: true,
           action: TextInputAction.done,
@@ -128,7 +128,7 @@ class LoginPage extends StatelessWidget {
     fields.addAll([
       CustomButton(
         keyValue: "loginButton",
-        label: buttonLogin,
+        label: "Iniciar sesión",
         fontSize: 20,
         onTap: () async {
           var res = await _ctrl.logIn();
@@ -154,7 +154,7 @@ class LoginPage extends StatelessWidget {
         Get.toNamed(RouterName.registerPageTag);
       },
       child: CustomText(
-        register,
+        "Registrarse",
         fontSize: 22.h,
         textColor: themeConfig!.blueColor,
       ),

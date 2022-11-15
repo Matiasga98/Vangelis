@@ -41,9 +41,9 @@ class Collab {
                   Instrument.fromJson(instrument)
               ]
             : [],
-        genres = json['favoriteGenres'] != null
+        genres = json['genres'] != null
             ? [
-                for (var favoriteGenre in json['favoriteGenres'])
+                for (var favoriteGenre in json['genres'])
                   Genre.fromJson(favoriteGenre)
               ]
             : [];

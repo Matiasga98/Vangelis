@@ -5,6 +5,7 @@ import 'package:get/get_core/src/get_main.dart';
 import 'package:vangelis/config/colors_.dart';
 import 'package:vangelis/helpers/custom_button.dart';
 import 'package:vangelis/helpers/custom_text_field.dart';
+import 'package:vangelis/helpers/secondary_button.dart';
 import 'package:vangelis/pages/dashboard/search/search_controller.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -16,7 +17,6 @@ import 'package:faker/faker.dart';
 import 'package:vangelis/services/theme_service.dart';
 import 'package:vangelis/util/constants.dart';
 import 'package:vangelis/util/enums.dart';
-
 
 import 'create_collab_controller.dart';
 
@@ -38,26 +38,332 @@ class _CreateCollabScreenState extends State<CreateCollabScreen> {
     _ctrl.openContext();
 
     return Obx(() => Scaffold(
-        backgroundColor: themeConfig!.whiteBlackColor,
+        backgroundColor: themeConfig!.blueColor,
         body: SingleChildScrollView(
-          padding: EdgeInsets.symmetric(vertical: 20),
-          child: Column(
-            children: [
-              CustomTextField(
-                keyValue: "title",
-                fontSize: 26.h,
-                hint: "titulo",
-                label: "titulo",
-                textEditingController: _ctrl.titleController,
-              ),
-              SizedBox(height: 30.h),
-              CustomTextField(
-                keyValue: "description",
-                fontSize: 26.h,
-                hint: "descripcion",
-                label: "descripcion",
-                textEditingController: _ctrl.descriptionController,
-              ),
+            child: SizedBox(
+                height: Get.height,
+                width: Get.width,
+                child: Stack(children: [
+                  Image.asset(
+                    themeConfig!.bgBlueAsset,
+                    fit: BoxFit.cover,
+                    height: Get.height,
+                    width: Get.width,
+                  ),
+                  Center(
+                      child: Column(
+                          mainAxisSize: MainAxisSize.max,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                        Container(
+                            color: themeConfig!.whiteBlackColor,
+                            padding: EdgeInsets.symmetric(
+                                vertical: 50.h, horizontal: 50.w),
+                            margin: EdgeInsets.symmetric(horizontal: 30.w),
+                            child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  CustomTextField(
+                                    keyValue: "title",
+                                    fontSize: 26.h,
+                                    hint: "titulo",
+                                    label: "",
+                                    textEditingController:
+                                        _ctrl.titleController,
+                                  ),
+                                  SizedBox(height: 10.h),
+                                  CustomTextField(
+                                    keyValue: "description",
+                                    fontSize: 26.h,
+                                    hint: "descripcion",
+                                    label: "",
+                                    textEditingController:
+                                        _ctrl.descriptionController,
+                                  ),
+                                  Container(
+                                    padding: EdgeInsets.symmetric(
+                                        vertical: 16,
+                                        horizontal: size.width * 0.075),
+                                    alignment: Alignment.centerLeft,
+                                    child: Text(
+                                      "Instrumentos",
+                                      style: TextStyle(
+                                          color: greenDark,
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.w500),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                      height: 180.h,
+                                      child: SingleChildScrollView(
+                                        child: Wrap(
+                                          spacing: 6,
+                                          runSpacing: 12,
+                                          runAlignment: WrapAlignment.start,
+                                          alignment: WrapAlignment.start,
+                                          crossAxisAlignment:
+                                              WrapCrossAlignment.start,
+                                          children: List.generate(
+                                            _ctrl.instruments.value.length,
+                                            (index) => IntrinsicWidth(
+                                              child: GestureDetector(
+                                                onTap: () {
+                                                  setState(() {
+                                                    if (_ctrl
+                                                        .selectedInstruments
+                                                        .contains(_ctrl
+                                                            .instruments
+                                                            .value[index])) {
+                                                      _ctrl.selectedInstruments
+                                                          .remove(_ctrl
+                                                              .instruments
+                                                              .value[index]);
+                                                    } else {
+                                                      _ctrl.selectedInstruments
+                                                          .add(
+                                                              _ctrl.instruments[
+                                                                  index]);
+                                                    }
+                                                  });
+                                                },
+                                                child: Container(
+                                                  height: 30,
+                                                  padding: const EdgeInsets
+                                                          .symmetric(
+                                                      horizontal: 16),
+                                                  decoration: BoxDecoration(
+                                                      color: _ctrl
+                                                              .selectedInstruments
+                                                              .contains(_ctrl
+                                                                      .instruments[
+                                                                  index])
+                                                          ? greenLight
+                                                          : greenTint1,
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              15)),
+                                                  alignment: Alignment.center,
+                                                  child: Text(
+                                                    _ctrl.instruments
+                                                        .value[index],
+                                                    style: TextStyle(
+                                                        color: _ctrl
+                                                                .selectedInstruments
+                                                                .contains(_ctrl
+                                                                        .instruments[
+                                                                    index])
+                                                            ? Colors.white
+                                                            : Colors.black,
+                                                        fontWeight:
+                                                            FontWeight.w500),
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      )),
+                                  const SizedBox(
+                                    height: 16,
+                                  ),
+                                  Container(
+                                    padding: EdgeInsets.symmetric(
+                                        vertical: 16,
+                                        horizontal: size.width * 0.075),
+                                    alignment: Alignment.centerLeft,
+                                    child: Text(
+                                      "Genero Musical",
+                                      style: TextStyle(
+                                          color: greenDark,
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.w500),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                      height: 160.h,
+                                      child: SingleChildScrollView(
+                                          child: Wrap(
+                                        spacing: 6,
+                                        runSpacing: 12,
+                                        runAlignment: WrapAlignment.start,
+                                        alignment: WrapAlignment.start,
+                                        crossAxisAlignment:
+                                            WrapCrossAlignment.start,
+                                        children: List.generate(
+                                          _ctrl.musicalGenres.value.length,
+                                          (index) => IntrinsicWidth(
+                                            child: GestureDetector(
+                                              onTap: () {
+                                                setState(() {
+                                                  if (_ctrl.selectedGenres
+                                                      .contains(_ctrl
+                                                          .musicalGenres
+                                                          .value[index])) {
+                                                    _ctrl.selectedGenres.remove(
+                                                        _ctrl.musicalGenres
+                                                            .value[index]);
+                                                  } else {
+                                                    _ctrl.selectedGenres.add(
+                                                        _ctrl.musicalGenres[
+                                                            index]);
+                                                  }
+                                                });
+                                              },
+                                              child: Container(
+                                                height: 30,
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                        horizontal: 16),
+                                                decoration: BoxDecoration(
+                                                    color: _ctrl.selectedGenres
+                                                            .contains(_ctrl
+                                                                .musicalGenres
+                                                                .value[index])
+                                                        ? greenLight
+                                                        : greenTint1,
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            15)),
+                                                alignment: Alignment.center,
+                                                child: Text(
+                                                  _ctrl.musicalGenres
+                                                      .value[index],
+                                                  style: TextStyle(
+                                                      color: _ctrl
+                                                              .selectedGenres
+                                                              .contains(_ctrl
+                                                                      .musicalGenres[
+                                                                  index])
+                                                          ? Colors.white
+                                                          : Colors.black,
+                                                      fontWeight:
+                                                          FontWeight.w500),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ))),
+                                  const SizedBox(
+                                    height: 1,
+                                  ),
+                                  SecondaryButton(
+                                      onPress: () {
+                                        _ctrl
+                                            .openVideos()
+                                            .then((value) => showDialog(
+                                                context: context,
+                                                builder: (context) {
+                                                  return AlertDialog(
+                                                      title: Text(
+                                                          'Select a video to add to profile'),
+                                                      content: Obx(() =>
+                                                          Container(
+                                                              height: 500.h,
+                                                              width: 500.w,
+                                                              child: ListView
+                                                                  .builder(
+                                                                      scrollDirection:
+                                                                          Axis
+                                                                              .horizontal,
+                                                                      itemCount: _ctrl
+                                                                          .userVideos
+                                                                          .length,
+                                                                      itemBuilder:
+                                                                          (context,
+                                                                              index) {
+                                                                        return GestureDetector(
+                                                                            onTap: () {
+                                                                              _ctrl.addVideoToSelected(index);
+                                                                              Get.back();
+                                                                            },
+                                                                            child: Container(
+                                                                              padding: EdgeInsets.all(10.0),
+                                                                              child: Container(
+                                                                                decoration: BoxDecoration(
+                                                                                  borderRadius: BorderRadius.circular(10),
+                                                                                  border: Border.all(color: Colors.black),
+                                                                                ),
+                                                                                child: Image.network(
+                                                                                  _ctrl.userVideos[index].snippet!.thumbnails!.high!.url!,
+                                                                                ),
+                                                                              ),
+                                                                            ));
+                                                                      }))));
+                                                }));
+                                      },
+                                      buttonText: "  Elegir video  "),
+                                  _ctrl.videoSelected.value
+                                      ? Container(
+                                          height: 200.h,
+                                          width: 300.w,
+                                          child: Image(
+                                            image: NetworkImage(_ctrl
+                                                .selectedUserVideo
+                                                .value
+                                                .snippet!
+                                                .thumbnails!
+                                                .high!
+                                                .url!),
+                                          ),
+                                        )
+                                      : Container(
+                                          height: 200.h,
+                                          width: 300.w,
+                                          decoration: BoxDecoration(
+                                            border: Border.all(
+                                                color: Colors.black, width: 1),
+                                          ),
+                                        ),
+                                  SizedBox(height: 10.h),
+                                  _ctrl.videoSelected.value
+                                      ? CustomButton(
+                                          label: "Crear Collab",
+                                          onTap: () {
+                                            _ctrl.createCollab().then((value) {
+                                              if (value) {
+                                                Get.back();
+                                                showMsg(
+                                                    message:
+                                                        "Collab creado exitosamente",
+                                                    type: MessageType.success);
+                                              } else {
+                                                showMsg(
+                                                    message:
+                                                        "error creando collab",
+                                                    type: MessageType.error);
+                                              }
+                                            });
+                                          },
+                                        )
+                                      : Container()
+                                ]))
+                      ]))
+                ])))));
+
+    return Obx(() => Scaffold(
+          backgroundColor: themeConfig!.whiteBlackColor,
+          body: SingleChildScrollView(
+              padding: EdgeInsets.symmetric(vertical: 20),
+              child: Column(
+                children: [
+                  CustomTextField(
+                    keyValue: "title",
+                    fontSize: 26.h,
+                    hint: "titulo",
+                    label: "titulo",
+                    textEditingController: _ctrl.titleController,
+                  ),
+                  SizedBox(height: 30.h),
+                  CustomTextField(
+                    keyValue: "description",
+                    fontSize: 26.h,
+                    hint: "descripcion",
+                    label: "descripcion",
+                    textEditingController: _ctrl.descriptionController,
+                  ),
                   Container(
                     padding: EdgeInsets.symmetric(
                         vertical: 16, horizontal: size.width * 0.075),
@@ -81,12 +387,11 @@ class _CreateCollabScreenState extends State<CreateCollabScreen> {
                           crossAxisAlignment: WrapCrossAlignment.start,
                           children: List.generate(
                             _ctrl.instruments.value.length,
-                                (index) => IntrinsicWidth(
+                            (index) => IntrinsicWidth(
                               child: GestureDetector(
                                 onTap: () {
                                   setState(() {
-                                    if (_ctrl.selectedInstruments
-                                        .contains(
+                                    if (_ctrl.selectedInstruments.contains(
                                         _ctrl.instruments.value[index])) {
                                       _ctrl.selectedInstruments.remove(
                                           _ctrl.instruments.value[index]);
@@ -101,20 +406,18 @@ class _CreateCollabScreenState extends State<CreateCollabScreen> {
                                   padding: const EdgeInsets.symmetric(
                                       horizontal: 16),
                                   decoration: BoxDecoration(
-                                      color: _ctrl.selectedInstruments
-                                          .contains(_ctrl
-                                          .instruments[index])
+                                      color: _ctrl.selectedInstruments.contains(
+                                              _ctrl.instruments[index])
                                           ? greenLight
                                           : greenTint1,
-                                      borderRadius:
-                                      BorderRadius.circular(15)),
+                                      borderRadius: BorderRadius.circular(15)),
                                   alignment: Alignment.center,
                                   child: Text(
                                     _ctrl.instruments.value[index],
                                     style: TextStyle(
                                         color: _ctrl.selectedInstruments
-                                            .contains(_ctrl
-                                            .instruments[index])
+                                                .contains(
+                                                    _ctrl.instruments[index])
                                             ? Colors.white
                                             : Colors.black,
                                         fontWeight: FontWeight.w500),
@@ -144,141 +447,143 @@ class _CreateCollabScreenState extends State<CreateCollabScreen> {
                       height: 220.h,
                       child: SingleChildScrollView(
                           child: Wrap(
-                            spacing: 6,
-                            runSpacing: 12,
-                            runAlignment: WrapAlignment.start,
-                            alignment: WrapAlignment.start,
-                            crossAxisAlignment: WrapCrossAlignment.start,
-                            children: List.generate(
-                              _ctrl.musicalGenres.value.length,
-                                  (index) => IntrinsicWidth(
-                                child: GestureDetector(
-                                  onTap: () {
-                                    setState(() {
-                                      if (_ctrl.selectedGenres.contains(
-                                          _ctrl.musicalGenres.value[index])) {
-                                        _ctrl.selectedGenres.remove(
-                                            _ctrl.musicalGenres.value[index]);
-                                      } else {
-                                        _ctrl.selectedGenres
-                                            .add(_ctrl.musicalGenres[index]);
-                                      }
-                                    });
-                                  },
-                                  child: Container(
-                                    height: 30,
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 16),
-                                    decoration: BoxDecoration(
-                                        color: _ctrl.selectedGenres.contains(
+                        spacing: 6,
+                        runSpacing: 12,
+                        runAlignment: WrapAlignment.start,
+                        alignment: WrapAlignment.start,
+                        crossAxisAlignment: WrapCrossAlignment.start,
+                        children: List.generate(
+                          _ctrl.musicalGenres.value.length,
+                          (index) => IntrinsicWidth(
+                            child: GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  if (_ctrl.selectedGenres.contains(
+                                      _ctrl.musicalGenres.value[index])) {
+                                    _ctrl.selectedGenres.remove(
+                                        _ctrl.musicalGenres.value[index]);
+                                  } else {
+                                    _ctrl.selectedGenres
+                                        .add(_ctrl.musicalGenres[index]);
+                                  }
+                                });
+                              },
+                              child: Container(
+                                height: 30,
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 16),
+                                decoration: BoxDecoration(
+                                    color: _ctrl.selectedGenres.contains(
                                             _ctrl.musicalGenres.value[index])
-                                            ? greenLight
-                                            : greenTint1,
-                                        borderRadius:
-                                        BorderRadius.circular(15)),
-                                    alignment: Alignment.center,
-                                    child: Text(
-                                      _ctrl.musicalGenres.value[index],
-                                      style: TextStyle(
-                                          color: _ctrl.selectedGenres
-                                              .contains(_ctrl
-                                              .musicalGenres[index])
-                                              ? Colors.white
-                                              : Colors.black,
-                                          fontWeight: FontWeight.w500),
-                                    ),
-                                  ),
+                                        ? greenLight
+                                        : greenTint1,
+                                    borderRadius: BorderRadius.circular(15)),
+                                alignment: Alignment.center,
+                                child: Text(
+                                  _ctrl.musicalGenres.value[index],
+                                  style: TextStyle(
+                                      color: _ctrl.selectedGenres.contains(
+                                              _ctrl.musicalGenres[index])
+                                          ? Colors.white
+                                          : Colors.black,
+                                      fontWeight: FontWeight.w500),
                                 ),
                               ),
                             ),
-                          ))),
+                          ),
+                        ),
+                      ))),
                   const SizedBox(
                     height: 16,
                   ),
-              GestureDetector(
-                onTap: () {
-                  _ctrl
-                      .openVideos()
-                      .then((value) => showDialog(
-                      context: context,
-                      builder: (context) {
-                        return AlertDialog(
-                            title: Text(
-                                'Select a video to add to profile'),
-                            content: Obx(() =>
-                                Container(
+                  GestureDetector(
+                    onTap: () {
+                      _ctrl.openVideos().then((value) => showDialog(
+                          context: context,
+                          builder: (context) {
+                            return AlertDialog(
+                                title: Text('Select a video to add to profile'),
+                                content: Obx(() => Container(
                                     height: 500.h,
                                     width: 500.w,
-                                    child: ListView
-                                        .builder(
-                                        scrollDirection:
-                                        Axis
-                                            .horizontal,
-                                        itemCount: _ctrl
-                                            .userVideos
-                                            .length,
-                                        itemBuilder:
-                                            (context,
-                                            index) {
+                                    child: ListView.builder(
+                                        scrollDirection: Axis.horizontal,
+                                        itemCount: _ctrl.userVideos.length,
+                                        itemBuilder: (context, index) {
                                           return GestureDetector(
-                                              onTap: () =>
-                                                  _ctrl.addVideoToSelected(index),
+                                              onTap: () => _ctrl
+                                                  .addVideoToSelected(index),
                                               child: Padding(
-                                                  padding: const EdgeInsets.all(60.0),
+                                                  padding: const EdgeInsets.all(
+                                                      60.0),
                                                   child: Container(
                                                     decoration: BoxDecoration(
                                                       color: Colors.black,
-                                                      borderRadius: BorderRadius.circular(20.0),
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              20.0),
                                                       image: DecorationImage(
-                                                        image: NetworkImage(_ctrl.userVideos[index].snippet!.thumbnails!.high!.url!),
+                                                        image: NetworkImage(
+                                                            _ctrl
+                                                                .userVideos[
+                                                                    index]
+                                                                .snippet!
+                                                                .thumbnails!
+                                                                .high!
+                                                                .url!),
                                                         fit: BoxFit.cover,
                                                       ),
                                                     ),
                                                     child: Padding(
-                                                      padding: const EdgeInsets.only(left: 100.0, right: 100.0, top: 1.0, bottom: 1.0),
+                                                      padding:
+                                                          const EdgeInsets.only(
+                                                              left: 100.0,
+                                                              right: 100.0,
+                                                              top: 1.0,
+                                                              bottom: 1.0),
                                                     ),
                                                   )));
                                         }))));
-                      }));
-                },
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    border: Border.all(color: Colors.black),
-                    borderRadius:
-                    BorderRadius.circular(20.0),
+                          }));
+                    },
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        border: Border.all(color: Colors.black),
+                        borderRadius: BorderRadius.circular(20.0),
+                      ),
+                      child: Icon(Icons.add),
+                    ),
                   ),
-                  child: Icon(Icons.add),
-                ),
-              ),
-
-
-              _ctrl.videoSelected.value?Container(
-                height: 200.h,
-                width: 300.w,
-                child: Image(
-                  image: NetworkImage(_ctrl.selectedUserVideo.value.snippet!.thumbnails!.high!.url!),
-                ),
-
-              ):Container(),
-              CustomButton(
-                label: "Crear Collab",
-                onTap: () {
-                  _ctrl.createCollab().then((value) {
-                    if (value){
-                      Get.back();
-                      showMsg(message: "Collab creado exitosamente",type: MessageType.success);
-                    }
-                    else{
-                      showMsg(message: "error creando collab",type: MessageType.error);
-                    }
-                  });
-                  },
-              )
-            ],
-              )
-
-          ),
+                  _ctrl.videoSelected.value
+                      ? Container(
+                          height: 200.h,
+                          width: 300.w,
+                          child: Image(
+                            image: NetworkImage(_ctrl.selectedUserVideo.value
+                                .snippet!.thumbnails!.high!.url!),
+                          ),
+                        )
+                      : Container(),
+                  CustomButton(
+                    label: "Crear Collab",
+                    onTap: () {
+                      _ctrl.createCollab().then((value) {
+                        if (value) {
+                          Get.back();
+                          showMsg(
+                              message: "Collab creado exitosamente",
+                              type: MessageType.success);
+                        } else {
+                          showMsg(
+                              message: "error creando collab",
+                              type: MessageType.error);
+                        }
+                      });
+                    },
+                  )
+                ],
+              )),
         ));
   }
 }

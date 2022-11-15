@@ -21,6 +21,7 @@ import '../../../config/colors_.dart';
 import 'card_widget.dart';
 import '../../../services/theme_service.dart';
 import '../../../services/theme_service.dart';
+import 'collabUserResponse/collabUserResponse_page.dart';
 import 'collab_controller.dart';
 
 class CollabScreen extends StatefulWidget {
@@ -41,7 +42,7 @@ class _CollabScreenState extends State<CollabScreen> {
     _ctrl.openContext();
 
     return DefaultTabController(
-        length: 3,
+        length: 4,
         child: Scaffold(
           backgroundColor: themeConfig!.whiteBlackColor,
           appBar: AppBar(
@@ -61,6 +62,9 @@ class _CollabScreenState extends State<CollabScreen> {
                     Tab(
                       text: 'Mis Collabs',
                     ),
+                    Tab(
+                      text: "Mis Respuestas",
+                    )
                   ],
                 )
               ],
@@ -71,6 +75,7 @@ class _CollabScreenState extends State<CollabScreen> {
               CollabSearchScreen(),
               CollabFeedScreen(),
               CollabUserScreen(),
+              CollabUserResponseScreen(),
             ],
           ),
         ));

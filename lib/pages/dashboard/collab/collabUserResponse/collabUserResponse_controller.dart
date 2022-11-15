@@ -21,7 +21,7 @@ import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 import '../../../../entity/user.dart';
 
-class CollabUserController extends GetxController {
+class CollabUserResponseController extends GetxController {
   GoogleService googleService = Get.find();
   var textFilterController = TextEditingController();
 
@@ -38,6 +38,8 @@ class CollabUserController extends GetxController {
   List<CollabCard> responseCards = [];
   List<Collab> filteredCollabs = [];
 
+  List<CollabCard> collabsRespondedCards = [];
+  List<Collab> collabsResponded = [];
 
   List<String> selectedInstruments = [];
   List<String> selectedGenres = [];
@@ -56,9 +58,9 @@ class CollabUserController extends GetxController {
   @override
   Future<void> onReady() async {
     if (filteredCollabs.isEmpty) {
-    filteredCollabs = await collabService.searchCollabs([], [],true);
-    filteredCollabCards = filteredCollabs.map((e) =>
-        CollabCard(open: e.isOpen, finalImage: e.musician.userAvatar, name: e.musician.userName,
+    collabsResponded = await collabService.getCollabsUserResponded();
+    collabsRespondedCards = collabsResponded.map((e) =>
+        CollabCard(open: true, finalImage: e.musician.userAvatar, name: e.musician.userName,
             description: e.description, address: "CABA",instruments: e.instruments.map((i) => i.name).toList(),
             genres: e.genres.map((g) => g.name).toList(), collabInstrument: "instrumento"))
         .toList();
@@ -194,6 +196,8 @@ class CollabUserController extends GetxController {
     }
   }
 
-
+  int getResponseIndexOfUser(int collabIndex){
+    return collabsResponded[collabIndex].responses.indexWhere((element) => element.musician.id == User().id);
+  }
 
 }
