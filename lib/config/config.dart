@@ -31,6 +31,7 @@ class Configuration extends GetxService
       value = dotenv.get(key, fallback: fallback);
     }*/
     return "http://10.0.2.2:8080/";
+    //return "http://192.168.0.177:8080/";
   }
 
   String getApiUrl()

@@ -9,7 +9,7 @@ import 'enums.dart';
 export 'screen_size.dart';
 
 ///texts
-const appNameText = "Barbri";
+const appNameText = "Vangelis";
 
 const barbriLogo = "Barbri Logo";
 const cancel = "cancel";
