@@ -83,7 +83,7 @@ class AuthService extends GetxService
   Future<bool> register(String username, String password, String email) async{
     try {
       var data = {
-        'username': username,
+        'userName': username,
         'password': password,
         'email': email,
         'bio': ""

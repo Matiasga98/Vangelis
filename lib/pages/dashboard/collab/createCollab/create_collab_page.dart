@@ -258,7 +258,7 @@ class _CreateCollabScreenState extends State<CreateCollabScreen> {
                                                 builder: (context) {
                                                   return AlertDialog(
                                                       title: Text(
-                                                          'Select a video to add to profile'),
+                                                          'Elegir video a utilizar'),
                                                       content: Obx(() =>
                                                           Container(
                                                               height: 500.h,

@@ -87,7 +87,7 @@ class RegisterPage extends StatelessWidget {
     final fields = <Widget>[];
     fields.addAll([
       CustomText(
-        "Iniciar Sesión",
+        "Registrarse",
         fontSize: 40.h,
         fontFamily: regularFont,
         fontWeight: FontWeight.w400,

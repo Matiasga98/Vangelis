@@ -524,7 +524,7 @@ class _ProfilePageState extends State<ProfilePage>
               context: context,
               builder: (context) {
                 return AlertDialog(
-                    title: Text('Select a video to add to profile'),
+                    title: Text('Elegir video para agregar a tu perfil'),
                     content: Obx(() => Container(
                         height: 500.h,
                         width: 500.w,
