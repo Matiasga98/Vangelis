@@ -7,11 +7,11 @@ import '../entity/user.dart';
 class Configuration extends GetxService
 {
   static const environments = {
-    'BACKENDLOCAL': 'Conectado a backend levantado',
-    'MOBILE': 'Sin conectarse a backend',
+    'BACKENDMATI': 'Conectado a backend levantado en la compu de mati',
+    'NUEVAIP': 'Conectado a ip que cambiemos en el momento',
   };
 
-  static const defaultEnvironment = 'BACKENDLOCAL';
+  static const defaultEnvironment = 'BACKENDMATI';
 
 
   Map<String, String>? _envMap;
@@ -24,13 +24,13 @@ class Configuration extends GetxService
 
   String _fromSources(String key, String fallback)
   {
-    /*String? value;
-    if (_envMap != null) {
-      value = _envMap?[key] ?? fallback;
-    } else {
-      value = dotenv.get(key, fallback: fallback);
-    }*/
-    return "http://10.0.2.2:8080/";
+    switch(User().environment){
+      case "BACKENDMATI":
+        return "http://192.168.0.177:25565/";
+      case "NUEVAIP":
+        return "http://10.0.2.2:8080";
+    }
+    return "http://10.0.2.2:25565/";
     //return "http://192.168.0.177:8080/";
   }
 
