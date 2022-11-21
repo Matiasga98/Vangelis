@@ -217,22 +217,7 @@ class _ProfilePageState extends State<ProfilePage>
                           ),
                         ),
                         SizedBox(width: 15.w),
-                        OutlinedButton(
-                          onPressed: () {
-                            _ctrl.handleSignIn();
-                          },
-                          style: OutlinedButton.styleFrom(
-                              side: const BorderSide(
-                                color: Colors.transparent,
-                              ),
-                              primary: Colors.red,
-                              backgroundColor: Colors.white,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(100.0),
-                              ),
-                              fixedSize: const Size(50.0, 60.0)),
-                          child: const Icon(Icons.youtube_searched_for),
-                        )
+
                       ],
                     ),
                     Container(

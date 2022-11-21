@@ -56,6 +56,11 @@ class GoogleService extends BaseApiService {
   }
 
   Future<SearchListResponse> handleGetChannelsMock() async {
+    ResourceId idFran = ResourceId(videoId: "cY3XHRIt55U");
+    SearchResultSnippet snippetFran = SearchResultSnippet(thumbnails: ThumbnailDetails(high: Thumbnail(url: "https://img.youtube.com/vi/cY3XHRIt55U/hqdefault.jpg")));
+    SearchResult videoFran = SearchResult(id: idFran ,snippet: snippetFran);
+
+
     ResourceId id = ResourceId(videoId: "omKruLoPi6A");
     SearchResultSnippet snippet = SearchResultSnippet(thumbnails: ThumbnailDetails(high: Thumbnail(url: "https://img.youtube.com/vi/omKruLoPi6A/hqdefault.jpg")));
     SearchResult video1 = SearchResult(id: id ,snippet: snippet);
@@ -64,7 +69,7 @@ class GoogleService extends BaseApiService {
     SearchResultSnippet snippet2 = SearchResultSnippet(thumbnails: ThumbnailDetails(high: Thumbnail(url: "https://img.youtube.com/vi/QIOuTJBwmwM/hqdefault.jpg")));
     SearchResult video2 = SearchResult(id: id2 ,snippet: snippet2);
 
-    return SearchListResponse(items: [video1,video2]);
+    return SearchListResponse(items: [videoFran,video1,video2]);
   }
 
 
