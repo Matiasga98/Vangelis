@@ -26,7 +26,7 @@ class Configuration extends GetxService
   {
     switch(User().environment){
       case "BACKENDMATI":
-        return "http://192.168.0.177:25565/";
+        return "http://200.122.87.203:25565/";
       case "NUEVAIP":
         return "http://10.0.2.2:8080";
     }
