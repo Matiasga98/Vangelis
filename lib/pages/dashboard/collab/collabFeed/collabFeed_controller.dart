@@ -15,8 +15,10 @@ import 'package:vangelis/services/collab_service.dart';
 import 'package:vangelis/services/genre_service.dart';
 import 'package:vangelis/services/google_service.dart';
 import 'package:vangelis/services/instrument_service.dart';
+import 'package:vangelis/services/theme_service.dart';
 import 'package:vangelis/services/user_service.dart';
 import 'package:vangelis/util/constants.dart';
+import 'package:vangelis/util/enums.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 import '../../../../entity/user.dart';
@@ -102,7 +104,7 @@ class CollabFeedController extends GetxController {
 
   Widget openVideo(int index) {
     RxDouble _sliderValue = 0.0.obs;
-    RxBool isPlaying = true.obs;
+    RxBool isPlaying = false.obs;
     return AlertDialog(
         title: Text('video'),
         content: Obx(() => Container(
@@ -139,33 +141,31 @@ class CollabFeedController extends GetxController {
                         isPlaying.value = true;
                       },
                       icon: Icon(Icons.refresh)),
-                  IconButton(
-                      onPressed: () {
-                        if (_sliderValue.value < 20.0) {
-                          _sliderValue.value += 0.1;
-                          String stringValue =
-                          _sliderValue.value.toStringAsFixed(2);
-                          _sliderValue.value = double.parse(stringValue);
-                        }
-                      },
-                      icon: Icon(Icons.add)),
-                  IconButton(
-                      onPressed: () {
-                        if (_sliderValue.value > 0) {
-                          _sliderValue.value -= 0.1;
-                          String stringValue =
-                          _sliderValue.value.toStringAsFixed(2);
-                          _sliderValue.value = double.parse(stringValue);
-                        }
-                      },
-                      icon: Icon(Icons.remove))
+
                 ],
               ),
               showVideoList(),
+              true?
               CustomButton(
                 label: "Elegir video respuesta",
+                backgroundColor: ThemeService().orangeColor,
+                onTap: () {
+                  if(selectedVideo.id!=null)
+                    Get.to(VideoScreen(filteredCollabs[index].videoId,
+                        selectedVideo.id!.videoId!,filteredCollabs[index].id,true));
+                  else
+                    showMsg(
+                        message:
+                        "Debe seleccionar un video",
+                        type: MessageType.warning);
+                }
+
+              ) :CustomButton(
+                label: "Elegir video respuesta",
+                backgroundColor: ThemeService().grayTextColor,
                 onTap: () => Get.to(VideoScreen(filteredCollabs[index].videoId,
-                selectedVideo.id!.videoId!,filteredCollabs[index].id,true)),
+                    selectedVideo.id!.videoId!,filteredCollabs[index].id,true))
+                ,
               )
             ],
           ),
@@ -173,7 +173,6 @@ class CollabFeedController extends GetxController {
   }
 
   SearchResult selectedVideo = SearchResult();
-
   RxList<SearchResult> userVideos = <SearchResult>[].obs;
 
   Widget showVideoList() {
