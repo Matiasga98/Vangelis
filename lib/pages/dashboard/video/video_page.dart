@@ -208,36 +208,132 @@ class _VideoScreenState extends State<VideoScreen> {
                                       _controller2.seekTo(
                                           Duration(milliseconds: miliseconds));
                                       _controller.seekTo(Duration(seconds: 0));
-                                      isPlaying.value = true;
+                                      isPlaying.value = false;
                                     },
                                     icon: Icon(Icons.refresh)),
+
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                Text("  1 Segundo:        "),
                                 createView
                                     ? IconButton(
-                                        onPressed: () {
-                                          if (_sliderValue.value < 20.0) {
-                                            _sliderValue.value += 0.05;
-                                            String stringValue = _sliderValue
-                                                .value
-                                                .toStringAsFixed(3);
-                                            _sliderValue.value =
-                                                double.parse(stringValue);
-                                          }
-                                        },
-                                        icon: Icon(Icons.add))
+                                    onPressed: () {
+                                      if (_sliderValue.value < 20.0) {
+                                        _sliderValue.value += 1;
+                                        String stringValue = _sliderValue
+                                            .value
+                                            .toStringAsFixed(3);
+                                        _sliderValue.value =
+                                            double.parse(stringValue);
+                                      }
+                                    },
+                                    icon: Icon(Icons.add))
                                     : Container(),
                                 createView
                                     ? IconButton(
-                                        onPressed: () {
-                                          if (_sliderValue.value > 0) {
-                                            _sliderValue.value -= 0.05;
-                                            String stringValue = _sliderValue
-                                                .value
-                                                .toStringAsFixed(3);
-                                            _sliderValue.value =
-                                                double.parse(stringValue);
-                                          }
-                                        },
-                                        icon: Icon(Icons.remove))
+                                    onPressed: () {
+                                      if (_sliderValue.value-1 > 0) {
+                                        _sliderValue.value -= 1;
+                                        String stringValue = _sliderValue
+                                            .value
+                                            .toStringAsFixed(3);
+                                        _sliderValue.value =
+                                            double.parse(stringValue);
+                                      }
+                                      else{
+                                        _sliderValue.value = 0;
+                                        String stringValue = _sliderValue
+                                            .value
+                                            .toStringAsFixed(3);
+                                        _sliderValue.value =
+                                            double.parse(stringValue);
+                                      }
+                                    },
+                                    icon: Icon(Icons.remove))
+                                    : Container()
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                Text("  0.1 Segundo:    "),
+                                createView
+                                    ? IconButton(
+                                    onPressed: () {
+                                      if (_sliderValue.value < 20.0) {
+                                        _sliderValue.value += 0.1;
+                                        String stringValue = _sliderValue
+                                            .value
+                                            .toStringAsFixed(3);
+                                        _sliderValue.value =
+                                            double.parse(stringValue);
+                                      }
+                                    },
+                                    icon: Icon(Icons.add))
+                                    : Container(),
+                                createView
+                                    ? IconButton(
+                                    onPressed: () {
+                                      if (_sliderValue.value-0.1 > 0) {
+                                        _sliderValue.value -= 0.1;
+                                        String stringValue = _sliderValue
+                                            .value
+                                            .toStringAsFixed(3);
+                                        _sliderValue.value =
+                                            double.parse(stringValue);
+                                      }
+                                      else{
+                                        _sliderValue.value = 0;
+                                        String stringValue = _sliderValue
+                                            .value
+                                            .toStringAsFixed(3);
+                                        _sliderValue.value =
+                                            double.parse(stringValue);
+                                      }
+                                    },
+                                    icon: Icon(Icons.remove))
+                                    : Container()
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                Text("  0.01 Segundo:  "),
+                                createView
+                                    ? IconButton(
+                                    onPressed: () {
+                                      if (_sliderValue.value < 20.0) {
+                                        _sliderValue.value += 0.01;
+                                        String stringValue = _sliderValue
+                                            .value
+                                            .toStringAsFixed(3);
+                                        _sliderValue.value =
+                                            double.parse(stringValue);
+                                      }
+                                    },
+                                    icon: Icon(Icons.add))
+                                    : Container(),
+                                createView
+                                    ? IconButton(
+                                    onPressed: () {
+                                      if (_sliderValue.value-0.01 > 0) {
+                                        _sliderValue.value -= 0.01;
+                                        String stringValue = _sliderValue
+                                            .value
+                                            .toStringAsFixed(3);
+                                        _sliderValue.value =
+                                            double.parse(stringValue);
+                                      }
+                                      else{
+                                        _sliderValue.value = 0;
+                                        String stringValue = _sliderValue
+                                            .value
+                                            .toStringAsFixed(3);
+                                        _sliderValue.value =
+                                            double.parse(stringValue);
+                                      }
+                                    },
+                                    icon: Icon(Icons.remove))
                                     : Container()
                               ],
                             ),
