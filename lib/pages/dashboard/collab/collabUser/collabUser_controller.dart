@@ -10,6 +10,7 @@ import 'package:vangelis/model/Instrument.dart';
 import 'package:vangelis/model/collab.dart';
 import 'package:vangelis/pages/dashboard/collab/card_widget.dart';
 import 'package:vangelis/pages/dashboard/collab/collab_page.dart';
+import 'package:vangelis/pages/dashboard/collab/response_card_widget.dart';
 import 'package:vangelis/pages/dashboard/video/video_page.dart';
 import 'package:vangelis/services/collab_service.dart';
 import 'package:vangelis/services/genre_service.dart';
@@ -35,7 +36,7 @@ class CollabUserController extends GetxController {
 
   List<CollabCard> collabs = [];
   List<CollabCard> filteredCollabCards = [];
-  List<CollabCard> responseCards = [];
+  List<ResponseCard> responseCards = [];
   List<Collab> filteredCollabs = [];
 
 
@@ -93,7 +94,7 @@ class CollabUserController extends GetxController {
         hideControls: true,
       ),
     );
-    responseCards = filteredCollabs[index].responses.map((e) => CollabCard(open: true, finalImage: e.musician.userAvatar, name: e.musician.userName,
+    responseCards = filteredCollabs[index].responses.map((e) => ResponseCard(open: true, finalImage: e.musician.userAvatar, name: e.musician.userName,
         description: "descripcion", address: "CABA",instruments: e.instruments.map((i) => i.name).toList(),
         genres: e.genres.map((g) => g.name).toList(), collabInstrument: "instrumento")).toList();
     await Future.delayed(Duration(seconds: 1));
