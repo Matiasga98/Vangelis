@@ -83,8 +83,10 @@ class _ProfilePageState extends State<ProfilePage>
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          IconButton(
-                            onPressed: () {},
+                          _ctrl.isCurrentUser.value? Container():IconButton(
+                            onPressed: () {
+                              Get.back();
+                            },
                             icon: const Icon(
                               Icons.arrow_back_ios,
                               size: 30.0,
@@ -171,51 +173,87 @@ class _ProfilePageState extends State<ProfilePage>
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        OutlinedButton(
-                          onPressed: () {
-                            !_ctrl.isCurrentUser.value
-                                ? _launchUrl(whatsappUrlBase +
+                        Stack(
+                          children: [
+                            OutlinedButton(
+                              onPressed: () {
+                                !_ctrl.isCurrentUser.value
+                                    ? _launchUrl(whatsappUrlBase +
                                     _ctrl.musician.phoneNumber +
                                     "&text=" +
                                     _ctrl.greetingMessage!)
-                                : EditPhoneNumberModal();
-                          },
-                          style: OutlinedButton.styleFrom(
-                              side: const BorderSide(
-                                color: Colors.transparent,
+                                    : EditPhoneNumberModal();
+                              },
+                              style: OutlinedButton.styleFrom(
+                                  side: const BorderSide(
+                                    color: Colors.transparent,
+                                  ),
+                                  primary: Colors.green,
+                                  backgroundColor: Colors.white,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(100.0),
+                                  ),
+                                  fixedSize: const Size(50.0, 60.0)),
+                              child: const Icon(Icons.whatsapp_rounded),
+                            ),
+                            _ctrl.isCurrentUser.value ?
+                            Positioned(
+                              top: -14,
+                              right: -14,
+                              child: IconButton(
+                                onPressed: () {},
+                                icon: const Icon(
+                                  Icons.edit,
+                                  color: Colors.blue,
+                                ),
                               ),
-                              primary: Colors.green,
-                              backgroundColor: Colors.white,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(100.0),
-                              ),
-                              fixedSize: const Size(50.0, 60.0)),
-                          child: const Icon(Icons.whatsapp_rounded),
+                            )
+                                : const SizedBox()
+                          ],
                         ),
+
                         SizedBox(width: 15.w),
-                        OutlinedButton(
-                          onPressed: () {
-                            !_ctrl.isCurrentUser.value
-                                ? _launchUrl(mailUrlBase +
-                                    _ctrl.musician.email +
-                                    "?subject=¡Busco músico!&body=" +
-                                    _ctrl.greetingMessage!)
-                                : EditEmailModal();
-                          },
-                          style: OutlinedButton.styleFrom(
-                              side: const BorderSide(
-                                color: Colors.transparent,
-                              ),
-                              primary: Colors.blue,
-                              backgroundColor: Colors.white,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(100.0),
-                              ),
-                              fixedSize: const Size(50.0, 60.0)),
-                          child: const Icon(
-                            Icons.mail_rounded,
+                        Stack(
+                        children: [
+                          OutlinedButton(
+                            onPressed: () {
+                              !_ctrl.isCurrentUser.value
+                                  ? _launchUrl(mailUrlBase +
+                                  _ctrl.musician.email +
+                                  "?subject=¡Busco músico!&body=" +
+                                  _ctrl.greetingMessage!)
+                                  : EditEmailModal();
+                            },
+                            style: OutlinedButton.styleFrom(
+                                side: const BorderSide(
+                                  color: Colors.transparent,
+                                ),
+                                primary: Colors.blue,
+                                backgroundColor: Colors.white,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(100.0),
+                                ),
+                                fixedSize: const Size(50.0, 60.0)),
+                            child: const Icon(
+                              Icons.mail_rounded,
+                            ),
                           ),
+                          _ctrl.isCurrentUser.value ?
+                          Positioned(
+                            top: -14,
+                            right: -14,
+                            child: IconButton(
+                              onPressed: () {},
+                              icon: const Icon(
+                                Icons.edit,
+                                color: Colors.blue,
+                              ),
+                            ),
+                          )
+                              : const SizedBox()
+                        ]
                         ),
+
                         SizedBox(width: 15.w),
 
                       ],
