@@ -106,36 +106,8 @@ class CollabSearchController extends GetxController {
     searchState.value = false;
   }
 
-  RxList<String> instruments = [
-    "Bajo",
-    "Saxo",
-    "Clarinete",
-    "Guitarra",
-    "Bateria",
-    "Bandoneon",
-    "Vocalista",
-    "Teremin",
-    "Flauta de Embolo",
-    "Acordeon",
-  ].obs;
-  RxList<String> musicalGenres = [
-    "Rock",
-    "Jazz",
-    "Metal",
-    "Cumbia",
-    "Reggae",
-    "Blues",
-    "Tango",
-    "Trap",
-    "Pop",
-    "Folclore",
-    "Chamame",
-    "Cuarteto",
-    "Rap",
-    "Hip Hop",
-    "Kpop",
-    "Eurobeat",
-  ].obs;
+  RxList<String> instruments = [""].obs;
+  RxList<String> musicalGenres = [""].obs;
 
   InstrumentService instrumentService = Get.find();
   GenreService genreService = Get.find();
