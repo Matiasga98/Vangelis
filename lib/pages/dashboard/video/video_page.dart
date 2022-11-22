@@ -216,7 +216,7 @@ class _VideoScreenState extends State<VideoScreen> {
                             ),
                             Row(
                               children: [
-                                Text("  1 Segundo:        "),
+                                createView?Text("  1 Segundo:        "):Container(),
                                 createView
                                     ? IconButton(
                                     onPressed: () {
@@ -257,7 +257,7 @@ class _VideoScreenState extends State<VideoScreen> {
                             ),
                             Row(
                               children: [
-                                Text("  0.1 Segundo:    "),
+                                createView?Text("  0.1 Segundo:    "):Container(),
                                 createView
                                     ? IconButton(
                                     onPressed: () {
@@ -298,7 +298,7 @@ class _VideoScreenState extends State<VideoScreen> {
                             ),
                             Row(
                               children: [
-                                Text("  0.01 Segundo:  "),
+                                createView?Text("  0.01 Segundo:  "):Container(),
                                 createView
                                     ? IconButton(
                                     onPressed: () {
