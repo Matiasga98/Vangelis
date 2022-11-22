@@ -47,7 +47,14 @@ class _CollabUserScreenState extends State<CollabUserScreen> {
           padding: EdgeInsets.symmetric(vertical: 20),
           child: Column(
             children: [
-              _ctrl.loading.value? Container():
+              _ctrl.loading.value? Center(
+                child: Image.asset(
+                  themeConfig!.loadingGif,
+                  height: 100,
+                  fit: BoxFit.cover,
+                  semanticLabel: barbriLogo,
+                ),
+              ):
               ListView.builder(
                 shrinkWrap: true,
                 primary: false,
