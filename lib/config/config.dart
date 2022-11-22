@@ -9,6 +9,7 @@ class Configuration extends GetxService
   static const environments = {
     'BACKENDMATI': 'Conectado a backend levantado en la compu de mati',
     'NUEVAIP': 'Conectado a ip que cambiemos en el momento',
+    'EMULADOR': 'Conectado a backend corriendo el emulador'
   };
 
   static const defaultEnvironment = 'BACKENDMATI';
@@ -27,8 +28,10 @@ class Configuration extends GetxService
     switch(User().environment){
       case "BACKENDMATI":
         return "http://200.122.87.203:25565/";
-      case "NUEVAIP":
+      case "EMULADOR":
         return "http://10.0.2.2:8080";
+      case "NUEVAIP":
+        return "http://192.168.43.56:8080";
     }
     return "http://10.0.2.2:25565/";
     //return "http://192.168.0.177:8080/";

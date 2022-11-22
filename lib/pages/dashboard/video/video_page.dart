@@ -368,7 +368,7 @@ class _VideoScreenState extends State<VideoScreen> {
                                 : Container(),
                             createView
                                 ? CustomButton(
-                                    label: "Crear collab",
+                                    label: "Crear respuesta",
                                     onTap: () {
                                       var response = CollabResponse(
                                           0,

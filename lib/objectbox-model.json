@@ -34,7 +34,7 @@
     },
     {
       "id": "2:863897412781948733",
-      "lastPropertyId": "13:698533130156835837",
+      "lastPropertyId": "14:3550572966060621169",
       "name": "User",
       "properties": [
         {
@@ -79,6 +79,11 @@
         {
           "id": "13:698533130156835837",
           "name": "defaultLocale",
+          "type": 9
+        },
+        {
+          "id": "14:3550572966060621169",
+          "name": "phoneNumber",
           "type": 9
         }
       ],

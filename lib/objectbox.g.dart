@@ -52,7 +52,7 @@ final _entities = <ModelEntity>[
   ModelEntity(
       id: const IdUid(2, 863897412781948733),
       name: 'User',
-      lastPropertyId: const IdUid(13, 698533130156835837),
+      lastPropertyId: const IdUid(14, 3550572966060621169),
       flags: 0,
       properties: <ModelProperty>[
         ModelProperty(
@@ -95,6 +95,11 @@ final _entities = <ModelEntity>[
         ModelProperty(
             id: const IdUid(13, 698533130156835837),
             name: 'defaultLocale',
+            type: 9,
+            flags: 0),
+        ModelProperty(
+            id: const IdUid(14, 3550572966060621169),
+            name: 'phoneNumber',
             type: 9,
             flags: 0)
       ],
@@ -198,7 +203,8 @@ ModelDefinition getObjectBoxModel() {
           final emailOffset = fbb.writeString(object.email);
           final environmentOffset = fbb.writeString(object.environment);
           final defaultLocaleOffset = fbb.writeString(object.defaultLocale);
-          fbb.startTable(14);
+          final phoneNumberOffset = fbb.writeString(object.phoneNumber);
+          fbb.startTable(15);
           fbb.addInt64(0, object.objectBoxId);
           fbb.addOffset(4, userNameOffset);
           fbb.addOffset(5, emailOffset);
@@ -207,6 +213,7 @@ ModelDefinition getObjectBoxModel() {
           fbb.addOffset(9, environmentOffset);
           fbb.addBool(11, object.isDark);
           fbb.addOffset(12, defaultLocaleOffset);
+          fbb.addOffset(13, phoneNumberOffset);
           fbb.finish(fbb.endTable());
           return object.objectBoxId;
         },
@@ -228,7 +235,9 @@ ModelDefinition getObjectBoxModel() {
             ..isDark =
                 const fb.BoolReader().vTableGet(buffer, rootOffset, 26, false)
             ..defaultLocale = const fb.StringReader(asciiOptimization: true)
-                .vTableGet(buffer, rootOffset, 28, '');
+                .vTableGet(buffer, rootOffset, 28, '')
+            ..phoneNumber = const fb.StringReader(asciiOptimization: true)
+                .vTableGet(buffer, rootOffset, 30, '');
           object.token.targetId =
               const fb.Int64Reader().vTableGet(buffer, rootOffset, 16, 0);
           object.token.attach(store);
@@ -286,4 +295,8 @@ class User_ {
   /// see [User.defaultLocale]
   static final defaultLocale =
       QueryStringProperty<User>(_entities[1].properties[7]);
+
+  /// see [User.phoneNumber]
+  static final phoneNumber =
+      QueryStringProperty<User>(_entities[1].properties[8]);
 }
