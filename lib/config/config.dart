@@ -83,7 +83,7 @@ class Configuration extends GetxService
   }
 
   String getFeedbackEmail() {
-    return _fromSources('FEEDBACK_EMAIL', 'MobileApp@barbri.com');
+    return _fromSources('FEEDBACK_EMAIL', 'vangelisapp@gmail.com');
   }
 
   String getChangePasswordAuthEmail() {

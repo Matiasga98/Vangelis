@@ -11,7 +11,7 @@ export 'screen_size.dart';
 ///texts
 const appNameText = "Vangelis";
 
-const barbriLogo = "Barbri Logo";
+const vangelisLogo = "Vangelis Logo";
 const cancel = "cancel";
 const ok = "ok";
 const selectStudyPlan = "selectStudyPlan";
@@ -273,13 +273,7 @@ RxDouble noInternetHeight = 0.0.obs;
 const regularFont = 'goldPlay';
 const proximaNovaFont = 'proximaNova';
 
-/// Support information
-const technicalAssistancePhoneNumber = '1-877-385-6238';
-const technicalAssistanceEmail = 'techsupport@barbri.com';
-const otherInformationPhoneNumber = '1-888-3BARBRI';
-const otherInformationEmail = 'service@barbri.com';
-const ukContactPhone = '+44 (0) 2038550162';
-const ukContactEmail = 'ukoperations@barbri.com';
+
 const mailTo = "mailto";
 const emailBoodySubject = "subject=";
 const emailBoody = "&body=";

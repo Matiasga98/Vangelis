@@ -28,7 +28,7 @@ class SplashPage extends StatelessWidget {
               themeConfig!.loadingGif,
               height: 100,
               fit: BoxFit.cover,
-              semanticLabel: barbriLogo,
+              semanticLabel: vangelisLogo,
             ),
           ),
           Align(

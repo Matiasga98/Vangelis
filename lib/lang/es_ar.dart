@@ -1,7 +1,7 @@
 import '../util/constants.dart';
 
 const Map<String, String> esAR = {
-  barbriLogo: 'Barbri Logo',
+  vangelisLogo: 'Vangelis Logo',
   cancel: 'Cancelar',
   ok: 'Aceptar',
   selectStudyPlan: 'Seleccionar plan de estudio',
@@ -147,7 +147,6 @@ const Map<String, String> esAR = {
       "El audio que estas intentando escuchar no se encuentra disponible",
   creator: 'Creador',
   doubleTapTopreview: "Toca dos veces para obtener una vista previa",
-  assesmentStatusDes: "Esta tarea debe completarse en barbri.com",
   dismiss: "Dismiss",
   zoomOut: "Disminuir el zoom",
   zoomIn: "Acercarse",
@@ -170,8 +169,6 @@ const Map<String, String> esAR = {
   feedbackQuestion2: '¿Por qué le diste esa calificación a la aplicación?',
   feedbackQuestion3:
       'Proporcione cualquier comentario general que tenga. Por favor sea lo más específico posible',
-  feedbackEmailGreeting:
-      "Hola, equipo de Barbri,\nGracias por tomarse el tiempo de brindar sus comentarios y opiniones sobre la nueva app.",
   star: "Estrella",
   blackOnWhite: "Negro sobre blanco (predeterminado)",
   greyOnLightGrey: "Gris sobre gris claro",

@@ -2,7 +2,7 @@
 import '../util/constants.dart';
 
 const Map<String, String> enUS = {
-  barbriLogo: 'Barbri Logo',
+  vangelisLogo: 'Vangelis Logo',
   cancel: 'Cancel',
   ok: 'Ok',
   selectStudyPlan: 'Select study plan',
@@ -142,9 +142,7 @@ const Map<String, String> enUS = {
       "The audio for the lecture you are trying to hear is unavailable",
   creator: "Creator",
   doubleTapTopreview: "Double tap to preview",
-  assesmentStatusAlert: "Assessment Status Alert",
-  assesmentStatusDes: "This assignment must be completed on barbri.com",
-  dismiss: "Dismiss",
+   dismiss: "Dismiss",
   zoomOut: "Zoom Out",
   zoomIn: "Zoom In",
   doubleTapToForward: "Double tap to forward",
@@ -164,8 +162,7 @@ const Map<String, String> enUS = {
   feedbackQuestion2: 'Why did you give the app that rating?',
   feedbackQuestion3:
       'Please provide any overall feedback you have.  Please be as specific as possible:',
-  feedbackEmailGreeting:
-      "Hello Team Barbri,\nThank you for taking the time to provide feedback on our new app below.",
+
   star: "Star",
   blackOnWhite: "Black on White(default)",
   greyOnLightGrey: "Grey on Light Grey",

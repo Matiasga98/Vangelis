@@ -1,6 +1,6 @@
 
 class RefreshTokenData {
-  final String clientId = 'barbri_mobile_client_2016';
+  final String clientId = 'vangelis_mobile_client';
   final String grantType = 'refresh_token';
   final String refreshToken;
   RefreshTokenData({required this.refreshToken});

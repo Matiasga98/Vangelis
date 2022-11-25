@@ -47,7 +47,7 @@ class RegisterPage extends StatelessWidget {
                     GestureDetector(
                       onTap: () => _changeEnvironment(),
                       child: Semantics(
-                        label: barbriLogo.tr,
+                        label: vangelisLogo.tr,
                         child: Image.asset(
                           themeConfig!.logoAsset,
                           height: 80.h,

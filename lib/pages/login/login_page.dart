@@ -43,7 +43,7 @@ class LoginPage extends StatelessWidget {
                     GestureDetector(
                       onTap: () => _changeEnvironment(),
                       child: Semantics(
-                        label: barbriLogo.tr,
+                        label: vangelisLogo.tr,
                         child: Image.asset(
                           themeConfig!.logoAsset,
                           height: 80.h,
@@ -160,7 +160,7 @@ class LoginPage extends StatelessWidget {
       ),
     );
   }
-
+  final Configuration _configuration = Get.find();
   void _changeEnvironment() async {
     if (_ctrl.isDebugMode()) {
       var dialogSelection = Rx<String?>(_ctrl.getUserEnvironment());
@@ -192,6 +192,7 @@ class LoginPage extends StatelessWidget {
                             }));
                       }),
                 ),
+                Text(_configuration.getApiUrl()),
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.center,

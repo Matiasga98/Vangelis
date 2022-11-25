@@ -68,7 +68,7 @@ class _ProfilePageState extends State<ProfilePage>
               themeConfig!.loadingGif,
               height: 100,
               fit: BoxFit.cover,
-              semanticLabel: barbriLogo,
+              semanticLabel: vangelisLogo,
             ),
           )
         : Scaffold(

@@ -62,7 +62,7 @@ class ProgressService extends GetxService {
                   themeConfig!.loadingGif,
                   width: Get.width * 0.6,
                   fit: BoxFit.cover,
-                  semanticLabel: barbriLogo,
+                  semanticLabel: vangelisLogo,
                 ),
               ),
             ],
